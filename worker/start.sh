@@ -1,7 +1,11 @@
 #!/bin/sh
 
-export SPARK_PUBLIC_DNS=${SPARK_MASTER_SERVICE_HOST:-$1}
+MASTER_IP=${SPARK_MASTER_SERVICE_HOST:-$1}
+echo "MASTER_IP=$MASTER_IP"
 
-/usr/share/spark/sbin/start-slave.sh 1 spark://$SPARK_PUBLIC_DNS:7077
+# name resolution for spark-master
+echo "$MASTER_IP spark-master" >> /etc/hosts
+
+/usr/share/spark/sbin/start-slave.sh 1 spark://spark-master:7077
 
 tail -F /usr/share/spark/logs/*
