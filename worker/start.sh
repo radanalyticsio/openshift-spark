@@ -8,4 +8,5 @@ export SPARK_LOCAL_HOSTNAME=$(hostname -i)
 
 /usr/share/spark/sbin/start-slave.sh 1 spark://spark-master:7077
 
+# TODO: detect slave exit
 tail -F /usr/share/spark/logs/*
