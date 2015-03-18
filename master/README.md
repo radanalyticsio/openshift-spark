@@ -8,4 +8,4 @@ This image is the master node for a Spark cluster.
 
 # Use
 
-* ```docker run -d --name spark-master <name>/spark-master```
+* ```docker run -d --name spark-master --hostname spark-master <name>/spark-master```
