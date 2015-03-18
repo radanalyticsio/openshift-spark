@@ -15,3 +15,4 @@ This assumes that the master knows itself as "spark-master"
 * ```export SPARK_LOCAL_HOSTNAME=$(hostname -i)```
 * ```echo "<IP OF MASTER> spark-master"```
 * ```MASTER=spark://spark-master:7077 pyspark```
+* ```example program: import socket, resource; sc.parallelize(range(1000)).map(lambda x: (socket.gethostname(), resource.getrlimit(resource.RLIMIT_NOFILE))).distinct().collect()```
