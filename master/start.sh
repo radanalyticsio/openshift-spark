@@ -9,5 +9,4 @@ export SPARK_MASTER_PORT=${SPARK_MASTER_SERVICE_PORT:-7077}
 
 # run the spark master directly (instead of sbin/start-master.sh) to
 # link master and container lifecycle
-/usr/share/spark/bin/spark-class \
-  org.apache.spark.deploy.master.Master --ip spark-master --port 7077 --webui-port 8080
+spark-class org.apache.spark.deploy.master.Master --ip spark-master --port 7077 --webui-port 8080
