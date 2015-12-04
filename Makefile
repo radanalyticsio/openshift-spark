@@ -20,4 +20,4 @@ clean-master:
 	docker rmi $(REPO)openshift-spark-master
 
 clean-worker:
-	docker rmi $(REPO)openshift-spark-master
+	docker rmi $(REPO)openshift-spark-worker
