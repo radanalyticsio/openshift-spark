@@ -7,6 +7,8 @@ if [[ ! $(getent passwd $(id -u)) ]]; then
   cat /etc/passwd > /tmp/passwd
   echo "$(id -u):x:$(id -u):$(id -g):dynamic uid:/opt/spark:/bin/false" >> /tmp/passwd
   export NSS_WRAPPER_PASSWD=/tmp/passwd
+  # NSS_WRAPPER_GROUP must be set for NSS_WRAPPER_PASSWD to be used
+  export NSS_WRAPPER_GROUP=/etc/group
 fi
 
 # nss wrapper does not handle comments
