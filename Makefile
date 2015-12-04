@@ -4,6 +4,7 @@ REPO=mattf
 build: build-base build-master build-worker
 clean: clean-base clean-master clean-worker
 push: push-master push-worker
+resources: expand-master-template expand-worker-template
 
 build-base:
 	docker build -t openshift-spark-base base
@@ -30,3 +31,9 @@ push-master:
 push-worker:
 	docker tag -f openshift-spark-worker $(REPO)/openshift-spark-worker
 	docker push $(REPO)/openshift-spark-worker
+
+expand-master-template:
+	REPO=${REPO} envsubst <resources/spark-master-controller.yaml.template >resources/spark-master-controller.yaml
+
+expand-worker-template:
+	REPO=${REPO} envsubst <resources/spark-worker-controller.yaml.template >resources/spark-worker-controller.yaml

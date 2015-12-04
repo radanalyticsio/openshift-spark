@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
         - name: spark-master
-          image: YOUR_REGISTRY:5000/YOUR_PROJECT/openshift-spark-master
+          image: ${REPO}/openshift-spark-master
           ports:
             - containerPort: 7077
             - containerPort: 8080
