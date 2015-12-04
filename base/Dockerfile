@@ -3,6 +3,7 @@ FROM centos:latest
 MAINTAINER Matthew Farrellee <matt@cs.wisc.edu>
 
 RUN yum update -y && \
+    yum install -y epel-release && \
     yum install -y yum-utils && \
     yum-config-manager --add-repo=http://ci.radanalytics.io/RAD/RAD-master.repo && \
     yum clean all
