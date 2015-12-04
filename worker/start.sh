@@ -8,7 +8,4 @@ echo "${SPARK_MASTER_SERVICE_HOST:-$1} spark-master" >> /tmp/hosts
 # because the hostname only resolves locally
 export SPARK_LOCAL_HOSTNAME=$(hostname -i)
 
-/usr/share/spark/sbin/start-slave.sh spark://spark-master:7077
-
-# TODO: detect slave exit
-tail -F /usr/share/spark/logs/*
+spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
