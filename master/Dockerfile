@@ -1,4 +1,4 @@
-FROM mattf/openshift-spark-base
+FROM openshift-spark-base
 
 MAINTAINER Matthew Farrellee <matt@cs.wisc.edu>
 
