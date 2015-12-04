@@ -19,6 +19,7 @@ ENV LD_PRELOAD=libnss_wrapper.so
 ENV PATH $PATH:/usr/share/spark/bin
 
 ADD common.sh /
+RUN chmod a+rx /common.sh
 
 # quiet the logging
 RUN sed -i 's/log4j.rootCategory=.*/log4j.rootCategory=WARN, console/' \
