@@ -37,3 +37,15 @@ expand-master-template:
 
 expand-worker-template:
 	REPO=${REPO} envsubst <resources/spark-worker-controller.yaml.template >resources/spark-worker-controller.yaml
+
+create: build push resources
+	oc create -f resources/spark-master-service.yaml
+	oc create -f resources/spark-master-webui-service.yaml
+	oc create -f resources/spark-master-controller.yaml
+	oc create -f resources/spark-worker-controller.yaml
+
+destroy:
+	oc delete -f resources/spark-master-service.yaml
+	oc delete -f resources/spark-master-webui-service.yaml
+	oc delete -f resources/spark-master-controller.yaml
+	oc delete -f resources/spark-worker-controller.yaml
