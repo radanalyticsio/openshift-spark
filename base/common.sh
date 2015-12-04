@@ -8,3 +8,7 @@ if [[ ! $(getent passwd $(id -u)) ]]; then
   echo "$(id -u):x:$(id -u):$(id -g):dynamic uid:/opt/spark:/bin/false" >> /tmp/passwd
   export NSS_WRAPPER_PASSWD=/tmp/passwd
 fi
+
+# nss wrapper does not handle comments
+grep -v ^# /etc/hosts > /tmp/hosts
+export NSS_WRAPPER_HOSTS=/tmp/hosts
