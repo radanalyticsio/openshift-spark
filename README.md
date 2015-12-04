@@ -1,7 +1,9 @@
-# Apache Spark images for Docker
+# Apache Spark images for OpenShift
 
 # Build
 
-* ```docker build -t <name>/spark-base base```
-* ```docker build -t <name>/spark-master master```
-* ```docker build -t <name>/spark-worker worker```
+```make```
+
+# Push
+
+```make push REPO=[REGISTRY_HOST/][USERNAME]```
