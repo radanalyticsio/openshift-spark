@@ -3,7 +3,9 @@
 . /common.sh
 
 # name resolution for spark-master
-echo "${SPARK_MASTER_SERVICE_HOST:-$1} spark-master" >> /etc/hosts
+grep -v ^# /etc/hosts > /tmp/hosts
+echo "${SPARK_MASTER_SERVICE_HOST:-$1} spark-master" >> /tmp/hosts
+export NSS_WRAPPER_HOSTS=/tmp/hosts
 
 # because the hostname only resolves locally
 export SPARK_LOCAL_HOSTNAME=$(hostname -i)
