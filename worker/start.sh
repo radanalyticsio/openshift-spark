@@ -1,5 +1,7 @@
 #!/bin/sh
 
+. /common.sh
+
 # name resolution for spark-master
 echo "${SPARK_MASTER_SERVICE_HOST:-$1} spark-master" >> /etc/hosts
 

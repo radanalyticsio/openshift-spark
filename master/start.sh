@@ -1,5 +1,7 @@
 #!/bin/sh
 
+. /common.sh
+
 # nss wrapper does not handle comments
 grep -v ^# /etc/hosts > /tmp/hosts
 echo "$(hostname -i) spark-master" >> /tmp/hosts
