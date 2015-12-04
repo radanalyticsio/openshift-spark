@@ -1,0 +1,2 @@
+resources/spark-master-controller.yaml
+resources/spark-worker-controller.yaml
