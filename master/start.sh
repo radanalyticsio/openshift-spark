@@ -1,6 +1,7 @@
 #!/bin/sh
 
-cat /etc/hosts > /tmp/hosts
+# nss wrapper does not handle comments
+grep -v ^# /etc/hosts > /tmp/hosts
 echo "$(hostname -i) spark-master" >> /tmp/hosts
 export NSS_WRAPPER_HOSTS=/tmp/hosts
 
