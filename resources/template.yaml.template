@@ -87,10 +87,10 @@ objects:
 parameters:
 - name: MASTER_IMAGE
   description: Name of the master image
-  value: 172.30.122.181:5000/uber/openshift-spark-master
+  value: _REPO_/openshift-spark-master
 - name: WORKER_IMAGE
   description: Name of the worker image
-  value: 172.30.122.181:5000/uber/openshift-spark-worker
+  value: _REPO_/openshift-spark-worker
 - name: MASTER_NAME
   description: master name used as a service name and a selector
   generate: expression

@@ -49,3 +49,6 @@ destroy:
 	oc delete -f resources/spark-master-webui-service.yaml
 	oc delete -f resources/spark-master-controller.yaml
 	oc delete -f resources/spark-worker-controller.yaml
+
+create-template:
+	sed "s,_REPO_,$(REPO)," resources/template.yaml.template >resources/template.yaml
