@@ -36,5 +36,8 @@ expand-app-template:
 	sed "s,_REPO_,$(REPO)," resources/template.yaml.template >resources/template.yaml
 
 create: build push resources
+	oc process -f resources/template.yaml > resources/template.active
+	oc create -f resources/template.active
 
 destroy:
+	oc delete -f resources/template.active
