@@ -4,7 +4,7 @@ REPO=mattf
 build: build-master build-worker
 clean: clean-base clean-master clean-worker
 push: push-master push-worker
-resources: expand-master-template expand-worker-template expand-app-template
+resources: expand-app-template
 
 build-base:
 	docker build -t openshift-spark-base base
@@ -32,23 +32,9 @@ push-worker: build-worker
 	docker tag -f openshift-spark-worker $(REPO)/openshift-spark-worker
 	docker push $(REPO)/openshift-spark-worker
 
-expand-master-template:
-	REPO=${REPO} envsubst <resources/spark-master-controller.yaml.template >resources/spark-master-controller.yaml
-
-expand-worker-template:
-	REPO=${REPO} envsubst <resources/spark-worker-controller.yaml.template >resources/spark-worker-controller.yaml
-
 expand-app-template:
 	sed "s,_REPO_,$(REPO)," resources/template.yaml.template >resources/template.yaml
 
 create: build push resources
-	oc create -f resources/spark-master-service.yaml
-	oc create -f resources/spark-master-webui-service.yaml
-	oc create -f resources/spark-master-controller.yaml
-	oc create -f resources/spark-worker-controller.yaml
 
 destroy:
-	oc delete -f resources/spark-master-service.yaml
-	oc delete -f resources/spark-master-webui-service.yaml
-	oc delete -f resources/spark-master-controller.yaml
-	oc delete -f resources/spark-worker-controller.yaml
