@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
         - name: spark-worker
-          image: ${REPO}/openshift-spark-worker
+          image: ${REPO}/openshift-spark-worker:latest
           ports:
             - containerPort: 8081
           resources:
