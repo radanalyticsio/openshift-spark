@@ -53,6 +53,7 @@ objects:
         containers:
           - name: ${MASTER_NAME}
             image: ${MASTER_IMAGE}
+            command: ["/start.sh", "${MASTER_NAME}"]
             ports:
               - containerPort: 7077
                 protocol: TCP
