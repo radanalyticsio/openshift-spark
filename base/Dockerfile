@@ -25,5 +25,5 @@ ENV LD_PRELOAD=libnss_wrapper.so
 
 ENV PATH $PATH:/opt/spark/bin
 
-ADD common.sh /
-RUN chmod a+rx /common.sh
+ADD common.sh start-master start-worker /
+RUN chmod a+rx /common.sh /start-master /start-worker
