@@ -6,6 +6,7 @@
 # workers call it. the workers use the spark-master-service name, and
 # thus so shall the master.
 echo "$(hostname -i) $1" >> /tmp/hosts
+export SPARK_MASTER_HOST=$1
 
 # unset these env variables that are used by the Master, because they
 # may be set and if so they're likely to be set to kubernetes
@@ -17,4 +18,4 @@ unset SPARK_MASTER_WEBUI_PORT
 
 # run the spark master directly (instead of sbin/start-master.sh) to
 # link master and container lifecycle
-spark-class org.apache.spark.deploy.master.Master --ip $1 --port 7077 --webui-port 8080
+spark-class org.apache.spark.deploy.master.Master --port 7077 --webui-port 8080
