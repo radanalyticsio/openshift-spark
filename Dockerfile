@@ -2,8 +2,7 @@ FROM centos:latest
 
 MAINTAINER Matthew Farrellee <matt@cs.wisc.edu>
 
-RUN yum update -y && \
-    yum install -y epel-release tar java && \
+RUN yum install -y epel-release tar java && \
     yum clean all
 
 RUN cd /opt && \
