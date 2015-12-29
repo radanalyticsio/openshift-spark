@@ -52,7 +52,7 @@ objects:
       spec:
         containers:
           - name: ${MASTER_NAME}
-            image: ${MASTER_IMAGE}
+            image: ${SPARK_IMAGE}
             env:
               - name: SPARK_MASTER_PORT
                 value: "7077"
@@ -84,15 +84,12 @@ objects:
       spec:
         containers:
           - name: ${WORKER_NAME}
-            image: ${WORKER_IMAGE}
+            image: ${SPARK_IMAGE}
             command: ["/start-worker", "spark://${MASTER_NAME}:7077"]
 
 parameters:
-- name: MASTER_IMAGE
-  description: Name of the master image
-  value: _REPO_/openshift-spark:latest
-- name: WORKER_IMAGE
-  description: Name of the worker image
+- name: SPARK_IMAGE
+  description: Name of the Spark master/worker image
   value: _REPO_/openshift-spark:latest
 - name: MASTER_NAME
   description: master name used as a service name and a selector
