@@ -18,4 +18,4 @@ unset SPARK_MASTER_WEBUI_PORT
 
 # run the spark master directly (instead of sbin/start-master.sh) to
 # link master and container lifecycle
-spark-class org.apache.spark.deploy.master.Master --port 7077 --webui-port 8080
+spark-class org.apache.spark.deploy.master.Master
