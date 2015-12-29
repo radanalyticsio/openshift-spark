@@ -19,3 +19,4 @@ create: push
 
 destroy:
 	oc delete -f template.active
+	rm template.active
