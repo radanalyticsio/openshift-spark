@@ -53,6 +53,11 @@ objects:
         containers:
           - name: ${MASTER_NAME}
             image: ${MASTER_IMAGE}
+            env:
+              - name: SPARK_MASTER_PORT
+                value: "7077"
+              - name: SPARK_MASTER_WEBUI_PORT
+                value: "8080"
             command: ["/start.sh", "${MASTER_NAME}"]
             ports:
               - containerPort: 7077
