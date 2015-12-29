@@ -90,10 +90,10 @@ objects:
 parameters:
 - name: MASTER_IMAGE
   description: Name of the master image
-  value: _REPO_/openshift-spark-base:latest
+  value: _REPO_/openshift-spark:latest
 - name: WORKER_IMAGE
   description: Name of the worker image
-  value: _REPO_/openshift-spark-base:latest
+  value: _REPO_/openshift-spark:latest
 - name: MASTER_NAME
   description: master name used as a service name and a selector
   generate: expression

@@ -3,14 +3,14 @@ REPO=mattf
 .PHONY: build clean push create destroy
 
 build:
-	docker build -t openshift-spark-base base
+	docker build -t openshift-spark .
 
 clean:
-	docker rmi openshift-spark-base
+	docker rmi openshift-spark
 
 push: build
-	docker tag -f openshift-spark-base $(REPO)/openshift-spark-base
-	docker push $(REPO)/openshift-spark-base
+	docker tag -f openshift-spark $(REPO)/openshift-spark
+	docker push $(REPO)/openshift-spark
 
 create: push
 	sed "s,_REPO_,$(REPO)," template.yaml.template > template.yaml
