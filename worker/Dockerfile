@@ -9,6 +9,4 @@ RUN chmod a+rx /start.sh
 # be created and written to
 ENV SPARK_WORKER_DIR=/tmp/work
 
-EXPOSE 8888
-
 ENTRYPOINT ["/start.sh"]
