@@ -1,6 +1,6 @@
 REPO=mattf
 
-.PHONY: build
+.PHONY: build clean push create destroy
 
 build:
 	docker build -t openshift-spark-base base
