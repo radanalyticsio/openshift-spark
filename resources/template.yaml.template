@@ -80,7 +80,7 @@ objects:
         containers:
           - name: ${WORKER_NAME}
             image: ${WORKER_IMAGE}
-            command: ["/start.sh", "${MASTER_NAME}"]
+            command: ["/start.sh", "-m", "spark://${MASTER_NAME}:7077"]
             ports:
               - containerPort: 8888
                 protocol: TCP
