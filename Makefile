@@ -13,7 +13,7 @@ push: build
 	docker push $(REPO)/openshift-spark
 
 create: push template.yaml.template
-	sed "s,_REPO_,$(REPO)," template.yaml.template | oc process -f - > template.active
+	oc process -f template.yaml.template -v SPARK_IMAGE=$(REPO)/openshift-spark > template.active
 	oc create -f template.active
 
 destroy: template.active
