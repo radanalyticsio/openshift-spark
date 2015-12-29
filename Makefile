@@ -1,4 +1,4 @@
-REPO=mattf
+SPARK_IMAGE=mattf/openshift-spark
 
 .PHONY: build clean push create destroy
 
@@ -9,11 +9,11 @@ clean:
 	docker rmi openshift-spark
 
 push: build
-	docker tag -f openshift-spark $(REPO)/openshift-spark
-	docker push $(REPO)/openshift-spark
+	docker tag -f openshift-spark $(SPARK_IMAGE)
+	docker push $(SPARK_IMAGE)
 
 create: push template.yaml
-	oc process -f template.yaml -v SPARK_IMAGE=$(REPO)/openshift-spark > template.active
+	oc process -f template.yaml -v SPARK_IMAGE=$(SPARK_IMAGE) > template.active
 	oc create -f template.active
 
 destroy: template.active
