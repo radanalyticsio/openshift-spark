@@ -1,15 +1,9 @@
 #!/bin/sh
 
-while getopts "m:" opt; do
-  case $opt in
-    m)
-      master=$OPTARG
-      ;;
-  esac
-done
+master=$1
 
 if [ -z "$master" ]; then
-  echo "No master provided, -m required, e.g. -m spark://spark-master.local:7077" >&2
+  echo "No master provided, e.g. spark://spark-master.local:7077" >&2
   exit 1
 fi
 
