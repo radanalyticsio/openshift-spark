@@ -1,4 +1,2 @@
-resources/spark-master-controller.yaml
-resources/spark-worker-controller.yaml
-resources/template.yaml
-resources/template.active
+template.yaml
+template.active
