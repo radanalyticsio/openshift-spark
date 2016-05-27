@@ -10,12 +10,6 @@ if [[ ! $(getent passwd $(id -u)) ]]; then
   fi
 fi
 
-# nss wrapper does not handle comments
-if [[ ! -e /tmp/hosts ]]; then
-  grep -v ^# /etc/hosts > /tmp/hosts
-fi
-
 export NSS_WRAPPER_PASSWD=/tmp/passwd
 # NSS_WRAPPER_GROUP must be set for NSS_WRAPPER_PASSWD to be used
 export NSS_WRAPPER_GROUP=/etc/group
-export NSS_WRAPPER_HOSTS=/tmp/hosts
