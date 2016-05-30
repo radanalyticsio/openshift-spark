@@ -19,7 +19,7 @@ RUN mkdir /opt/spark/work && chmod a+rwx /opt/spark/work
 # /etc/passwd and it may not be possible to modify things like
 # /etc/hosts. nss_wrapper provides an LD_PRELOAD way to modify passwd
 # and hosts.
-RUN yum install -y hostname nss_wrapper && yum clean all
+RUN yum install -y nss_wrapper && yum clean all
 ENV LD_PRELOAD=libnss_wrapper.so
 
 ENV PATH $PATH:/opt/spark/bin
