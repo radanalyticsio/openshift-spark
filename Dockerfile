@@ -15,6 +15,13 @@ RUN cd /opt && \
 # world writable, create SPARK_HOME/work.
 RUN mkdir /opt/spark/work && chmod a+rwx /opt/spark/work
 
+# when the containers are not run w/ uid 0, the uid may not map in
+# /etc/passwd and it may not be possible to modify things like
+# /etc/hosts. nss_wrapper provides an LD_PRELOAD way to modify passwd
+# and hosts.
+RUN yum install -y nss_wrapper && yum clean all
+ENV LD_PRELOAD=libnss_wrapper.so
+
 ENV PATH $PATH:/opt/spark/bin
 
 ADD common.sh start-master start-worker /
