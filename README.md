@@ -2,8 +2,8 @@
 
 # Build
 
-```make```
+    make
 
 # Push
 
-```make push REPO=[REGISTRY_HOST/][USERNAME]```
+    make push REPO=[REGISTRY_HOST/][USERNAME]
