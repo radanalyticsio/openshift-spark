@@ -6,9 +6,9 @@ RUN yum install -y epel-release tar java && \
     yum clean all
 
 RUN cd /opt && \
-    curl https://dist.apache.org/repos/dist/release/spark/spark-2.0.0-preview/spark-2.0.0-preview-bin-hadoop2.7.tgz | \
+    curl https://dist.apache.org/repos/dist/release/spark/spark-2.0.0/spark-2.0.0-bin-hadoop2.7.tgz | \
         tar -zx && \
-    ln -s spark-2.0.0-preview-bin-hadoop2.7 spark
+    ln -s spark-2.0.0-bin-hadoop2.7 spark
 
 # SPARK_WORKER_DIR defaults to SPARK_HOME/work and is created on
 # Worker startup if it does not exist. instead of making SPARK_HOME
