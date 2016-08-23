@@ -60,7 +60,6 @@ objects:
                 value: "7077"
               - name: SPARK_MASTER_WEBUI_PORT
                 value: "8080"
-            command: ["/start-master", "${MASTER_NAME}"]
             ports:
               - containerPort: 7077
                 protocol: TCP
@@ -87,7 +86,9 @@ objects:
         containers:
           - name: ${WORKER_NAME}
             image: ${SPARK_IMAGE}
-            command: ["/start-worker", "spark://${MASTER_NAME}:7077"]
+            env:
+              - name: SPARK_MASTER_ADDRESS
+                value: spark://${MASTER_NAME}:7077
 
 parameters:
 - name: SPARK_IMAGE

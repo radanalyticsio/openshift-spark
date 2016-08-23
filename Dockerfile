@@ -10,19 +10,28 @@ RUN cd /opt && \
         tar -zx && \
     ln -s spark-2.0.0-bin-hadoop2.7 spark
 
-# SPARK_WORKER_DIR defaults to SPARK_HOME/work and is created on
-# Worker startup if it does not exist. instead of making SPARK_HOME
-# world writable, create SPARK_HOME/work.
-RUN mkdir /opt/spark/work && chmod a+rwx /opt/spark/work
-
 # when the containers are not run w/ uid 0, the uid may not map in
 # /etc/passwd and it may not be possible to modify things like
 # /etc/hosts. nss_wrapper provides an LD_PRELOAD way to modify passwd
 # and hosts.
 RUN yum install -y nss_wrapper && yum clean all
-ENV LD_PRELOAD=libnss_wrapper.so
 
-ENV PATH $PATH:/opt/spark/bin
+ENV PATH=$PATH:/opt/spark/bin
+ENV SPARK_HOME=/opt/spark
 
-ADD common.sh start-master start-worker /
-RUN chmod a+rx /common.sh /start-master /start-worker
+# Add scripts used to configure the image
+COPY scripts /tmp/scripts
+
+# Custom scripts
+USER root
+RUN [ "bash", "-x", "/tmp/scripts/spark/install" ]
+
+# Cleanup the scripts directory
+USER root
+RUN rm -rf /tmp/scripts
+
+# Switch to the user 185 for OpenShift usage
+USER 185
+
+# Start the main process
+CMD ["/opt/spark/bin/launch.sh"]

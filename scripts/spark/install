@@ -1,0 +1,17 @@
+#!/bin/sh
+
+set -e
+
+SCRIPT_DIR=$(dirname $0)
+ADDED_DIR=${SCRIPT_DIR}/added
+
+mv $ADDED_DIR/launch.sh $SPARK_HOME/bin/
+chmod +x $SPARK_HOME/bin/launch.sh
+
+# SPARK_WORKER_DIR defaults to SPARK_HOME/work and is created on
+# Worker startup if it does not exist. instead of making SPARK_HOME
+# world writable, create SPARK_HOME/work.
+mkdir $SPARK_HOME/work
+chmod a+rwx $SPARK_HOME/work
+
+chmod -R a+rwX $SPARK_HOME
