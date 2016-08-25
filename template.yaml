@@ -89,6 +89,8 @@ objects:
             env:
               - name: SPARK_MASTER_ADDRESS
                 value: spark://${MASTER_NAME}:7077
+              - name: SPARK_MASTER_UI_ADDRESS
+                value: http://${MASTER_NAME}-webui:8080
 
 parameters:
 - name: SPARK_IMAGE
