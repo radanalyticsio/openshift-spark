@@ -2,6 +2,7 @@ FROM centos:latest
 
 MAINTAINER Matthew Farrellee <matt@cs.wisc.edu>
 
+USER root
 RUN yum install -y epel-release tar java && \
     yum clean all
 
@@ -23,11 +24,9 @@ ENV SPARK_HOME=/opt/spark
 COPY scripts /tmp/scripts
 
 # Custom scripts
-USER root
 RUN [ "bash", "-x", "/tmp/scripts/spark/install" ]
 
 # Cleanup the scripts directory
-USER root
 RUN rm -rf /tmp/scripts
 
 # Switch to the user 185 for OpenShift usage
