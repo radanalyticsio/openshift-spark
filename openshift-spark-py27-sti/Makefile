@@ -1,5 +1,5 @@
 BASE_IMAGE=centos/python-27-centos7:latest
-LOCAL_IMAGE=openshift-spark-py27i-sti
+LOCAL_IMAGE=openshift-spark-py27-sti
 SPARK_IMAGE=myproject/openshift-spark-py27-sti
 
 .PHONY: build clean push create destroy artifacts clean-artifacts clean-dockerfile clean-scripts clean-template
