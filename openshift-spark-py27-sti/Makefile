@@ -1,6 +1,10 @@
 BASE_IMAGE=centos/python-27-centos7:latest
 LOCAL_IMAGE=openshift-spark-py27-sti
-SPARK_IMAGE=myproject/openshift-spark-py27-sti
+
+# If you are going to push the built image to a registry
+# using the "push" make target then you should replace
+# "project" with an appropriate path for your registry and/or project
+SPARK_IMAGE=project/openshift-spark-py27-sti
 
 .PHONY: build clean push create destroy artifacts clean-artifacts clean-dockerfile clean-scripts clean-template
 
