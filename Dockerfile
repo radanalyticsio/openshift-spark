@@ -17,6 +17,8 @@ RUN cd /opt && \
 # and hosts.
 RUN yum install -y nss_wrapper && yum clean all
 
+RUN yum install -y numpy && yum clean all
+
 ENV PATH=$PATH:/opt/spark/bin
 ENV SPARK_HOME=/opt/spark
 
