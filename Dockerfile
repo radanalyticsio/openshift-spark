@@ -15,9 +15,7 @@ RUN cd /opt && \
 # /etc/passwd and it may not be possible to modify things like
 # /etc/hosts. nss_wrapper provides an LD_PRELOAD way to modify passwd
 # and hosts.
-RUN yum install -y nss_wrapper && yum clean all
-
-RUN yum install -y numpy && yum clean all
+RUN yum install -y nss_wrapper numpy && yum clean all
 
 ENV PATH=$PATH:/opt/spark/bin
 ENV SPARK_HOME=/opt/spark
