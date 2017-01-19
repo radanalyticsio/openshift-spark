@@ -13,19 +13,17 @@ export LD_PRELOAD=libnss_wrapper.so
 
 # If the UPDATE_SPARK_CONF_DIR dir is non-empty,
 # copy the contents to $SPARK_HOME/conf
-if [ -n "$UPDATE_SPARK_CONF_DIR" ]; then
-    ls -1 $UPDATE_SPARK_CONF_DIR &> /dev/null
-    if [ $? -eq 0 ]; then
-        sparkconfs=$(ls -1 $UPDATE_SPARK_CONF_DIR | wc -l)
-        if [ "$sparkconfs" -ne "0" ]; then
-            echo "Copying from $UPDATE_SPARK_CONF_DIR to $SPARK_HOME/conf"
-            ls -1 $UPDATE_SPARK_CONF_DIR
-            cp $UPDATE_SPARK_CONF_DIR/* $SPARK_HOME/conf
-        fi
-    else
-        echo "$UPDATE_SPARK_CONF_DIR does not exist, using default spark config"
+if [ -d "$UPDATE_SPARK_CONF_DIR" ]; then
+    sparkconfs=$(ls -1 $UPDATE_SPARK_CONF_DIR | wc -l)
+    if [ "$sparkconfs" -ne "0" ]; then
+        echo "Copying from $UPDATE_SPARK_CONF_DIR to $SPARK_HOME/conf"
+        ls -1 $UPDATE_SPARK_CONF_DIR
+        cp $UPDATE_SPARK_CONF_DIR/* $SPARK_HOME/conf
     fi
+elif [ -n "$UPDATE_SPARK_CONF_DIR" ]; then
+    echo "Directory $UPDATE_SPARK_CONF_DIR does not exist, using default spark config"
 fi
+
 
 # If SPARK_MASTER_ADDRESS env varaible is not provided, start master,
 # otherwise start worker and connect to SPARK_MASTER_ADDRESS
