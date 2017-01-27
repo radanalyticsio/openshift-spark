@@ -9,4 +9,4 @@
 
 # Push
 
-    make push REPO=[REGISTRY_HOST/][USERNAME]
+    make push SPARK_IMAGE=[REGISTRY_HOST/][USERNAME]
