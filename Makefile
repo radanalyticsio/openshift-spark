@@ -15,7 +15,7 @@ clean:
 	docker rmi $(LOCAL_IMAGE)
 
 push: build
-	docker tag -f $(LOCAL_IMAGE) $(SPARK_IMAGE)
+	docker tag $(LOCAL_IMAGE) $(SPARK_IMAGE)
 	docker push $(SPARK_IMAGE)
 
 create: push template.yaml
