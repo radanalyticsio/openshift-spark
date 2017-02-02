@@ -6,4 +6,4 @@ services:
   - docker
 
 script:
-  - docker build -t openshift-spark --build-arg DISTRO_LOC=https://dist.apache.org/repos/dist/release/spark/spark-2.1.0/spark-2.1.0-bin-hadoop2.7.tgz --build-arg DISTRO_NAME=spark-2.1.0-bin-hadoop2.7 .
+  - make build 
