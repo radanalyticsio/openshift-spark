@@ -35,7 +35,7 @@ RUN rm -rf /tmp/scripts
 # Switch to the user 185 for OpenShift usage
 USER 185
 
-ENTRYPOINT ["/opt/spark/bin/entrypoint"]
+ENTRYPOINT ["/entrypoint"]
 
 # Start the main process
 CMD ["/opt/spark/bin/launch.sh"]
