@@ -5,8 +5,8 @@ set -e
 SCRIPT_DIR=$(dirname $0)
 ADDED_DIR=${SCRIPT_DIR}/added
 
-mv $ADDED_DIR/entrypoint $SPARK_HOME/bin/
-chmod +x $SPARK_HOME/bin/entrypoint
+mv $ADDED_DIR/entrypoint /
+chmod +x /entrypoint
 
 mv $ADDED_DIR/launch.sh $SPARK_HOME/bin/
 chmod +x $SPARK_HOME/bin/launch.sh
