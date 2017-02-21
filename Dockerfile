@@ -35,6 +35,12 @@ RUN rm -rf /tmp/scripts
 # Switch to the user 185 for OpenShift usage
 USER 185
 
+# Make the default PWD somewhere that the user can write. This is
+# useful when connecting with 'oc run' and starting a 'spark-shell',
+# which will likely try to create files and directories in PWD and
+# error out if it cannot.
+WORKDIR /tmp
+
 ENTRYPOINT ["/entrypoint"]
 
 # Start the main process
