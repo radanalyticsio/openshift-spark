@@ -1,5 +1,14 @@
 #!/bin/bash
 
+function check_reverse_proxy {
+    grep -e "^spark\.ui\.reverseProxy" $SPARK_HOME/conf/spark-defaults.conf &> /dev/null
+    if [ "$?" -ne 0 ]; then
+        echo "Appending default reverse proxy config to spark-defaults.conf"
+        echo "spark.ui.reverseProxy              true" >> $SPARK_HOME/conf/spark-defaults.conf
+        echo "spark.ui.reverseProxyUrl           /" >> $SPARK_HOME/conf/spark-defaults.conf
+    fi
+}
+
 # If the UPDATE_SPARK_CONF_DIR dir is non-empty,
 # copy the contents to $SPARK_HOME/conf
 if [ -d "$UPDATE_SPARK_CONF_DIR" ]; then
@@ -13,6 +22,7 @@ elif [ -n "$UPDATE_SPARK_CONF_DIR" ]; then
     echo "Directory $UPDATE_SPARK_CONF_DIR does not exist, using default spark config"
 fi
 
+check_reverse_proxy
 
 # If SPARK_MASTER_ADDRESS env varaible is not provided, start master,
 # otherwise start worker and connect to SPARK_MASTER_ADDRESS
