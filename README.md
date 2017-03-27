@@ -8,10 +8,11 @@
     make
 Maybe you must edit the Dockerfile for insert some proxy definition.
 for example, insert the following lines after ARG DISTRO_NAME:
-ENV http_proxy=http://192.168.1.1:8080
-ENV https_proxy=http://192.168.1.1:8080
 
-RUN echo "proxy=http://192.168.1.1:8080" >> /etc/yum.conf && \
+    ENV http_proxy=http://192.168.1.1:8080
+    ENV https_proxy=http://192.168.1.1:8080
+
+    RUN echo "proxy=http://192.168.1.1:8080" >> /etc/yum.conf && \
     yum install -y epel-release tar java && \
     yum clean all
 
