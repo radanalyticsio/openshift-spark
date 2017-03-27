@@ -24,5 +24,5 @@ RUN echo "proxy=http://192.168.1.1:8080" >> /etc/yum.conf && \
 - change the value of the SPARK_IMAGE (default: 10.193.127.18:5000/openshift/apachespark:latest)
 
 # Insert the template to openshift
-- oc create -f apachespark.yaml -n openshift
-- oc delete template apache-spark -n openshift
+    oc create -f apachespark.yaml -n openshift
+    oc delete template apache-spark -n openshift
