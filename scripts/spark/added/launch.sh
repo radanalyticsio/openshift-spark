@@ -9,6 +9,22 @@ function check_reverse_proxy {
     fi
 }
 
+function handle_term {
+    echo Received a termination signal
+    # If we've saved a PID for a subprocess, kill that first before
+    # trying to delete the cluster
+    if ! [ -z ${PID+x} ]; then
+        echo "Stopping subprocess $PID"
+        kill -TERM $PID
+        wait $PID
+        echo "Subprocess stopped"
+    fi
+    exit 0
+}
+
+
+trap handle_term TERM INT
+
 # If the UPDATE_SPARK_CONF_DIR dir is non-empty,
 # copy the contents to $SPARK_HOME/conf
 if [ -d "$UPDATE_SPARK_CONF_DIR" ]; then
