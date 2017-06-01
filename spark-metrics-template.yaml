@@ -105,7 +105,9 @@ objects:
               - name: SPARK_METRICS_ON
                 value: "true"
               - name: SPARK_MASTER_ADDRESS
-                value: spark://${MASTER_NAME}:7077"
+                value: spark://${MASTER_NAME}:7077
+              - name: SPARK_MASTER_UI_ADDRESS
+                value: ${MASTER_NAME}-webui
               - name: SPARK_USER
                 value: bob
 parameters:
