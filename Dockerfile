@@ -26,6 +26,12 @@ ENV SPARK_HOME=/opt/spark
 # Add scripts used to configure the image
 COPY scripts /tmp/scripts
 
+# Adding jmx by default
+COPY metrics /opt/spark
+RUN mv $SPARK_HOME/metrics.properties $SPARK_HOME/conf/metrics.properties && chown 1000 /opt/spark/conf/metrics.properties && chmod a+rwx /opt/spark/jolokia-jvm-1.3.6-agent.jar && chown 1000 /opt/spark/jolokia-jvm-1.3.6-agent.jar
+
+
+
 # Custom scripts
 RUN [ "bash", "-x", "/tmp/scripts/spark/install" ]
 

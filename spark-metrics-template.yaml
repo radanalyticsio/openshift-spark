@@ -1,0 +1,124 @@
+kind: Template
+apiVersion: v1
+template: spark
+metadata:
+  name: spark
+objects:
+
+- kind: Service
+  apiVersion: v1
+  metadata:
+    name: ${MASTER_NAME}-jolokia
+    labels:
+      name: ${MASTER_NAME}
+  spec:
+    ports:
+      - protocol: TCP
+        port: 7777
+        targetPort: 7777
+    selector:
+      name: ${MASTER_NAME}
+- kind: Service
+  apiVersion: v1
+  metadata:
+    name: ${MASTER_NAME}
+    labels:
+      name: ${MASTER_NAME}
+  spec:
+    ports:
+      - protocol: TCP
+        port: 7077
+        targetPort: 7077
+    selector:
+      name: ${MASTER_NAME}
+
+- kind: Service
+  apiVersion: v1
+  metadata:
+    name: ${MASTER_NAME}-webui
+    labels:
+      name: ${MASTER_NAME}
+  spec:
+    ports:
+      - protocol: TCP
+        port: 8080
+        targetPort: 8080
+    selector:
+      name: ${MASTER_NAME}
+
+- kind: DeploymentConfig
+  apiVersion: v1
+  metadata:
+    name: ${MASTER_NAME}
+  spec:
+    strategy:
+      type: Rolling
+    triggers:
+      - type: ConfigChange
+    replicas: 1
+    selector:
+      name: ${MASTER_NAME}
+    template:
+      metadata:
+        labels:
+          name: ${MASTER_NAME}
+      spec:
+        containers:
+          - name: ${MASTER_NAME}
+            image: analyticsci/openshift-spark:v2.1.0-metrics-poc
+            env:
+              - name: SPARK_MASTER_PORT
+                value: "7077"
+              - name: SPARK_MASTER_WEBUI_PORT
+                value: "8080"
+              - name: SPARK_METRICS_ON
+                value: "true"
+            ports:
+              - containerPort: 7077
+                protocol: TCP
+              - containerPort: 7777
+                protocol: TCP
+              - containerPort: 8080
+                protocol: TCP
+
+- kind: DeploymentConfig
+  apiVersion: v1
+  metadata:
+    name: ${WORKER_NAME}
+  spec:
+    strategy:
+      type: Rolling
+    triggers:
+      - type: ConfigChange
+    replicas: 3
+    selector:
+      name: ${WORKER_NAME}
+    template:
+      metadata:
+        labels:
+          name: ${WORKER_NAME}
+      spec:
+        containers:
+          - name: ${WORKER_NAME}
+            image: ${SPARK_IMAGE}
+            env:
+              - name: SPARK_METRICS_ON
+                value: "true"
+              - name: SPARK_MASTER_ADDRESS
+                value: spark://${MASTER_NAME}:7077"
+              - name: SPARK_USER
+                value: bob
+parameters:
+- name: SPARK_IMAGE
+  description: Name of the Spark master/worker image
+  value: analyticsci/openshift-spark:v2.1.0-metrics-poc
+- name: MASTER_NAME
+  description: master name used as a service name and a selector
+  generate: expression
+  from: "spark-master-[a-z0-9]{4}"
+  required: true
+- name: WORKER_NAME
+  description: worker name used as a selector
+  generate: expression
+  from: "spark-worker-[a-z0-9]{4}"
+  required: true
