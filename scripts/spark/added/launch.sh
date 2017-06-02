@@ -13,7 +13,7 @@ function handle_term {
     echo Received a termination signal
     # If we've saved a PID for a subprocess, kill that first before
     # trying to delete the cluster
-    if ! [ -z ${PID+x} ]; then
+    if [ -n "$PID" ]; then
         echo "Stopping subprocess $PID"
         kill -TERM $PID
         wait $PID
@@ -53,7 +53,7 @@ fi
 
 if [ -z ${SPARK_MASTER_ADDRESS+_} ]; then
     echo "Starting master$metrics"
-    exec $SPARK_HOME/bin/spark-class$JAVA_AGENT org.apache.spark.deploy.master.Master
+    $SPARK_HOME/bin/spark-class$JAVA_AGENT org.apache.spark.deploy.master.Master &
 else
     echo "Starting worker$metrics, will connect to: $SPARK_MASTER_ADDRESS"
     while true; do
@@ -64,5 +64,7 @@ else
         fi
         sleep 1
     done
-    exec $SPARK_HOME/bin/spark-class$JAVA_AGENT org.apache.spark.deploy.worker.Worker $SPARK_MASTER_ADDRESS
+    $SPARK_HOME/bin/spark-class$JAVA_AGENT org.apache.spark.deploy.worker.Worker $SPARK_MASTER_ADDRESS &
 fi
+PID=$!
+wait $PID
