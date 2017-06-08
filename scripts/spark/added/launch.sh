@@ -27,25 +27,29 @@ check_reverse_proxy
 # If SPARK_MASTER_ADDRESS env varaible is not provided, start master,
 # otherwise start worker and connect to SPARK_MASTER_ADDRESS
 if [ -z ${SPARK_MASTER_ADDRESS+_} ]; then
-    echo "Starting master"
 
     # run the spark master directly (instead of sbin/start-master.sh) to
     # link master and container lifecycle
     # If SPARK_METRICS_ON env variable is not provided, start master without the agent.
-	if [ -z ${SPARK_METRICS_ON+_} ]; then
-	    echo "Starting master"
-	    # run the spark master directly (instead of sbin/start-master.sh) to
-	    # link master and container lifecycle
-	    exec $SPARK_HOME/bin/spark-class org.apache.spark.deploy.master.Master
-	else
-	  echo "Starting master with metrics enabled"
-		# If SPARK_METRICS_ON env is set then start spark master with agent
-		exec $SPARK_HOME/bin/spark-class -javaagent:$SPARK_HOME/jolokia-jvm-1.3.6-agent.jar=port=7777,host=0.0.0.0 org.apache.spark.deploy.master.Master
-	fi
+    if [ -z ${SPARK_METRICS_ON+_} ]; then
+        echo "Starting master"
+        # run the spark master directly (instead of sbin/start-master.sh) to
+        # link master and container lifecycle
+        exec $SPARK_HOME/bin/spark-class org.apache.spark.deploy.master.Master
+    else
+        echo "Starting master with metrics enabled"
+        # If SPARK_METRICS_ON env is set then start spark master with agent
+        exec $SPARK_HOME/bin/spark-class -javaagent:$SPARK_HOME/jolokia-jvm-1.3.6-agent.jar=port=7777,host=0.0.0.0 org.apache.spark.deploy.master.Master
+    fi
 
 else
-    echo "Starting worker, will connect to: $SPARK_MASTER_ADDRESS"
-
+    # Do this here to preserve the message ordering
+    # and parallel the logic below
+    msg=" with metrics enabled"
+    if [ -z ${SPARK_METRICS_ON+_} ]; then
+        msg=""
+    fi
+    echo "Starting worker$msg, will connect to: $SPARK_MASTER_ADDRESS"
     while true; do
         echo "Waiting for spark master to be available ..."
         curl --connect-timeout 1 -s -X GET $SPARK_MASTER_UI_ADDRESS > /dev/null
@@ -54,11 +58,10 @@ else
         fi
         sleep 1
     done
+
     if [ -z ${SPARK_METRICS_ON+_} ]; then
-        echo "Starting worker "
         exec $SPARK_HOME/bin/spark-class org.apache.spark.deploy.worker.Worker $SPARK_MASTER_ADDRESS
     else
-        echo "Starting worker with metrics enabled "
         exec $SPARK_HOME/bin/spark-class -javaagent:$SPARK_HOME/jolokia-jvm-1.3.6-agent.jar=port=7777,host=0.0.0.0 org.apache.spark.deploy.worker.Worker $SPARK_MASTER_ADDRESS
     fi
 fi
