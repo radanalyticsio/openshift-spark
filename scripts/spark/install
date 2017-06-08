@@ -11,14 +11,16 @@ chmod +x /entrypoint
 mv $ADDED_DIR/launch.sh $SPARK_HOME/bin/
 chmod +x $SPARK_HOME/bin/launch.sh
 
+chmod a+rwx /opt/spark/jolokia-jvm-1.3.6-agent.jar
+
 # copy in live conf files
 mv $ADDED_DIR/spark-defaults.conf $SPARK_HOME/conf/
 mv $ADDED_DIR/log4j.properties $SPARK_HOME/conf/
+mv $ADDED_DIR/metrics.properties $SPARK_HOME/conf/
 
 # SPARK_WORKER_DIR defaults to SPARK_HOME/work and is created on
 # Worker startup if it does not exist. instead of making SPARK_HOME
 # world writable, create SPARK_HOME/work.
 mkdir $SPARK_HOME/work
 chmod a+rwx $SPARK_HOME/work
-
 chmod -R a+rwX $SPARK_HOME
