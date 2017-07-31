@@ -22,7 +22,7 @@ elif [ -n "$UPDATE_SPARK_CONF_DIR" ]; then
     echo "Directory $UPDATE_SPARK_CONF_DIR does not exist, using default spark config"
 fi
 
-check_reverse_proxy
+#check_reverse_proxy
 
 # If SPARK_MASTER_ADDRESS env varaible is not provided, start master,
 # otherwise start worker and connect to SPARK_MASTER_ADDRESS
