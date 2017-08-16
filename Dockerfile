@@ -19,8 +19,9 @@ COPY metrics /tmp/spark
 # when the containers are not run w/ uid 0, the uid may not map in
 # /etc/passwd and it may not be possible to modify things like
 # /etc/hosts. nss_wrapper provides an LD_PRELOAD way to modify passwd
-# and hosts.
-RUN yum install -y epel-release tar java nss_wrapper numpy && \
+# and hosts. nss_wrapper package needs to be installed in its own step
+RUN yum install -y epel-release tar java numpy && \
+    yum install -y nss_wrapper && \
     cd /opt && \
     curl -O --progress-bar $DISTRO_LOC && \
     echo "9d1188efbbc92ba6aa0b834ea684d00fa7b63e39 `ls spark-*`" | sha1sum -c - && \
