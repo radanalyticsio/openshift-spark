@@ -5,7 +5,7 @@ MAINTAINER Matthew Farrellee <matt@cs.wisc.edu>
 USER root
 
 # when changing the version, don't forget also to change the sha1 checksum
-ARG DISTRO_LOC=https://archive.apache.org/dist/spark/spark-2.1.0/spark-2.1.0-bin-hadoop2.7.tgz
+ARG DISTRO_LOC=https://archive.apache.org/dist/spark/spark-2.2.0/spark-2.2.0-bin-hadoop2.7.tgz
 
 ENV PATH="$PATH:/opt/spark/bin" \
     SPARK_HOME="/opt/spark"
@@ -24,7 +24,7 @@ RUN yum install -y epel-release tar java numpy && \
     yum install -y nss_wrapper && \
     cd /opt && \
     curl -O --progress-bar $DISTRO_LOC && \
-    echo "9d1188efbbc92ba6aa0b834ea684d00fa7b63e39 `ls spark-*`" | sha1sum -c - && \
+    echo "e48dd30a62f8e6cf87920d931564929d00780a29 `ls spark-*`" | sha1sum -c - && \
     tar -zxf spark-* && \
     rm -rf spark-*.tgz && \
     ln -s spark-* spark && \
