@@ -18,7 +18,7 @@ COPY metrics /tmp/spark
 
 RUN yum install -y epel-release tar wget java numpy && \
     cd /opt && \
-    chmod ug+rw /etc/passwd && \
+    chmod a+rw /etc/passwd && \
     curl -O --progress-bar $DISTRO_LOC && \
     echo "e48dd30a62f8e6cf87920d931564929d00780a29 `ls spark-*`" | sha1sum -c - && \
     tar -zxf spark-* && \
