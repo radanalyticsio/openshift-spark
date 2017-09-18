@@ -1,14 +1,18 @@
 #!/bin/bash
 
-# spark likes to be able to lookup a username for the running UID, if
-# no name is present fake it.
-cat /etc/passwd > /tmp/passwd
-echo "$(id -u):x:$(id -u):$(id -g):dynamic uid:$SPARK_HOME:/bin/false" >> /tmp/passwd
+# Check whether there is a passwd entry for the container UID
+myuid=$(id -u)
+mygid=$(id -g)
+uidentry=$(getent passwd $myuid)
 
-export NSS_WRAPPER_PASSWD=/tmp/passwd
-# NSS_WRAPPER_GROUP must be set for NSS_WRAPPER_PASSWD to be used
-export NSS_WRAPPER_GROUP=/etc/group
+# If there is no passwd entry for the container UID, attempt to create one
+if [ -z "$uidentry" ] ; then
+    if [ -w /etc/passwd ] ; then
+        echo "$myuid:x:$myuid:$mygid:anonymous uid:$SPARK_HOME:/bin/false" >> /etc/passwd
+    else
+        echo "Container ENTRYPOINT failed to add passwd entry for anonymous UID"
+    fi
+fi
 
-export LD_PRELOAD=libnss_wrapper.so
-
-exec "$@"
+# Execute the container CMD under tini for better hygiene
+tini -s -- "$@"
