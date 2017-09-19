@@ -2,11 +2,25 @@ kind: Template
 apiVersion: v1
 template: spark
 metadata:
-  name: spark
+  name: apache-spark
+  creationTimestamp: null
+  annotations:
+    description: Apache Spark with 3 worker nodes.
+    iconClass: icon-nodejs
+    tags: quickstart,Apache,Spark,apachespark
 labels:
   app: sparkcluster
 objects:
-
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: spark-claim
+  spec:
+    accessModes:
+    - ReadWriteMany
+    resources:
+      requests:
+        storage: ${VOLUME_CAPACITY}
 - kind: Service
   apiVersion: v1
   metadata:
@@ -60,11 +74,26 @@ objects:
                 value: "7077"
               - name: SPARK_MASTER_WEBUI_PORT
                 value: "8080"
+              - name: NSS_WRAPPER_PASSWD
+                value: /tmp/passwd
+              - name: NSS_WRAPPER_GROUP
+                value: /etc/group
+              - name: LD_PRELOAD
+                value: libnss_wrapper.so
             ports:
               - containerPort: 7077
                 protocol: TCP
               - containerPort: 8080
                 protocol: TCP
+            volumeMounts:
+              - mountPath: /data
+                name: spark-data
+        volumes:
+          - name: spark-data
+            persistentVolumeClaim:
+              claimName: spark-claim
+
+
 
 - kind: DeploymentConfig
   apiVersion: v1
@@ -91,11 +120,40 @@ objects:
                 value: spark://${MASTER_NAME}:7077
               - name: SPARK_MASTER_UI_ADDRESS
                 value: http://${MASTER_NAME}-webui:8080
-
+              - name: NSS_WRAPPER_PASSWD
+                value: /tmp/passwd
+              - name: NSS_WRAPPER_GROUP
+                value: /etc/group
+              - name: LD_PRELOAD
+                value: libnss_wrapper.so
+            volumeMounts:
+              - mountPath: /data
+                name: spark-data
+        volumes:
+          - name: spark-data
+            persistentVolumeClaim:
+              claimName: spark-claim
+- apiVersion: v1
+  kind: Route
+  metadata:
+    annotations:
+      openshift.io/host.generated: "true"
+    creationTimestamp: null
+    labels:
+      app: apachespark-${MASTER_NAME}-webui
+    name: ${MASTER_NAME}
+  spec:
+    port:
+      targetPort: 8080
+    to:
+      kind: Service
+      name: ${MASTER_NAME}-webui
+  status:
+    ingress: null
 parameters:
 - name: SPARK_IMAGE
   description: Name of the Spark master/worker image
-  value: _REPO_/openshift-spark:latest
+  value: 10.193.127.18:5000/openshift/apachespark:latest
 - name: MASTER_NAME
   description: master name used as a service name and a selector
   generate: expression
@@ -106,3 +164,8 @@ parameters:
   generate: expression
   from: "spark-worker-[a-z0-9]{4}"
   required: true
+- description: Volume space available for data, e.g. 512Mi, 2Gi.
+  displayName: Volume Capacity
+  name: VOLUME_CAPACITY
+  required: true
+  value: 1Gi
