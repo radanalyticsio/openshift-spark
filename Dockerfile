@@ -6,8 +6,10 @@ USER root
 
 # when changing the version, don't forget also to change the sha1 checksum
 ARG DISTRO_LOC=https://archive.apache.org/dist/spark/spark-2.2.0/spark-2.2.0-bin-hadoop2.7.tgz
-ENV TINI_VERSION v0.16.1
+
 ENV PATH="$PATH:/opt/spark/bin" \
+    TINI_VERSION=v0.16.1 \
+    PATH="$PATH:/opt/spark/bin" \
     SPARK_HOME="/opt/spark"
 
 # Add scripts used to configure the image
