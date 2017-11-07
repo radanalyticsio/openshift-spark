@@ -8,14 +8,14 @@ objects:
 - kind: Service
   apiVersion: v1
   metadata:
-    name: ${MASTER_NAME}-jolokia
+    name: ${MASTER_NAME}-prometheus
     labels:
       name: ${MASTER_NAME}
   spec:
     ports:
       - protocol: TCP
-        port: 7777
-        targetPort: 7777
+        port: 9779
+        targetPort: 9779
     selector:
       name: ${MASTER_NAME}
 - kind: Service
@@ -76,7 +76,7 @@ objects:
             ports:
               - containerPort: 7077
                 protocol: TCP
-              - containerPort: 7777
+              - containerPort: 9779
                 protocol: TCP
               - containerPort: 8080
                 protocol: TCP
@@ -111,7 +111,7 @@ objects:
 parameters:
 - name: SPARK_IMAGE
   description: Name of the Spark master/worker image
-  value: analyticsci/openshift-spark:v2.1.0-metrics-jolokia
+  value: analyticsci/openshift-spark:v2.1.0-metrics-prometheus
 - name: MASTER_NAME
   description: master name used as a service name and a selector
   generate: expression

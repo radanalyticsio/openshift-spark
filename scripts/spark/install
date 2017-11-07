@@ -11,8 +11,7 @@ chmod +x /entrypoint
 mv $ADDED_DIR/launch.sh $SPARK_HOME/bin/
 chmod +x $SPARK_HOME/bin/launch.sh
 
-chmod a+rwx /opt/spark/jolokia-jvm-1.3.6-agent.jar
-
+chown 185 /opt/spark/agent-bond.jar
 # copy in live conf files
 mv $ADDED_DIR/spark-defaults.conf $SPARK_HOME/conf/
 mv $ADDED_DIR/log4j.properties $SPARK_HOME/conf/
