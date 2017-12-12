@@ -5,6 +5,22 @@ metadata:
   name: spark
 objects:
 
+
+
+- kind: Service
+  apiVersion: v1
+  metadata:
+    name: ${WORKER_NAME}-prometheus
+    labels:
+      name: ${WORKER_NAME}
+  spec:
+    ports:
+      - protocol: TCP
+        port: 7777
+        targetPort: 7777
+    selector:
+      name: ${WORKER_NAME}
+
 - kind: Service
   apiVersion: v1
   metadata:
@@ -14,8 +30,8 @@ objects:
   spec:
     ports:
       - protocol: TCP
-        port: 9779
-        targetPort: 9779
+        port: 7777
+        targetPort: 7777
     selector:
       name: ${MASTER_NAME}
 - kind: Service
@@ -73,10 +89,12 @@ objects:
                 value: "8080"
               - name: SPARK_METRICS_ON
                 value: "true"
+              - name: SPARK_USER
+                value: admin
             ports:
               - containerPort: 7077
                 protocol: TCP
-              - containerPort: 9779
+              - containerPort: 7777
                 protocol: TCP
               - containerPort: 8080
                 protocol: TCP
@@ -108,6 +126,8 @@ objects:
                 value: spark://${MASTER_NAME}:7077
               - name: SPARK_MASTER_UI_ADDRESS
                 value: http://${MASTER_NAME}-webui:8080
+              - name: SPARK_USER
+                value: admin
 parameters:
 - name: SPARK_IMAGE
   description: Name of the Spark master/worker image
