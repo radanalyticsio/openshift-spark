@@ -39,7 +39,7 @@ if [ -z ${SPARK_MASTER_ADDRESS+_} ]; then
     else
         echo "Starting master with metrics enabled"
         # If SPARK_METRICS_ON env is set then start spark master with agent
-        exec $SPARK_HOME/bin/spark-class -javaagent:$SPARK_HOME/agent-bond.jar=$SPARK_HOME/agent.properties org.apache.spark.deploy.master.Master
+        exec $SPARK_HOME/bin/spark-class -javaagent:$SPARK_HOME/agent-bond.jar=$SPARK_HOME/conf/agent.properties org.apache.spark.deploy.master.Master
     fi
 
 else
@@ -62,6 +62,6 @@ else
     if [ -z ${SPARK_METRICS_ON+_} ]; then
         exec $SPARK_HOME/bin/spark-class org.apache.spark.deploy.worker.Worker $SPARK_MASTER_ADDRESS
     else
-        exec $SPARK_HOME/bin/spark-class -javaagent:$SPARK_HOME/agent-bond.jar=$SPARK_HOME/agent.properties org.apache.spark.deploy.worker.Worker $SPARK_MASTER_ADDRESS
+        exec $SPARK_HOME/bin/spark-class -javaagent:$SPARK_HOME/agent-bond.jar=$SPARK_HOME/conf/agent.properties org.apache.spark.deploy.worker.Worker $SPARK_MASTER_ADDRESS
     fi
 fi
