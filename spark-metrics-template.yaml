@@ -5,12 +5,10 @@ metadata:
   name: spark
 objects:
 
-
-
 - kind: Service
   apiVersion: v1
   metadata:
-    name: ${WORKER_NAME}-prometheus
+    name: ${WORKER_NAME}-${SPARK_METRICS_ON}
     labels:
       name: ${WORKER_NAME}
   spec:
@@ -24,7 +22,7 @@ objects:
 - kind: Service
   apiVersion: v1
   metadata:
-    name: ${MASTER_NAME}-prometheus
+    name: ${MASTER_NAME}-${SPARK_METRICS_ON}
     labels:
       name: ${MASTER_NAME}
   spec:
@@ -34,6 +32,7 @@ objects:
         targetPort: 7777
     selector:
       name: ${MASTER_NAME}
+
 - kind: Service
   apiVersion: v1
   metadata:
@@ -88,7 +87,7 @@ objects:
               - name: SPARK_MASTER_WEBUI_PORT
                 value: "8080"
               - name: SPARK_METRICS_ON
-                value: "true"
+                value: ${SPARK_METRICS_ON}
               - name: SPARK_USER
                 value: admin
             ports:
@@ -121,7 +120,7 @@ objects:
             image: ${SPARK_IMAGE}
             env:
               - name: SPARK_METRICS_ON
-                value: "true"
+                value: ${SPARK_METRICS_ON}
               - name: SPARK_MASTER_ADDRESS
                 value: spark://${MASTER_NAME}:7077
               - name: SPARK_MASTER_UI_ADDRESS
@@ -133,12 +132,16 @@ parameters:
   description: Name of the Spark master/worker image
   value: analyticsci/openshift-spark:v2.1.0-metrics-prometheus
 - name: MASTER_NAME
-  description: master name used as a service name and a selector
+  description: Master name used as a service name and a selector
   generate: expression
   from: "spark-master-[a-z0-9]{4}"
   required: true
 - name: WORKER_NAME
-  description: worker name used as a selector
+  description: Worker name used as a selector
   generate: expression
   from: "spark-worker-[a-z0-9]{4}"
+  required: true
+- name: SPARK_METRICS_ON
+  description: Enable metrics services. The default value is "jolokia" (deprecated), consider setting to "prometheus" instead.
+  value: "jolokia"
   required: true
