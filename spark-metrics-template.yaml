@@ -8,20 +8,6 @@ objects:
 - kind: Service
   apiVersion: v1
   metadata:
-    name: ${WORKER_NAME}-${SPARK_METRICS_ON}
-    labels:
-      name: ${WORKER_NAME}
-  spec:
-    ports:
-      - protocol: TCP
-        port: 7777
-        targetPort: 7777
-    selector:
-      name: ${WORKER_NAME}
-
-- kind: Service
-  apiVersion: v1
-  metadata:
     name: ${MASTER_NAME}-${SPARK_METRICS_ON}
     labels:
       name: ${MASTER_NAME}
