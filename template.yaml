@@ -95,7 +95,7 @@ objects:
 parameters:
 - name: SPARK_IMAGE
   description: Name of the Spark master/worker image
-  value: _REPO_/openshift-spark:latest
+  value: radanalyticsio/openshift-spark:2.2-latest
 - name: MASTER_NAME
   description: master name used as a service name and a selector
   generate: expression
