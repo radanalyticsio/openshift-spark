@@ -9,6 +9,39 @@ function check_reverse_proxy {
     fi
 }
 
+function handle_term {
+    echo Received a termination signal
+
+    # If we've saved a PID for a subprocess, kill that first before
+    # trying to delete the cluster
+    local cnt
+    local killed=1
+    if [ -n "$PID" ]; then
+        echo "Stopping subprocess $PID"
+        kill -TERM $PID
+        for cnt in {1..10}
+        do
+            kill -0 $PID >/dev/null 2>&1
+            if [ "$?" -ne 0 ]; then
+                killed=0
+                break
+            else
+                sleep 1
+            fi
+        done
+        if [ "$killed" -ne 0 ]; then
+            echo Process is still running 10 seconds after TERM, sending KILL
+            kill -9 $PID
+        fi
+        wait $PID
+        echo "Subprocess stopped"
+    fi
+    exit 0
+}
+
+
+trap handle_term TERM INT
+
 # If the UPDATE_SPARK_CONF_DIR dir is non-empty,
 # copy the contents to $SPARK_HOME/conf
 if [ -d "$UPDATE_SPARK_CONF_DIR" ]; then
@@ -37,7 +70,7 @@ fi
 
 if [ -z ${SPARK_MASTER_ADDRESS+_} ]; then
     echo "Starting master$metrics"
-    exec $SPARK_HOME/bin/spark-class$JAVA_AGENT org.apache.spark.deploy.master.Master
+    $SPARK_HOME/bin/spark-class$JAVA_AGENT org.apache.spark.deploy.master.Master &
 else
     echo "Starting worker$metrics, will connect to: $SPARK_MASTER_ADDRESS"
     while true; do
@@ -48,5 +81,7 @@ else
         fi
         sleep 1
     done
-    exec $SPARK_HOME/bin/spark-class$JAVA_AGENT org.apache.spark.deploy.worker.Worker $SPARK_MASTER_ADDRESS
+    $SPARK_HOME/bin/spark-class$JAVA_AGENT org.apache.spark.deploy.worker.Worker $SPARK_MASTER_ADDRESS &
 fi
+PID=$!
+wait $PID
