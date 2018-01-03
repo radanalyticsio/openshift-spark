@@ -15,4 +15,4 @@ if [ -z "$uidentry" ] ; then
 fi
 
 # Execute the container CMD under tini for better hygiene
-tini -s -- "$@"
+exec tini -s -- "$@"
