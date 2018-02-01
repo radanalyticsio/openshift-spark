@@ -1,0 +1,12 @@
+#!/bin/sh
+set -u
+set -e
+
+# set up EPEL, install nss_wrapper
+SCRIPT_DIR=$(dirname $0)
+mv $SCRIPT_DIR/epel.repo /etc/yum.repos.d
+rpm --import $SCRIPT_DIR/RPM-GPG-KEY-EPEL-7
+yum install -y nss_wrapper
+chmod a+rw /etc/passwd
+yum clean all
+rm /etc/yum.repos.d/epel.repo

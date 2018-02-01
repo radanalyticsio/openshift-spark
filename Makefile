@@ -1,5 +1,6 @@
 LOCAL_IMAGE=openshift-spark
 SPARK_IMAGE=mattf/openshift-spark
+DOCKERFILE_CONTEXT=openshift-spark-build
 
 # If you're pushing to an integrated registry
 # in Openshift, SPARK_IMAGE will look something like this
@@ -8,8 +9,8 @@ SPARK_IMAGE=mattf/openshift-spark
 
 .PHONY: build clean push create destroy
 
-build:
-	docker build -t $(LOCAL_IMAGE) .
+build: $(DOCKERFILE_CONTEXT)
+	docker build -t $(LOCAL_IMAGE) $(DOCKERFILE_CONTEXT)
 
 clean:
 	docker rmi $(LOCAL_IMAGE)
@@ -25,3 +26,16 @@ create: push template.yaml
 destroy: template.active
 	oc delete -f template.active
 	rm template.active
+
+clean-context:
+	-rm -f $(DOCKERFILE_CONTEXT)/Dockerfile
+	-rm -rf $(DOCKERFILE_CONTEXT)/modules
+	-rm -rf $(DOCKERFILE_CONTEXT)/*.tgz
+
+context: clean-context
+	concreate build --descriptor=image.yaml
+	cp -R target/image/* $(DOCKERFILE_CONTEXT)
+	$(MAKE) zero-tarballs
+
+zero-tarballs:
+	-truncate -s 0 $(DOCKERFILE_CONTEXT)/*.tgz

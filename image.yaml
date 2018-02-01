@@ -1,0 +1,38 @@
+schema_version: 1
+
+version: 0.4.3
+release: community
+name: testing/openshift-spark
+from: centos:latest
+labels:
+    - name: maintainer
+      value: Chad Roberts <croberts@redhat.com>
+    - name: sparkversion
+      value: 2.2.1
+envs:
+    - name: PATH
+      value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/spark/bin
+    - name: SPARK_HOME
+      value: /opt/spark
+modules:
+      install:
+          - name: spark
+          - name: epel-nss
+          - name: metrics
+packages:
+      install:
+          - java-1.8.0-openjdk
+          - numpy
+          - cmake
+          - perl
+          - wget
+artifacts:
+    - url: https://dist.apache.org/repos/dist/release/spark/spark-2.2.1/spark-2.2.1-bin-hadoop2.7.tgz
+      md5: c0081f6076070f0a6c6a607c71ac7e95
+run:
+      user: 185
+      entrypoint:
+          - "/entrypoint"
+      cmd:
+          - "/opt/spark/bin/launch.sh"
+      workdir: /tmp
