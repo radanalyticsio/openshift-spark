@@ -33,7 +33,7 @@ clean-context:
 	-rm -rf $(DOCKERFILE_CONTEXT)/*.tgz
 
 context: clean-context
-	concreate build --descriptor=image.yaml
+	concreate generate --descriptor=image.yaml
 	cp -R target/image/* $(DOCKERFILE_CONTEXT)
 	$(MAKE) zero-tarballs
 
