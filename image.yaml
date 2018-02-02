@@ -17,14 +17,11 @@ envs:
 modules:
       install:
           - name: spark
-          - name: epel-nss
           - name: metrics
 packages:
       install:
           - java-1.8.0-openjdk
           - numpy
-          - cmake
-          - perl
           - wget
 artifacts:
     - url: https://dist.apache.org/repos/dist/release/spark/spark-2.2.1/spark-2.2.1-bin-hadoop2.7.tgz

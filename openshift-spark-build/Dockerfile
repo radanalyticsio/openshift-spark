@@ -37,9 +37,9 @@ USER root
 
 
 # Install required RPMs and ensure that the packages were installed
-RUN yum install -y  java-1.8.0-openjdk numpy cmake perl wget \
+RUN yum install -y  java-1.8.0-openjdk numpy wget \
     && yum clean all && \
-    rpm -q  java-1.8.0-openjdk numpy cmake perl wget
+    rpm -q  java-1.8.0-openjdk numpy wget
 
 # Add all artifacts to the /tmp/artifacts
 # directory
@@ -53,9 +53,6 @@ COPY modules /tmp/scripts
 # Custom scripts
 USER root
 RUN [ "bash", "-x", "/tmp/scripts/spark/install" ]
-
-USER root
-RUN [ "bash", "-x", "/tmp/scripts/epel-nss/install" ]
 
 USER root
 RUN [ "bash", "-x", "/tmp/scripts/metrics/install" ]
