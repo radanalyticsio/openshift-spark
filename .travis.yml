@@ -22,17 +22,17 @@ before_install:
 - sudo service docker start
 - sudo service docker status
 ## chmod needs sudo, so all other commands are with sudo
-- sudo mkdir -p /home/openshift-spark/origin
-- sudo chmod -R 766 /home/openshift-spark/origin
+- sudo mkdir -p /home/travis/gopath/src/github.com/radanalyticsio/origin
+- sudo chmod -R 766 /home/travis/gopath/src/github.com/radanalyticsio/origin
 ## download oc binary
 - sudo wget https://github.com/openshift/origin/releases/download/v3.7.0/openshift-origin-client-tools-v3.7.0-7ed6862-linux-64bit.tar.gz -O origin/openshift-origin-client-tools.tar.gz
 - sudo wget https://github.com/openshift/origin/releases/download/v3.7.0/openshift-origin-server-v3.7.0-7ed6862-linux-64bit.tar.gz -O origin/openshift-origin-server.tar.gz
-- sudo ls -l /home/openshift-spark/origin
+- sudo ls -l /home/travis/gopath/src/github.com/radanalyticsio/origin
 - sudo tar -xvzf /home/travis/gopath/src/github.com/radanalyticsio/oshinko-cli/origin/openshift-origin-client-tools.tar.gz --strip-components=1 -C /bin
 - sudo tar -xvzf /home/travis/gopath/src/github.com/radanalyticsio/oshinko-cli/origin/openshift-origin-server.tar.gz --strip-components=1 -C /bin
 - sudo ls -l /bin
 - oc version
-- export PATH=$PATH:/home/openshift-spark/origin/
+- export PATH=$PATH:/home/travis/gopath/src/github.com/radanalyticsio/origin
 - echo $PATH
 # below cmd is important to get oc working in ubuntu
 - sudo docker run -v /:/rootfs -ti --rm --entrypoint=/bin/bash --privileged openshift/origin:v3.7.0 -c "mv /rootfs/bin/findmnt /rootfs/bin/findmnt.backup"
@@ -42,7 +42,7 @@ before_install:
   set +e
   built=false
   while true; do
-      oc cluster up --host-config-dir=/home/openshift-spark/origin
+      oc cluster up --host-config-dir=/home/travis/gopath/src/github.com/radanalyticsio/origin
       if [ "$?" -eq 0 ]; then
           ./travis-check-pods.sh
           if [ "$?" -eq 0 ]; then
