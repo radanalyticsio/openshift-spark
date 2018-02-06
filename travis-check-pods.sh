@@ -72,9 +72,3 @@ while true; do
     sleep 5
 done
 echo "Registry and router pods are okay"
-© 2018 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Help
