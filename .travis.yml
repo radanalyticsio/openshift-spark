@@ -1,9 +1,71 @@
 sudo: required
-
+dist: trusty
 language: go
-
+## home folder is /home/travis/gopath/src/github.com/radanalyticsio/oshinko-cli
 services:
-  - docker
+- docker
+matrix:
+  include:
+    - env: TO_TEST=e2e
+  fast_finish: true
 
+before_install:
+## add insecure-registry and restart docker
+- pwd
+- bash --version
+- sudo apt-get install --only-upgrade bash
+- bash --version
+- sudo cat /etc/default/docker
+- sudo service docker stop
+- sudo sed -i -e 's/sock/sock --insecure-registry 172.30.0.0\/16/' /etc/default/docker
+- sudo cat /etc/default/docker
+- sudo service docker start
+- sudo service docker status
+## chmod needs sudo, so all other commands are with sudo
+- sudo mkdir -p /home/travis/gopath/src/github.com/radanalyticsio/origin
+- sudo chmod -R 766 /home/travis/gopath/src/github.com/radanalyticsio/origin
+## download oc binary
+- sudo wget https://github.com/openshift/origin/releases/download/v3.7.0/openshift-origin-client-tools-v3.7.0-7ed6862-linux-64bit.tar.gz -O ../origin/openshift-origin-client-tools.tar.gz
+- sudo wget https://github.com/openshift/origin/releases/download/v3.7.0/openshift-origin-server-v3.7.0-7ed6862-linux-64bit.tar.gz -O ../origin/openshift-origin-server.tar.gz
+- sudo ls -l /home/travis/gopath/src/github.com/radanalyticsio/origin
+- sudo tar -xvzf //home/travis/gopath/src/github.com/radanalyticsio/origin/openshift-origin-client-tools.tar.gz --strip-components=1 -C /bin
+- sudo tar -xvzf /home/travis/gopath/src/github.com/radanalyticsio/origin/openshift-origin-client-tools.tar.gz --strip-components=1 -C /bin
+- sudo ls -l /bin
+- oc version
+- export PATH=$PATH:/home/travis/gopath/src/github.com/radanalyticsio/origin
+- echo $PATH
+# below cmd is important to get oc working in ubuntu
+- sudo docker run -v /:/rootfs -ti --rm --entrypoint=/bin/bash --privileged openshift/origin:v3.7.0 -c "mv /rootfs/bin/findmnt /rootfs/bin/findmnt.backup"
+- sudo chmod 777 ./travis-check-pods.sh
+- |
+  # Sometimes oc cluster up fails with a permission error and works when the test is relaunched.
+  # See if a retry within the same test works
+  set +e
+  built=false
+  while true; do
+      oc cluster up --host-config-dir=/home/travis/gopath/src/github.com/radanalyticsio/origin
+      if [ "$?" -eq 0 ]; then
+          ./travis-check-pods.sh
+          if [ "$?" -eq 0 ]; then
+              built=true
+              break
+          fi
+      fi
+      echo "Retrying oc cluster up after failure"
+      oc cluster down
+      sleep 5
+  done
+  set -e
+  if [ "$built" == false ]; then
+      exit 1
+  fi
+  # travis-check-pods.sh left us in the default project
+  oc project myproject
+install:
+before_script:
 script:
-  - make build
+- if [ "$TO_TEST" = "e2e" ]; then test/run.sh ; fi
+notifications:
+ email:
+   on_success: never
+   on_failure: never
