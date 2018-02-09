@@ -17,7 +17,7 @@ os::cmd::try_until_text 'oc logs dc/worker' 'DEBUG'
 
 os::cmd::try_until_text 'oc logs dc/master' 'Copying from /etc/config to /opt/spark/conf'
 
-os::cmd::try_until_text 'oc logs dc/worker''Copying from /etc/config to /opt/spark/conf'
+os::cmd::try_until_text 'oc logs dc/worker' 'Copying from /etc/config to /opt/spark/conf'
 
 #test deletion
 os::cmd::try_until_success 'oc delete dc/worker'
@@ -25,6 +25,4 @@ os::cmd::try_until_success 'oc delete dc/worker'
 os::cmd::try_until_success 'oc delete dc/master'
 
 #check the pods have been deleted using a label
-os::cmd::try_until_text 'oc get pods' 'No resources found.' $((15*second))
-
-os::cmd::expect_success 'oc delete template spark'
+os::cmd::try_until_text 'oc get pods' 'No resources found.' $((2*minute))
