@@ -6,6 +6,8 @@ os::test::junit::declare_suite_start "cmd/create"
 
 RESOURCE_DIR="$(dirname "${BASH_SOURCE}")/../resources"
 
+os::cmd::expect_success 'oc create configmap test-config --from-file=$RESOURCE_DIR/config'
+
 os::cmd::expect_success 'oc new-app --file=$RESOURCE_DIR/test-template.yaml -p MASTER_NAME=master -p WORKER_NAME=worker -p SPARK_IMAGE="$OPENSHIFT_SPARK_TEST_IMAGE"'
 
 os::cmd::try_until_text 'oc get pods' 'worker'
