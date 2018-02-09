@@ -4,16 +4,13 @@ trap os::test::junit::reconcile_output EXIT
 
 os::test::junit::declare_suite_start "cmd/create"
 
-os::cmd::expect_success 'make build'
+RESOURCE_DIR="$(dirname "${BASH_SOURCE}")/../resources"
 
-TEST_DIR=$(pwd)
+os::cmd::expect_success 'oc create -f "$RESOURCE_DIR"/test-template.yaml'
 
-os::cmd::expect_success 'oc new-project deploy'
+os::cmd::expect_success 'oc new-app --template=spark -p MASTER_NAME=master -p WORKER_NAME=worker -p SPARK_IMAGE="$OPENSHIFT_SPARK_TEST_IMAGE"'
 
-os::cmd::expect_success 'oc create -f "$TEST_DIR"/template.yaml'
-
-os::cmd::expect_success 'oc new-app --template=spark -p MASTER_NAME=master -p WORKER_NAME=worker'
-
+#check pods have been created
 os::cmd::try_until_text 'oc get pods' 'worker'
 
 os::cmd::try_until_text 'oc get pods' 'master'
@@ -22,16 +19,13 @@ os::cmd::try_until_text 'oc logs dc/master' 'Registering worker'
 
 os::cmd::try_until_text 'oc logs dc/worker' 'Worker: Successfully registered with master'
 
+#checking the delpoyer pods are gone
+os::cmd::try_until_text 'oc get pods -l openshift.io/deployer-pod-for.name' 'No resources found.'
+
+#test deletion
 os::cmd::try_until_success 'oc delete dc/worker'
 
 os::cmd::try_until_success 'oc delete dc/master'
 
-os::cmd::expect_failure 'oc get dc/worker'
-
-os::cmd::expect_failure 'oc get dc/master'
-
-os::cmd::expect_success 'oc delete template --all'
-
-os::cmd::expect_success 'oc delete pods --all'
-
-os::cmd::expect_success 'oc delete project deploy'
+#check the pods have been deleted using a label
+os::cmd::try_until_text 'oc get pods' 'No resources found.' $((15*second))
