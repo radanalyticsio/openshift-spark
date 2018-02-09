@@ -6,6 +6,9 @@ source "$(dirname "${BASH_SOURCE}")/../hack/lib/init.sh"
 
 os::util::environment::setup_time_vars
 
+OPENSHIFT_SPARK_TEST_IMAGE=${OPENSHIFT_SPARK_TEST_IMAGE:-spark-testimage}
+export OPENSHIFT_SPARK_TEST_IMAGE
+
 function cleanup()
 {
     out=$?
@@ -86,6 +89,11 @@ for dir in "${dirs[@]}"; do
 
     for test in "${tests[@]}"; do
         echo
+        oc delete dc --all > /dev/null
+        oc delete service --all > /dev/null
+        oc delete configmap --all > /dev/null
+        oc delete route --all > /dev/null
+        oc delete template --all > /dev/null
         echo "++++ ${test}"
         if ! ${test}; then
             echo "failed: ${test}"
