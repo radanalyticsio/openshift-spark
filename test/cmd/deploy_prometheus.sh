@@ -8,25 +8,16 @@ RESOURCE_DIR="$(dirname "${BASH_SOURCE}")/../resources"
 
 os::cmd::expect_success 'oc create configmap test-config --from-file=$RESOURCE_DIR/config'
 
-os::cmd::expect_success 'oc new-app --file=$RESOURCE_DIR/test-template.yaml -p MASTER_NAME=master -p WORKER_NAME=worker -p SPARK_IMAGE="$OPENSHIFT_SPARK_TEST_IMAGE"'
+os::cmd::expect_success 'oc new-app --file=$RESOURCE_DIR/test-spark-metrics-template.yaml -p MASTER_NAME=master -p WORKER_NAME=worker -p SPARK_IMAGE="$OPENSHIFT_SPARK_TEST_IMAGE" -p SPARK_METRICS_ON=prometheus'
 
-#check the pods are deployed
-os::cmd::try_until_text 'oc get pods' 'worker'
+# check the master has started the metrics
+os::cmd::try_until_text 'oc logs dc/master' 'Starting master with prometheus metrics enabled.'
 
-os::cmd::try_until_text 'oc get pods' 'master'
+# expose the service
+os::cmd::expect_success 'oc expose service/master'
 
-#checking the delpoyer pods are gone
-os::cmd::try_until_text 'oc get pods -l openshift.io/deployer-pod-for.name' 'No resources found.'
+# parse the ip
+HOST=$(oc get route | awk '{print $2;}')
 
-#check the workers have registered with the master
-os::cmd::try_until_text 'oc logs dc/master' 'Registering worker'
-
-os::cmd::try_until_text 'oc logs dc/worker' 'Worker: Successfully registered with master'
-
-#test deletion
-os::cmd::try_until_success 'oc delete dc/worker'
-
-os::cmd::try_until_success 'oc delete dc/master'
-
-#check the pods have been deleted using a label
-os::cmd::try_until_text 'oc get pods' 'No resources found.' $((15*second))
+# check its up
+os::cmd::expect_success 'curl $HOST'
