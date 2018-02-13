@@ -11,7 +11,7 @@ os::cmd::expect_success 'oc create configmap test-config --from-file=$RESOURCE_D
 os::cmd::expect_success 'oc new-app --file=$RESOURCE_DIR/test-spark-metrics-template.yaml -p MASTER_NAME=master -p WORKER_NAME=worker -p SPARK_IMAGE="$OPENSHIFT_SPARK_TEST_IMAGE" -p SPARK_METRICS_ON=jolokia'
 
 # check the master has started the metrics
-os::cmd::try_until_text 'oc logs dc/master' 'Starting master with jolokia metrics enabled.'
+os::cmd::try_until_text 'oc logs dc/master' 'Starting master with jolokia metrics enabled'
 
 # expose the service
 os::cmd::expect_success 'oc expose service/master'
