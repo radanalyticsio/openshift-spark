@@ -10,11 +10,6 @@ os::cmd::expect_success 'oc create configmap test-config --from-file=$RESOURCE_D
 
 os::cmd::expect_success 'oc new-app --file=$RESOURCE_DIR/test-template.yaml -p MASTER_NAME=master -p WORKER_NAME=worker -p SPARK_IMAGE="$OPENSHIFT_SPARK_TEST_IMAGE"'
 
-#check the logging has changed so you know a new config is used
-os::cmd::try_until_text 'oc logs dc/master' 'DEBUG'
-
-os::cmd::try_until_text 'oc logs dc/worker' 'DEBUG'
-
 os::cmd::try_until_text 'oc logs dc/master' 'Copying from /etc/config to /opt/spark/conf'
 
 os::cmd::try_until_text 'oc logs dc/worker' 'Copying from /etc/config to /opt/spark/conf'
