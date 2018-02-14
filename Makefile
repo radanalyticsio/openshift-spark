@@ -7,7 +7,10 @@ DOCKERFILE_CONTEXT=openshift-spark-build
 
 # SPARK_IMAGE=172.30.242.71:5000/myproject/openshift-spark
 
-.PHONY: build clean push create destroy
+OPENSHIFT_SPARK_TEST_IMAGE ?= spark-testimage
+export OPENSHIFT_SPARK_TEST_IMAGE
+
+.PHONY: build clean push create destroy test-e2e
 
 build: $(DOCKERFILE_CONTEXT)
 	docker build -t $(LOCAL_IMAGE) $(DOCKERFILE_CONTEXT)
@@ -39,3 +42,7 @@ context: clean-context
 
 zero-tarballs:
 	-truncate -s 0 $(DOCKERFILE_CONTEXT)/*.tgz
+
+test-e2e:
+	LOCAL_IMAGE=$(OPENSHIFT_SPARK_TEST_IMAGE) make build
+	test/run.sh
