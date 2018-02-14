@@ -4,8 +4,10 @@ DOCKERFILE_CONTEXT=openshift-spark-build
 
 # If you're pushing to an integrated registry
 # in Openshift, SPARK_IMAGE will look something like this
-
 # SPARK_IMAGE=172.30.242.71:5000/myproject/openshift-spark
+
+OPENSHIFT_SPARK_TEST_IMAGE ?= spark-testimage
+export OPENSHIFT_SPARK_TEST_IMAGE
 
 .PHONY: build clean push create destroy
 
@@ -39,3 +41,7 @@ context: clean-context
 
 zero-tarballs:
 	-truncate -s 0 $(DOCKERFILE_CONTEXT)/*.tgz
+
+test-e2e:
+	LOCAL_IMAGE=$(OPENSHIFT_SPARK_TEST_IMAGE) make build
+	test/run.sh
