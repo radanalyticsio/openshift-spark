@@ -1,4 +1,4 @@
-LOCAL_IMAGE=openshift-spark
+LOCAL_IMAGE ?= openshift-spark
 SPARK_IMAGE=mattf/openshift-spark
 DOCKERFILE_CONTEXT=openshift-spark-build
 
