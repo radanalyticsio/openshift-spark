@@ -24,6 +24,10 @@ chmod +x /entrypoint
 mv $ADDED_DIR/launch.sh $SPARK_HOME/bin/
 chmod +x $SPARK_HOME/bin/launch.sh
 
+mv $ADDED_DIR/*.properties $SPARK_HOME/conf/
+mv $ADDED_DIR/*.conf $SPARK_HOME/conf/
+mv $ADDED_DIR/*.yaml $SPARK_HOME/conf/
+
 # SPARK_WORKER_DIR defaults to SPARK_HOME/work and is created on
 # Worker startup if it does not exist. instead of making SPARK_HOME
  # world writable, create SPARK_HOME/work.
