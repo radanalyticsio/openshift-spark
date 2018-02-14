@@ -21,4 +21,4 @@ HOST=$(oc get route | grep master-prometheus | awk '{print $2;}')/metrics
 echo curling prometheus at $HOST
 
 # check its up
-os::cmd::try_until_text 'curl --silent --output /dev/null --write-out %{http_code} "$HOST"' '^200$' $((30*second))
+os::cmd::try_until_text 'curl --silent --output /dev/null --write-out %{http_code} "$HOST"' '^200$' $((60*second))
