@@ -14,10 +14,14 @@ os::cmd::expect_success 'oc new-app --file=$RESOURCE_DIR/test-template.yaml -p M
 os::cmd::try_until_text 'oc get pods' 'worker'
 
 os::cmd::try_until_text 'oc get pods' 'master'
-#check the workers have registered with the master
-os::cmd::try_until_text 'oc logs dc/master' 'Registering worker'
 
-os::cmd::try_until_text 'oc logs dc/worker' 'Worker: Successfully registered with master'
+# expose the service
+os::cmd::expect_success 'oc expose service/master-webui'
+
+# parse the ip
+HOST=$(oc get route | grep master-webui | awk '{print $2;}')
+
+os::cmd::try_until_text 'curl --silent "$HOST" | grep "Alive Workers" | sed "s,[^0-9],\\ ,g" | tr -d "[:space:]"' "^1$"
 
 #checking the delpoyer pods are gone
 os::cmd::try_until_text 'oc get pods -l openshift.io/deployer-pod-for.name' 'No resources found.'
