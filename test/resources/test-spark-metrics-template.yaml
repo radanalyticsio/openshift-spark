@@ -3,9 +3,21 @@ apiVersion: v1
 template: spark
 metadata:
   name: spark
-labels:
-  app: sparkcluster
 objects:
+
+- kind: Service
+  apiVersion: v1
+  metadata:
+    name: ${MASTER_NAME}-${SPARK_METRICS_ON}
+    labels:
+      name: ${MASTER_NAME}
+  spec:
+    ports:
+      - protocol: TCP
+        port: 7777
+        targetPort: 7777
+    selector:
+      name: ${MASTER_NAME}
 
 - kind: Service
   apiVersion: v1
@@ -20,6 +32,7 @@ objects:
         targetPort: 7077
     selector:
       name: ${MASTER_NAME}
+
 - kind: Service
   apiVersion: v1
   metadata:
@@ -60,20 +73,17 @@ objects:
                 value: "7077"
               - name: SPARK_MASTER_WEBUI_PORT
                 value: "8080"
-              - name: UPDATE_SPARK_CONF_DIR
-                value: /etc/config
+              - name: SPARK_METRICS_ON
+                value: ${SPARK_METRICS_ON}
+              - name: SPARK_USER
+                value: admin
             ports:
               - containerPort: 7077
                 protocol: TCP
+              - containerPort: 7777
+                protocol: TCP
               - containerPort: 8080
                 protocol: TCP
-            volumeMounts:
-              - name: config-volume
-                mountPath: /etc/config
-        volumes:
-          - name: config-volume
-            configMap:
-              name: test-config
 
 - kind: DeploymentConfig
   apiVersion: v1
@@ -97,30 +107,29 @@ objects:
             image: ${SPARK_IMAGE}
             imagePullPolicy: IfNotPresent
             env:
+              - name: SPARK_METRICS_ON
+                value: ${SPARK_METRICS_ON}
               - name: SPARK_MASTER_ADDRESS
                 value: spark://${MASTER_NAME}:7077
               - name: SPARK_MASTER_UI_ADDRESS
                 value: http://${MASTER_NAME}-webui:8080
-              - name: UPDATE_SPARK_CONF_DIR
-                value: /etc/config
-            volumeMounts:
-              - name: config-volume
-                mountPath: /etc/config
-        volumes:
-          - name: config-volume
-            configMap:
-              name: test-config
+              - name: SPARK_USER
+                value: admin
 parameters:
 - name: SPARK_IMAGE
   description: Name of the Spark master/worker image
   value: radanalyticsio/openshift-spark:2.2-latest
 - name: MASTER_NAME
-  description: master name used as a service name and a selector
+  description: Master name used as a service name and a selector
   generate: expression
   from: "spark-master-[a-z0-9]{4}"
   required: true
 - name: WORKER_NAME
-  description: worker name used as a selector
+  description: Worker name used as a selector
   generate: expression
   from: "spark-worker-[a-z0-9]{4}"
+  required: true
+- name: SPARK_METRICS_ON
+  description: Enable metrics services. The default value is "jolokia" (deprecated), consider setting to "prometheus" instead.
+  value: "jolokia"
   required: true

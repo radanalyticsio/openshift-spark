@@ -64,7 +64,7 @@ before_install:
 install:
 before_script:
 script:
-- if [ "$TO_TEST" = "e2e" ]; then test/run.sh ; fi
+- if [ "$TO_TEST" = "e2e" ]; then make test-e2e ; fi
 notifications:
  email:
    on_success: never

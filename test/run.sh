@@ -2,8 +2,7 @@
 STARTTIME=$(date +%s)
 
 # Sourcing common will source hack/lib/init.sh
-TEST_DIR="$(dirname "${BASH_SOURCE}")/../hack/lib/init.sh"
-source $TEST_DIR
+source "$(dirname "${BASH_SOURCE}")/../hack/lib/init.sh"
 
 os::util::environment::setup_time_vars
 

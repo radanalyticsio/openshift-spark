@@ -39,3 +39,7 @@ context: clean-context
 
 zero-tarballs:
 	-truncate -s 0 $(DOCKERFILE_CONTEXT)/*.tgz
+
+test-e2e:
+       LOCAL_IMAGE=$(OPENSHIFT_SPARK_TEST_IMAGE) make build
+       test/run.sh
