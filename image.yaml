@@ -24,7 +24,7 @@ packages:
           - numpy
           - wget
 artifacts:
-    - url: https://dist.apache.org/repos/dist/release/spark/spark-2.2.1/spark-2.2.1-bin-hadoop2.7.tgz
+    - url: https://archive.apache.org/dist/spark/spark-2.2.1/spark-2.2.1-bin-hadoop2.7.tgz
       md5: c0081f6076070f0a6c6a607c71ac7e95
 run:
       user: 185
