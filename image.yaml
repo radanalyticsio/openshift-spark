@@ -1,8 +1,8 @@
 schema_version: 1
 
-version: 0.4.3
+version: 2.2-latest
 release: community
-name: testing/openshift-spark
+name: radanalyticsio/openshift-spark
 from: centos:latest
 labels:
     - name: maintainer
