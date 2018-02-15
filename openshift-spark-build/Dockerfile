@@ -30,7 +30,8 @@ LABEL name="$JBOSS_IMAGE_NAME" \
       architecture="x86_64" \
       com.redhat.component="testing-openshift-spark-docker" \
       maintainer="Chad Roberts <croberts@redhat.com>" \
-      sparkversion="2.2.1"
+      sparkversion="2.2.1" \
+      org.concrt.version="1.4.0"
 
 
 USER root

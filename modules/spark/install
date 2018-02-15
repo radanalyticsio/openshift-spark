@@ -3,8 +3,6 @@
  SCRIPT_DIR=$(dirname $0)
  ADDED_DIR=${SCRIPT_DIR}/added
 
-DISTRO_NAME=spark-2.2.1-bin-hadoop2.7
-
 # If there is a zero-length spark tarball, find the verison in the
 # name and download from Apache
 fullname=$(find $ARTIFACTS_DIR -name spark-[0-9.]*\.tgz)
@@ -13,9 +11,9 @@ fullname=$(find $ARTIFACTS_DIR -name spark-[0-9.]*\.tgz)
 # unpack the spark tools
 {
     cd /tmp/artifacts
-    tar xzf "$DISTRO_NAME.tgz"
-    mv "$DISTRO_NAME" /opt
-    ln -s "/opt/$DISTRO_NAME" "/opt/spark"
+    tar xzf spark-*-bin-hadoop*.tgz
+    mv spark-*-bin-hadoop*/ /opt
+    ln -s /opt/spark-*-bin-hadoop* "/opt/spark"
 }
 
 mv $ADDED_DIR/entrypoint /
