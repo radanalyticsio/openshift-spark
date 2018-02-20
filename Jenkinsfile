@@ -47,7 +47,7 @@ node {
 
 				// test
 				dir('openshift-spark') {
-					sh('make build | tee -a test.log && exit ${PIPESTATUS[0]}')
+					sh('make test-e2e | tee -a test.log && exit ${PIPESTATUS[0]}')
 				}
 			} catch (err) {
 				try {
