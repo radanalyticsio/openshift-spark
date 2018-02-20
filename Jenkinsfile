@@ -57,7 +57,7 @@ node {
 				}
 				throw err
 			} finally {
-				dir('') {
+				dir('openshift-spark') {
 					archiveArtifacts(allowEmptyArchive: true, artifacts: 'test.log')
 				}
 			}
