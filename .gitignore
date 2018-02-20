@@ -1,2 +1,7 @@
 template.active
 target/
+
+# Intellij
+.idea/
+*.iml
+*.iws
