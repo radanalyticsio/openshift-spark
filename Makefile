@@ -15,8 +15,8 @@ export OPENSHIFT_SPARK_TEST_IMAGE
 build: $(DOCKERFILE_CONTEXT)
 	docker build -t $(LOCAL_IMAGE) $(DOCKERFILE_CONTEXT)
 
-clean:
-	docker rmi $(LOCAL_IMAGE)
+clean: clean-context
+	-docker rmi $(LOCAL_IMAGE)
 
 push: build
 	docker tag $(LOCAL_IMAGE) $(SPARK_IMAGE)
@@ -31,17 +31,20 @@ destroy: template.active
 	rm template.active
 
 clean-context:
-	-rm -f $(DOCKERFILE_CONTEXT)/Dockerfile
-	-rm -rf $(DOCKERFILE_CONTEXT)/modules
-	-rm -rf $(DOCKERFILE_CONTEXT)/*.tgz
+	-rm -rf target
+	-rm -rf $(DOCKERFILE_CONTEXT)/*
 
-context: clean-context
-	concreate generate --descriptor=image.yaml
+context: $(DOCKERFILE_CONTEXT)
+
+$(DOCKERFILE_CONTEXT): $(DOCKERFILE_CONTEXT)/Dockerfile $(DOCKERFILE_CONTEXT)/modules
+
+$(DOCKERFILE_CONTEXT)/Dockerfile $(DOCKERFILE_CONTEXT)/modules:
+	concreate generate --descriptor image.yaml
 	cp -R target/image/* $(DOCKERFILE_CONTEXT)
-	$(MAKE) zero-tarballs
 
 zero-tarballs:
-	-truncate -s 0 $(DOCKERFILE_CONTEXT)/*.tgz
+	find ./$(DOCKERFILE_CONTEXT) -name "*.tgz" -type f -exec truncate -s 0 {} \;
+	find ./$(DOCKERFILE_CONTEXT) -name "*.tar.gz" -type f -exec truncate -s 0 {} \;
 
 test-e2e:
 	LOCAL_IMAGE=$(OPENSHIFT_SPARK_TEST_IMAGE) make build
