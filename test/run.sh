@@ -6,9 +6,6 @@ source "$(dirname "${BASH_SOURCE}")/../hack/lib/init.sh"
 
 os::util::environment::setup_time_vars
 
-OPENSHIFT_SPARK_TEST_IMAGE=${OPENSHIFT_SPARK_TEST_IMAGE:-spark-testimage}
-export OPENSHIFT_SPARK_TEST_IMAGE
-
 function cleanup()
 {
     out=$?
