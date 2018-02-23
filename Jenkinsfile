@@ -9,7 +9,7 @@
 // $OCP_PASSWORD -- Openshift user's password
 
 node {
-	withEnv(["KUBECONFIG=$WORKSPACE/client/kubeconfig", "PATH+OC_PATH=$WORKSPACE/client"]) {
+	withEnv(["SPARK_TEST_EXTERNAL_REGISTRY=$EXTERNAL_DOCKER_REGISTRY", "SPARK_TEST_EXTERNAL_USER=$EXTERNAL_DOCKER_REGISTRY_USER", "SPARK_TEST_EXTERNAL_PASSWORD=$EXTERNAL_DOCKER_REGISTRY_PASSWORD", "KUBECONFIG=$WORKSPACE/client/kubeconfig", "PATH+OC_PATH=$WORKSPACE/client"]) {
 
 		// generate build url
 		def buildUrl = sh(script: 'curl https://url.corp.redhat.com/new?$BUILD_URL', returnStdout: true)
