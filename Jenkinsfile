@@ -8,7 +8,7 @@
 // $OCP_USER     -- Openshift user
 // $OCP_PASSWORD -- Openshift user's password
 
-node {
+node('radanalytics-test') {
 	withEnv(["SPARK_TEST_EXTERNAL_REGISTRY=$EXTERNAL_DOCKER_REGISTRY", "SPARK_TEST_EXTERNAL_USER=$EXTERNAL_DOCKER_REGISTRY_USER", "SPARK_TEST_EXTERNAL_PASSWORD=$EXTERNAL_DOCKER_REGISTRY_PASSWORD", "KUBECONFIG=$WORKSPACE/client/kubeconfig", "PATH+OC_PATH=$WORKSPACE/client"]) {
 
 		// generate build url
