@@ -1,6 +1,6 @@
 schema_version: 1
 
-version: 2.2-latest
+version: 2.3-latest
 release: community
 name: radanalyticsio/openshift-spark
 from: centos:latest
@@ -8,7 +8,7 @@ labels:
     - name: maintainer
       value: Chad Roberts <croberts@redhat.com>
     - name: sparkversion
-      value: 2.2.1
+      value: 2.3.0
 envs:
     - name: PATH
       value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/spark/bin
@@ -24,8 +24,8 @@ packages:
           - numpy
           - wget
 artifacts:
-    - url: https://archive.apache.org/dist/spark/spark-2.2.1/spark-2.2.1-bin-hadoop2.7.tgz
-      md5: c0081f6076070f0a6c6a607c71ac7e95
+    - url: https://archive.apache.org/dist/spark/spark-2.3.0/spark-2.3.0-bin-hadoop2.7.tgz
+      md5: af45eeb06dc1beee6d4c70b92c0e0237
 run:
       user: 185
       entrypoint:

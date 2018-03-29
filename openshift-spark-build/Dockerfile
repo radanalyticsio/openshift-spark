@@ -14,24 +14,24 @@
 #
 # ------------------------------------------------------------------------
 #
-# This is a Dockerfile for the radanalyticsio/openshift-spark:2.2-latest image.
+# This is a Dockerfile for the radanalyticsio/openshift-spark:2.3-latest image.
 
 FROM centos:latest
 
 # Environment variables
 ENV JBOSS_IMAGE_NAME="radanalyticsio/openshift-spark" \
-    JBOSS_IMAGE_VERSION="2.2-latest" \
+    JBOSS_IMAGE_VERSION="2.3-latest" \
     PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/spark/bin" \
     SPARK_HOME="/opt/spark" 
 
 # Labels
 LABEL name="$JBOSS_IMAGE_NAME" \
       version="$JBOSS_IMAGE_VERSION" \
-      architecture="x86_64" \
-      com.redhat.component="radanalyticsio-openshift-spark-docker" \
+      architecture="x86_64"  \
+      com.redhat.component="radanalyticsio-openshift-spark-docker"  \
       maintainer="Chad Roberts <croberts@redhat.com>" \
-      sparkversion="2.2.1" \
-      org.concrt.version="1.4.0"
+      sparkversion="2.3.0" \
+      org.concrt.version="1.4.1"
 
 
 USER root
@@ -45,7 +45,7 @@ RUN yum install -y  java-1.8.0-openjdk numpy wget \
 # Add all artifacts to the /tmp/artifacts
 # directory
 COPY \
-    spark-2.2.1-bin-hadoop2.7.tgz \
+    spark-2.3.0-bin-hadoop2.7.tgz \
     /tmp/artifacts/
 
 # Add scripts used to configure the image
