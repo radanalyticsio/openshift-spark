@@ -1,0 +1,8 @@
+#!/bin/sh
+set -u
+set -e
+
+# install scl repos, epel, python 36, and numpy for python36
+yum install -y centos-release-scl epel-release \
+    && yum-config-manager --enable rhel-server-rhscl-7-rpms \
+    && yum install -y rh-python36 rh-python36-numpy

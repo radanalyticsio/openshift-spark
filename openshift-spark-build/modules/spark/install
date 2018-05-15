@@ -1,7 +1,7 @@
 #!/bin/sh
 
- SCRIPT_DIR=$(dirname $0)
- ADDED_DIR=${SCRIPT_DIR}/added
+SCRIPT_DIR=$(dirname $0)
+ADDED_DIR=${SCRIPT_DIR}/added
 
 # If there is a zero-length spark tarball, find the verison in the
 # name and download from Apache
