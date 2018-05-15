@@ -1,0 +1,13 @@
+#!/bin/sh
+set -u
+set -e
+
+# set up EPEL, install nss_wrapper
+# working around some limitations in Dogen's repos plugin
+
+SCRIPT_DIR=$(dirname $0)
+ADDED_DIR=${SCRIPT_DIR}/added
+mv $ADDED_DIR/*.jar /opt/spark/
+
+chown 185 /opt/spark/agent-bond.jar
+chown 185 /opt/spark/jolokia-jvm-1.3.6-agent.jar

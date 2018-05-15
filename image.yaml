@@ -14,15 +14,16 @@ envs:
       value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/spark/bin
     - name: SPARK_HOME
       value: /opt/spark
+    - name: SCL_ENABLE_CMD
+      value: ""
 modules:
-      install:
-          - name: spark
-          - name: metrics
+    install:
+        - name: spark
+        - name: metrics
 packages:
-      install:
-          - java-1.8.0-openjdk
-          - numpy
-          - wget
+    install:
+        - java-1.8.0-openjdk
+        - wget
 artifacts:
     - url: https://archive.apache.org/dist/spark/spark-2.3.0/spark-2.3.0-bin-hadoop2.7.tgz
       md5: af45eeb06dc1beee6d4c70b92c0e0237

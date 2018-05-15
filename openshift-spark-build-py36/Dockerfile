@@ -21,9 +21,9 @@ FROM centos:latest
 # Environment variables
 ENV JBOSS_IMAGE_NAME="radanalyticsio/openshift-spark" \
     JBOSS_IMAGE_VERSION="2.3-latest" \
+    SCL_ENABLE_CMD="scl enable rh-python36" \
     PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/spark/bin" \
-    SPARK_HOME="/opt/spark" \
-    SCL_ENABLE_CMD="" 
+    SPARK_HOME="/opt/spark" 
 
 # Labels
 LABEL name="$JBOSS_IMAGE_NAME" \
@@ -39,9 +39,9 @@ USER root
 
 
 # Install required RPMs and ensure that the packages were installed
-RUN yum install -y  numpy java-1.8.0-openjdk wget \
+RUN yum install -y  java-1.8.0-openjdk wget \
     && yum clean all && \
-    rpm -q  numpy java-1.8.0-openjdk wget
+    rpm -q  java-1.8.0-openjdk wget
 
 # Add all artifacts to the /tmp/artifacts
 # directory
@@ -53,6 +53,9 @@ COPY \
 COPY modules /tmp/scripts
 
 # Custom scripts
+USER root
+RUN [ "bash", "-x", "/tmp/scripts/python36/install" ]
+
 USER root
 RUN [ "bash", "-x", "/tmp/scripts/spark/install" ]
 
