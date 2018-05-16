@@ -36,6 +36,21 @@ LABEL name="$JBOSS_IMAGE_NAME" \
 
 USER root
 
+# Install rh-python36 on centos7
+RUN yum install -y centos-release-scl-rh && \
+    yum-config-manager --enable centos-sclo-rh && \
+    yum install -y rh-python36
+
+# Enable the rh-python36
+RUN mkdir -p ${APP_ROOT}/etc
+RUN echo "source scl_source enable rh-python36" > ${APP_ROOT}/etc/scl_enable
+RUN chmod 666 ${APP_ROOT}/etc/scl_enable
+ENV APP_ROOT /opt/app-root
+ENV BASH_ENV=${APP_ROOT}/etc/scl_enable \
+    ENV=${APP_ROOT}/etc/scl_enable \
+    PROMPT_COMMAND=". ${APP_ROOT}/etc/scl_enable"
+
+USER root
 
 # Install required RPMs and ensure that the packages were installed
 RUN yum install -y  java-1.8.0-openjdk numpy wget \
