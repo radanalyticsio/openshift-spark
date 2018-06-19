@@ -6,7 +6,8 @@ services:
 - docker
 matrix:
   include:
-    - env: TO_TEST=e2e OPENSHIFT_VERSION=v3.9
+    - env: TO_TEST=openshift-spark OPENSHIFT_VERSION=v3.9
+    - env: TO_TEST=openshift-spark-py36 OPENSHIFT_VERSION=v3.9
   fast_finish: true
 
 before_install:
@@ -18,7 +19,8 @@ before_install:
 install:
 before_script:
 script:
-- if [ "$TO_TEST" = "e2e" ]; then make test-e2e ; fi
+- if [ "$TO_TEST" = "openshift-spark" ]; then make test-e2e-py ; fi
+- if [ "$TO_TEST" = "openshift-spark-py36" ]; then make test-e2e-py36 ; fi
 notifications:
  email:
    on_success: never
