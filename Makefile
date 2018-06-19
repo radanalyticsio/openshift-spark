@@ -10,10 +10,14 @@ DOCKERFILE_CONTEXT=openshift-spark-build
 OPENSHIFT_SPARK_TEST_IMAGE ?= spark-testimage
 export OPENSHIFT_SPARK_TEST_IMAGE
 
-.PHONY: build clean push create destroy test-e2e
+.PHONY: build clean push create destroy test-e2e build-py build-py36
 
-build: $(DOCKERFILE_CONTEXT) $(DOCKERFILE_CONTEXT)-py36
+build: build-py build-py36
+
+build-py: $(DOCKERFILE_CONTEXT)
 	docker build -t $(LOCAL_IMAGE) $(DOCKERFILE_CONTEXT)
+
+build-py36: $(DOCKERFILE_CONTEXT)-py36
 	docker build -t $(LOCAL_IMAGE)-py36 $(DOCKERFILE_CONTEXT)-py36
 
 clean: clean-context
@@ -69,4 +73,12 @@ zero-tarballs:
 test-e2e:
 	LOCAL_IMAGE=$(OPENSHIFT_SPARK_TEST_IMAGE) make build
 	test/run.sh
+	SPARK_TEST_IMAGE=$(OPENSHIFT_SPARK_TEST_IMAGE)-py36 test/run.sh
+
+test-e2e-py:
+	LOCAL_IMAGE=$(OPENSHIFT_SPARK_TEST_IMAGE) make build-py
+	test/run.sh
+
+test-e2e-py36:
+	LOCAL_IMAGE=$(OPENSHIFT_SPARK_TEST_IMAGE) make build-py36
 	SPARK_TEST_IMAGE=$(OPENSHIFT_SPARK_TEST_IMAGE)-py36 test/run.sh
