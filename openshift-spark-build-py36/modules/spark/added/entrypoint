@@ -1,5 +1,14 @@
 #!/bin/bash
 
+# If we receive a spark-on-kube command, hand it off to the
+# standard spark entrypoint
+case "$1" in
+    driver | executor | init)
+        exec /opt/spark/bin/spark-entrypoint.sh "$@"
+        ;;
+esac
+
+
 # Check whether there is a passwd entry for the container UID
 myuid=$(id -u)
 mygid=$(id -g)
