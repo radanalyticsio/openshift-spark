@@ -22,6 +22,9 @@ chmod +x /entrypoint
 mv $ADDED_DIR/launch.sh $SPARK_HOME/bin/
 chmod +x $SPARK_HOME/bin/launch.sh
 
+mv $ADDED_DIR/spark-entrypoint.sh $SPARK_HOME/bin/
+chmod +x $SPARK_HOME/bin/spark-entrypoint.sh
+
 mv $ADDED_DIR/*.properties $SPARK_HOME/conf/
 mv $ADDED_DIR/*.conf $SPARK_HOME/conf/
 mv $ADDED_DIR/*.yaml $SPARK_HOME/conf/
@@ -40,5 +43,5 @@ wget -q https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini -
 wget -q https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini.asc -P /tmp
 cd /tmp
 gpg --keyserver ha.pool.sks-keyservers.net --recv-keys 0527A9B7 && gpg --verify /tmp/tini.asc
-mv /tmp/tini /usr/local/bin/tini
-chmod +x /usr/local/bin/tini
+mv /tmp/tini /sbin/tini
+chmod +x /sbin/tini
