@@ -24,4 +24,4 @@ if [ -z "$uidentry" ] ; then
 fi
 
 # Execute the container CMD under tini for better hygiene
-exec /sbin/tini -s -- $SCL_ENABLE_CMD "$@"
+exec $SCL_ENABLE_CMD "$@"

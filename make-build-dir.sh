@@ -7,3 +7,4 @@ make zero-tarballs
 
 # Add any changes for a commit
 git add openshift-spark-build
+git add openshift-spark-build-py36

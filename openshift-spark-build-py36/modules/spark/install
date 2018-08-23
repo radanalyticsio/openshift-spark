@@ -37,11 +37,3 @@ chmod a+rwx $SPARK_HOME/work
 
 chmod -R a+rwX $SPARK_HOME
 chmod a+rw /etc/passwd
-
-TINI_VERSION=v0.16.1
-wget -q https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini -P /tmp
-wget -q https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini.asc -P /tmp
-cd /tmp
-gpg --keyserver ha.pool.sks-keyservers.net --recv-keys 0527A9B7 && gpg --verify /tmp/tini.asc
-mv /tmp/tini /sbin/tini
-chmod +x /sbin/tini
