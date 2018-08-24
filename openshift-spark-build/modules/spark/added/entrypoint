@@ -1,27 +1,61 @@
 #!/bin/bash
 
+trap handle_term TERM INT
+
+function handle_term {
+    echo Received a termination signal
+
+    local cnt
+    local killed=1
+    if [ -n "$PID" ]; then
+        echo "Stopping subprocess $PID"
+        kill -TERM $PID
+        for cnt in {1..10}
+        do
+            kill -0 $PID >/dev/null 2>&1
+            if [ "$?" -ne 0 ]; then
+                killed=0
+                break
+            else
+                sleep 1
+            fi
+        done
+        if [ "$killed" -ne 0 ]; then
+            echo Process is still running 10 seconds after TERM, sending KILL
+            kill -9 $PID
+        fi
+        wait $PID
+        echo "Subprocess stopped"
+    fi
+    exit 0
+}
+
+function patch_uid {
+    # Check whether there is a passwd entry for the container UID
+    myuid=$(id -u)
+    mygid=$(id -g)
+    uidentry=$(getent passwd $myuid)
+
+    # If there is no passwd entry for the container UID, attempt to create one
+    if [ -z "$uidentry" ] ; then
+        if [ -w /etc/passwd ] ; then
+            echo "$myuid:x:$myuid:$mygid:anonymous uid:$SPARK_HOME:/bin/false" >> /etc/passwd
+        else
+            echo "Container ENTRYPOINT failed to add passwd entry for anonymous UID"
+        fi
+    fi
+}
+
 # If we receive a spark-on-kube command, hand it off to the
 # standard spark entrypoint
 case "$1" in
     driver | executor | init)
-        exec /opt/spark/bin/spark-entrypoint.sh "$@"
+        /opt/spark/bin/spark-entrypoint.sh "$@" &
+        ;;
+    *)
+        patch_uid
+        $SCL_ENABLE_CMD "$@" &
         ;;
 esac
-
-
-# Check whether there is a passwd entry for the container UID
-myuid=$(id -u)
-mygid=$(id -g)
-uidentry=$(getent passwd $myuid)
-
-# If there is no passwd entry for the container UID, attempt to create one
-if [ -z "$uidentry" ] ; then
-    if [ -w /etc/passwd ] ; then
-        echo "$myuid:x:$myuid:$mygid:anonymous uid:$SPARK_HOME:/bin/false" >> /etc/passwd
-    else
-        echo "Container ENTRYPOINT failed to add passwd entry for anonymous UID"
-    fi
-fi
-
-# Execute the container CMD under tini for better hygiene
-exec $SCL_ENABLE_CMD "$@"
+PID=$!
+wait $PID
