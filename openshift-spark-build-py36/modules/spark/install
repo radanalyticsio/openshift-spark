@@ -2,38 +2,54 @@
 
 SCRIPT_DIR=$(dirname $0)
 ADDED_DIR=${SCRIPT_DIR}/added
+ARTIFACTS_DIR=/tmp/artifacts
 
 # If there is a zero-length spark tarball, find the verison in the
 # name and download from Apache
 fullname=$(find $ARTIFACTS_DIR -name spark-[0-9.]*\.tgz)
 /bin/sh -x $SCRIPT_DIR/check_for_download $fullname
 
-# unpack the spark tools
-{
-    cd /tmp/artifacts
-    tar xzf spark-*-bin-hadoop*.tgz
-    mv spark-*-bin-hadoop*/ /opt
-    ln -s /opt/spark-*-bin-hadoop* "/opt/spark"
-}
+# Make a place for spark to go (dupe what's done in common in case we're standalone)
+if ! [ -d $SPARK_INSTALL ]; then
+    mkdir -p $SPARK_INSTALL
+    ln -sfn $SPARK_INSTALL/distro $SPARK_HOME
+fi
 
-mv $ADDED_DIR/entrypoint /
-chmod +x /entrypoint
+pushd $SPARK_INSTALL
+cp $fullname .
+tar -zxf $(basename $fullname)
+ln -s $(basename $fullname .tgz) distro
+rm $(basename $fullname)
+popd
 
-mv $ADDED_DIR/launch.sh $SPARK_HOME/bin/
-chmod +x $SPARK_HOME/bin/launch.sh
+# If we included any metrics jars, move them
+mv /opt/metrics/*.jar $SPARK_HOME
 
-mv $ADDED_DIR/spark-entrypoint.sh $SPARK_HOME/bin/
-chmod +x $SPARK_HOME/bin/spark-entrypoint.sh
+# Add in the configuration files
+pushd $SPARK_INSTALL/conf
+for conf_file in *; do
+    if ! [ -f "$SPARK_HOME"/conf/$conf_file ]; then
+	echo Moving $conf_file to $SPARK_HOME/conf
+        mv $conf_file $SPARK_HOME/conf
+    else
+	echo Not moving $conf_file, $SPARK_HOME/conf/$conf_file already exists
+    fi
+done
+popd
 
-mv $ADDED_DIR/*.properties $SPARK_HOME/conf/
-mv $ADDED_DIR/*.conf $SPARK_HOME/conf/
-mv $ADDED_DIR/*.yaml $SPARK_HOME/conf/
+# Make everything under the spark directory accessible to the group
+chown 185:0 $SPARK_INSTALL/distro && chmod g+rwX $SPARK_INSTALL/distro
 
-# SPARK_WORKER_DIR defaults to SPARK_HOME/work and is created on
-# Worker startup if it does not exist. instead of making SPARK_HOME
- # world writable, create SPARK_HOME/work.
-mkdir $SPARK_HOME/work
-chmod a+rwx $SPARK_HOME/work
+# Search for the spark entrypoint file and copy it to $SPARK_INSTALL
+entry=$(find $SPARK_HOME/kubernetes -name entrypoint.sh)
+if [ -n "$entry" ]; then
+    cp $entry $SPARK_INSTALL
 
-chmod -R a+rwX $SPARK_HOME
-chmod a+rw /etc/passwd
+    # We have to patch the entrypoint to toggle error checking
+    # around the uidentry check for 2.3 (fix on the way)
+    sed -i '/^uidentry/i set +e' $SPARK_INSTALL/entrypoint.sh
+    sed -i '/^uidentry/a set -e' $SPARK_INSTALL/entrypoint.sh
+
+    # We also want to get rid of the tini invocation
+    sed -i "s@exec /sbin/tini -s --@exec@" $SPARK_INSTALL/entrypoint.sh
+fi

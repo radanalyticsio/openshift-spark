@@ -10,7 +10,7 @@ DOCKERFILE_CONTEXT=openshift-spark-build
 OPENSHIFT_SPARK_TEST_IMAGE ?= spark-testimage
 export OPENSHIFT_SPARK_TEST_IMAGE
 
-.PHONY: build clean push create destroy test-e2e build-py build-py36
+.PHONY: build clean push create destroy test-e2e test-e2e-py test-e2e-py36 build-py build-py36 clean-target clean-context zero-tarballs
 
 build: build-py build-py36
 
@@ -43,10 +43,12 @@ destroy: template.active
 	rm template-py36.active
 
 clean-context:
-	-rm -rf target
 	-rm -rf $(DOCKERFILE_CONTEXT)/*
-	-rm -rf target-py36
 	-rm -rf $(DOCKERFILE_CONTEXT)-py36/*
+
+clean-target:
+	-rm -rf target
+	-rm -rf target-py36
 
 context: $(DOCKERFILE_CONTEXT) $(DOCKERFILE_CONTEXT)-py36
 
