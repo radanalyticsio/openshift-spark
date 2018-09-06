@@ -8,5 +8,6 @@ envs:
 modules:
     install:
         - name: python36
-        - name: spark
+        - name: common
         - name: metrics
+        - name: spark

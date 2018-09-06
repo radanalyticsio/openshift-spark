@@ -23,6 +23,7 @@ ENV \
     PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/spark/bin" \
     SCL_ENABLE_CMD="scl enable rh-python36" \
     SPARK_HOME="/opt/spark" 
+    SPARK_INSTALL="/opt/spark-distro" 
 
 # Labels
 LABEL \
@@ -51,13 +52,16 @@ COPY modules /tmp/scripts
 
 # Custom scripts
 USER root
-RUN [ "bash", "-x", "/tmp/scripts/spark/install" ]
+RUN [ "bash", "-x", "/tmp/scripts/python36/install" ]
+
+USER root
+RUN [ "bash", "-x", "/tmp/scripts/common/install" ]
 
 USER root
 RUN [ "bash", "-x", "/tmp/scripts/metrics/install" ]
 
 USER root
-RUN [ "bash", "-x", "/tmp/scripts/python36/install" ]
+RUN [ "bash", "-x", "/tmp/scripts/spark/install" ]
 
 USER root
 RUN rm -rf /tmp/scripts
@@ -71,5 +75,4 @@ WORKDIR /tmp
 
 ENTRYPOINT ["/entrypoint"]
 
-CMD ["/opt/spark/bin/launch.sh"]
-
+CMD ["/launch.sh"]
