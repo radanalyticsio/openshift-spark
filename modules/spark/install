@@ -11,7 +11,7 @@ fullname=$(find $ARTIFACTS_DIR -name spark-[0-9.]*\.tgz)
 
 # Make a place for spark to go (dupe what's done in common in case we're standalone)
 if ! [ -d $SPARK_INSTALL ]; then
-    mkdir -p $SPARK_INSTALL
+    mkdir -p $SPARK_INSTALL/conf
     ln -sfn $SPARK_INSTALL/distro $SPARK_HOME
 fi
 
@@ -22,10 +22,7 @@ ln -s $(basename $fullname .tgz) distro
 rm $(basename $fullname)
 popd
 
-# If we included any metrics jars, move them
-mv /opt/metrics/*.jar $SPARK_HOME
-
-# Add in the configuration files
+# Add in the configuration files (from the common module)
 pushd $SPARK_INSTALL/conf
 for conf_file in *; do
     if ! [ -f "$SPARK_HOME"/conf/$conf_file ]; then
