@@ -48,3 +48,16 @@ zero-tarballs:
 	find ./$(DOCKERFILE_CONTEXT) -name "*.tar.gz" -type f -exec truncate -s 0 {} \;
 	find ./$(DOCKERFILE_CONTEXT)-py36 -name "*.tgz" -type f -exec truncate -s 0 {} \;
 	find ./$(DOCKERFILE_CONTEXT)-py36 -name "*.tar.gz" -type f -exec truncate -s 0 {} \;
+
+test-e2e:
+	LOCAL_IMAGE=$(OPENSHIFT_SPARK_TEST_IMAGE) make -f Makefile.inc build
+	test/run.sh incomplete/
+	SPARK_TEST_IMAGE=$(OPENSHIFT_SPARK_TEST_IMAGE)-py36 test/run.sh incomplete/
+
+test-e2e-py:
+	LOCAL_IMAGE=$(OPENSHIFT_SPARK_TEST_IMAGE) make -f Makefile.inc build-py
+	test/run.sh incomplete/
+
+test-e2e-py36:
+	LOCAL_IMAGE=$(OPENSHIFT_SPARK_TEST_IMAGE) make -f Makefile.inc build-py36
+	SPARK_TEST_IMAGE=$(OPENSHIFT_SPARK_TEST_IMAGE)-py36 test/run.sh incomplete/

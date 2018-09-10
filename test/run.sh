@@ -86,11 +86,6 @@ for dir in "${dirs[@]}"; do
 
     for test in "${tests[@]}"; do
         echo
-        oc delete dc --all > /dev/null
-        oc delete service --all > /dev/null
-        oc delete configmap --all > /dev/null
-        oc delete route --all > /dev/null
-        oc delete template --all > /dev/null
         echo "++++ ${test}"
         if ! ${test}; then
             echo "failed: ${test}"
