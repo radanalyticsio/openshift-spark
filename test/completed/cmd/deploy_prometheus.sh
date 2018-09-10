@@ -1,17 +1,18 @@
 #!/bin/bash
-source "$(dirname "${BASH_SOURCE}")/../../hack/lib/init.sh"
+THIS=$(readlink -f `dirname "${BASH_SOURCE[0]}"`)
+TOP_DIR=$(echo $THIS | grep -o '.*/openshift-spark')
+
+source $TOP_DIR/hack/lib/init.sh
 trap os::test::junit::reconcile_output EXIT
 
-source "$(dirname "${BASH_SOURCE}")/../common.sh"
+source $TOP_DIR/test/common.sh
+RESOURCE_DIR=$TOP_DIR/test/resources
 
-os::test::junit::declare_suite_start "cmd/create"
-
-RESOURCE_DIR="$(dirname "${BASH_SOURCE}")/../resources"
+os::test::junit::declare_suite_start "cmd/deploy_prom"
 
 # Handles registries, etc, and sets SPARK_IMAGE to the right value
 make_image
-
-os::cmd::expect_success 'oc create configmap test-config --from-file=$RESOURCE_DIR/config'
+make_configmap
 
 os::cmd::expect_success 'oc new-app --file=$RESOURCE_DIR/test-spark-metrics-template.yaml -p MASTER_NAME=master -p WORKER_NAME=worker -p SPARK_IMAGE="$SPARK_IMAGE" -p SPARK_METRICS_ON=prometheus'
 
@@ -27,3 +28,5 @@ echo curling prometheus at $HOST
 
 # check its up
 os::cmd::try_until_text 'curl --silent --output /dev/null --write-out %{http_code} "$HOST"' '^200$' $((60*second))
+
+cleanup_app

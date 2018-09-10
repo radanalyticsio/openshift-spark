@@ -92,3 +92,17 @@ function make_image {
 	SPARK_IMAGE=$SPARK_TEST_IMAGE
     fi
 }
+
+function cleanup_app {
+    oc delete dc --all > /dev/null
+    oc delete service --all > /dev/null
+    oc delete route --all > /dev/null
+    oc delete template --all > /dev/null
+    os::cmd::try_until_text 'oc get pods' 'No resources found'
+}
+
+function make_configmap {
+    set +e
+    oc create configmap test-config --from-file=$RESOURCE_DIR/config
+    set -e
+}
