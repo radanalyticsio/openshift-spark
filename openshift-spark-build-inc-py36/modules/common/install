@@ -1,0 +1,25 @@
+#!/bin/sh
+
+set -e
+
+SCRIPT_DIR=$(dirname $0)
+ADDED_DIR=${SCRIPT_DIR}/added
+
+# Put entrypoint and launch.sh at the root
+cp $ADDED_DIR/scripts/* /
+
+# Set up a place for spark to go
+# We'll also stage our default spark config files here
+# so that when spark is installed they can be copied over
+# if the spark tarball itself does not include files of the same name
+# (ie, "copy if not overwrite")
+if ! [ -d $SPARK_INSTALL ]; then
+    mkdir -p $SPARK_INSTALL
+    mv $ADDED_DIR/conf $SPARK_INSTALL
+    chown -R 185:0 $SPARK_INSTALL && chmod -R g+rwX $SPARK_INSTALL
+    ln -sfn $SPARK_INSTALL/distro /opt/spark
+fi
+
+# Change the permissions on /etc/passwd so that anonymous user
+# can be added to satisfy Spark
+chgrp root /etc/passwd && chmod g+rw /etc/passwd

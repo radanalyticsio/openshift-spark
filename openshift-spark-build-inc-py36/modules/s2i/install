@@ -1,0 +1,9 @@
+#!/bin/sh
+
+set -e
+
+SCRIPT_DIR=$(dirname $0)
+ADDED_DIR=${SCRIPT_DIR}/added
+
+mkdir -p $STI_SCRIPTS_PATH
+cp $ADDED_DIR/* $STI_SCRIPTS_PATH

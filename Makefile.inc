@@ -2,8 +2,8 @@ LOCAL_IMAGE ?= openshift-spark-inc
 SPARK_IMAGE=radanalyticsio/openshift-spark-inc
 DOCKERFILE_CONTEXT=openshift-spark-build-inc
 
-OPENSHIFT_SPARK_TEST_IMAGE ?= spark-testimage-inc
-export OPENSHIFT_SPARK_TEST_IMAGE
+SPARK_TEST_IMAGE ?= spark-testimage-inc
+export SPARK_TEST_IMAGE
 
 .PHONY: build clean push create destroy test-e2e build-py build-py36
 
@@ -50,14 +50,14 @@ zero-tarballs:
 	find ./$(DOCKERFILE_CONTEXT)-py36 -name "*.tar.gz" -type f -exec truncate -s 0 {} \;
 
 test-e2e:
-	LOCAL_IMAGE=$(OPENSHIFT_SPARK_TEST_IMAGE) make -f Makefile.inc build
-	test/run.sh incomplete/
-	SPARK_TEST_IMAGE=$(OPENSHIFT_SPARK_TEST_IMAGE)-py36 test/run.sh incomplete/
+	LOCAL_IMAGE=$(SPARK_TEST_IMAGE) make -f Makefile.inc build
+	SPARK_TEST_IMAGE=$(SPARK_TEST_IMAGE) test/run.sh incomplete/
+	SPARK_TEST_IMAGE=$(SPARK_TEST_IMAGE)-py36 test/run.sh incomplete/
 
 test-e2e-py:
-	LOCAL_IMAGE=$(OPENSHIFT_SPARK_TEST_IMAGE) make -f Makefile.inc build-py
-	test/run.sh incomplete/
+	LOCAL_IMAGE=$(SPARK_TEST_IMAGE) make -f Makefile.inc build-py
+	SPARK_TEST_IMAGE=$(SPARK_TEST_IMAGE) test/run.sh incomplete/
 
 test-e2e-py36:
-	LOCAL_IMAGE=$(OPENSHIFT_SPARK_TEST_IMAGE) make -f Makefile.inc build-py36
-	SPARK_TEST_IMAGE=$(OPENSHIFT_SPARK_TEST_IMAGE)-py36 test/run.sh incomplete/
+	LOCAL_IMAGE=$(SPARK_TEST_IMAGE)-py36 make -f Makefile.inc build-py36
+	SPARK_TEST_IMAGE=$(SPARK_TEST_IMAGE)-py36 test/run.sh incomplete/
