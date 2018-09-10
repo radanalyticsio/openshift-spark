@@ -28,10 +28,10 @@ if [ -z ${SPARK_METRICS_ON+_} ]; then
     JAVA_AGENT=
     metrics=""
 elif [ ${SPARK_METRICS_ON} == "prometheus" ]; then
-    JAVA_AGENT=" -javaagent:$SPARK_HOME/agent-bond.jar=$SPARK_HOME/conf/agent.properties"
+    JAVA_AGENT=" -javaagent:/opt/metrics/agent-bond.jar=$SPARK_HOME/conf/agent.properties"
     metrics=" with prometheus metrics enabled"
 else
-    JAVA_AGENT=" -javaagent:$SPARK_HOME/jolokia-jvm-1.3.6-agent.jar=port=7777,host=0.0.0.0"
+    JAVA_AGENT=" -javaagent:/opt/metrics/jolokia-jvm-1.3.6-agent.jar=port=7777,host=0.0.0.0"
     metrics=" with jolokia metrics enabled (deprecated, set SPARK_METRICS_ON to 'prometheus')"
 fi
 

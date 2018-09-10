@@ -93,9 +93,6 @@ else
             sed -i "s@exec /sbin/tini -s --@exec@" $SPARK_INSTALL/entrypoint.sh
         fi
 
-	# If we included any metrics jars, move them
-	mv /opt/metrics/*.jar $SPARK_HOME
-
 	# Include the default spark configuration files
         pushd $SPARK_INSTALL/conf
         for conf_file in *; do
