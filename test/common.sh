@@ -111,8 +111,17 @@ function poll_binary_build() {
     local name
     local source
     local expect_fail
+    local from_flag
     name=$1
     source=$2
+    # We'll pass a tarball directory to test from-archive and the ability
+    # of the image to detect an unpacked directory. We'll use from-file
+    # with a directory to test the ability of the image to handle a tarball
+    if [[ "$source" == *".tgz" ]]; then
+	from_flag="--from-archive=$source"
+    else
+	from_flag="--from-file=$source"
+    fi
     if [ "$#" -eq 3 ]; then
 	expect_fail=$3
     else
@@ -122,7 +131,9 @@ function poll_binary_build() {
     local status
     local BUILDNUM
 
-    oc start-build $name --from-file=$2
+    echo "oc start-build $name $from_flag"
+    oc start-build $name $from_flag
+
 
     while true; do
         BUILDNUM=$(oc get buildconfig $name --template='{{index .status "lastVersion"}}')
@@ -149,7 +160,7 @@ function poll_binary_build() {
 		if [ "$tries" -lt 5 ]; then
 		    echo Build failed on push, retrying
 		    sleep 5
-		    oc start-build $name --from-file=$2
+		    oc start-build $name $from_flag
 		    continue
 		fi
 	    fi
