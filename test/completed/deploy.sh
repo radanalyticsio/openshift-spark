@@ -8,7 +8,7 @@ trap os::test::junit::reconcile_output EXIT
 source $TOP_DIR/test/common.sh
 RESOURCE_DIR=$TOP_DIR/test/resources
 
-os::test::junit::declare_suite_start "cmd/deploy"
+os::test::junit::declare_suite_start "deploy"
 
 # Handles registries, etc, and sets SPARK_IMAGE to the right value
 make_image
@@ -41,3 +41,5 @@ os::cmd::try_until_success 'oc delete dc/master'
 os::cmd::try_until_text 'oc get pods' 'No resources found.' $((15*second))
 
 cleanup_app
+
+os::test::junit::declare_suite_end

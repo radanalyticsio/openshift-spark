@@ -47,3 +47,4 @@ os::cmd::try_until_text 'oc logs $POD' 'this is usage'
 
 cleanup_app
 
+os::test::junit::declare_suite_end

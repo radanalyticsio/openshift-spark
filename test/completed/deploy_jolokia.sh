@@ -8,7 +8,7 @@ trap os::test::junit::reconcile_output EXIT
 source $TOP_DIR/test/common.sh
 RESOURCE_DIR=$TOP_DIR/test/resources
 
-os::test::junit::declare_suite_start "cmd/deploy_jokokia"
+os::test::junit::declare_suite_start "deploy_jokokia"
 
 # Handles registries, etc, and sets SPARK_IMAGE to the right value
 make_image
@@ -31,3 +31,4 @@ os::cmd::try_until_text 'curl --silent --output /dev/null --write-out %{http_cod
 
 cleanup_app
 
+os::test::junit::declare_suite_end
