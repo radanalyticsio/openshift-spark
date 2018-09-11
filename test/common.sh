@@ -106,3 +106,80 @@ function make_configmap {
     oc create configmap test-config --from-file=$RESOURCE_DIR/config
     set -e
 }
+
+function poll_binary_build() {
+    local name
+    local source
+    local expect_fail
+    name=$1
+    source=$2
+    if [ "$#" -eq 3 ]; then
+	expect_fail=$3
+    else
+	expect_fail=false
+    fi
+    local tries=0
+    local status
+    local BUILDNUM
+
+    oc start-build $name --from-file=$2
+
+    while true; do
+        BUILDNUM=$(oc get buildconfig $name --template='{{index .status "lastVersion"}}')
+	if [ "$BUILDNUM" == "0" ]; then
+	    # Buildconfig is brand new, lastVersion hasn't been updated yet
+	    status="starting"
+	else
+            status=$(oc get build "$name"-$BUILDNUM --template="{{index .status \"phase\"}}")
+	fi
+	if [ "$status" == "starting" ]; then
+	    echo Build for $name is spinning up, waiting ...
+	    sleep 5
+	elif [ "$status" != "Complete" -a "$status" != "Failed" -a "$status" != "Error" ]; then
+	    echo Build for $name-$BUILDNUM status is $status, waiting ...
+	    sleep 10
+	elif [ "$status" == "Failed" -o "$status" == "Error" ]; then
+	    if [ "$expect_fail" == "true" ]; then
+		return
+	    fi
+	    set +e
+	    oc log buildconfig/$name | grep "Pushing image"
+	    if [ "$?" -eq 0 ]; then
+		tries=$((tries+1))
+		if [ "$tries" -lt 5 ]; then
+		    echo Build failed on push, retrying
+		    sleep 5
+		    oc start-build $name --from-file=$2
+		    continue
+		fi
+	    fi
+	    oc log buildconfig/$name | tail -100
+	    set -e
+	    return 1
+	else
+	    break
+	fi
+    done
+}
+
+function get_cluster_pod() {
+    local count
+    count=0
+
+    set +e
+    while true; do
+        POD=$(oc get pod -l deploymentconfig=$1 --template='{{index .items 0 "metadata" "name"}}')
+        if [ "$?" -eq 0 ]; then
+            break
+        fi
+        echo Getting cluster pod for $1 failed, trying again
+        oc get pods
+        sleep 0.5
+        count=$((count + 1))
+        echo $count
+        if [ "$count" -eq 120 ]; then
+            return 1
+        fi
+    done
+    set -e
+}

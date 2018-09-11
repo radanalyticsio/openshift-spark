@@ -8,28 +8,6 @@ trap os::test::junit::reconcile_output EXIT
 source $TOP_DIR/test/common.sh
 RESOURCE_DIR=$TOP_DIR/test/resources
 
-function get_cluster_pod() {
-    local count
-    count=0
-
-    set +e
-    while true; do
-        POD=$(oc get pod -l deploymentconfig=$1 --template='{{index .items 0 "metadata" "name"}}')
-        if [ "$?" -eq 0 ]; then
-            break
-        fi
-        echo Getting cluster pod for $1 failed, trying again
-        oc get pods
-        sleep 0.5
-        count=$((count + 1))
-        echo $count
-        if [ "$count" -eq 120 ]; then
-            return 1
-        fi
-    done
-    set -e
-}
-
 os::test::junit::declare_suite_start "app_fail"
 
 # Handles registries, etc, and sets SPARK_IMAGE to the right value
