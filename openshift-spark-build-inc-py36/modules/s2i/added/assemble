@@ -35,24 +35,24 @@ else
         # Is the file a directory? If it contains spark-submit, move it
         if [ -d "$spark" ]; then
             if ! [ -f $spark/bin/spark-submit ]; then
-		echo Ignoring directory $spark, no spark-submit
+                echo Ignoring directory $spark, no spark-submit
                 continue
             fi
-	    echo Installing from directory $spark
+            echo Installing from directory $spark
             sparkdir=$SPARK_INSTALL/$(basename $spark)
             mv $spark $SPARK_INSTALL
         else
             # If we can get the table of contents, it's a tar archive, otherwise ignore
             tar -tf $spark &> /dev/null
             if [ "$?" -ne 0 ]; then
-		echo Ignoring $spark, not a tar archive
+                echo Ignoring $spark, not a tar archive
                 continue
             fi
 
             # Does the tarball contain a spark-submit?
             name=$(tar -tzf $spark | grep "spark-submit$")
             if [ "$?" -ne 0 ]; then
-		echo Ignoring tarball $spark, no spark-submit
+                echo Ignoring tarball $spark, no spark-submit
                 continue
             else
                 # See if we have an md5 file to match against
@@ -74,7 +74,7 @@ else
 
                 # dname will be the intial directory from the path of spark-submit
                 # we found in the tarball, ie the dir created by tar
-		echo Installing from tarball $spark
+                echo Installing from tarball $spark
                 dname=$(dirname $name | cut -d/ -f 1)
                 sparkdir=$SPARK_INSTALL/$dname
                 tar -xzf $spark -C $SPARK_INSTALL
@@ -87,7 +87,7 @@ else
         # Search for the spark entrypoint file and copy it to $SPARK_INSTALL
         entry=$(find $sparkdir/kubernetes -name entrypoint.sh)
         if [ -n "$entry" ]; then
-	    echo Copying spark entrypoint
+            echo Copying spark entrypoint
             cp $entry $SPARK_INSTALL
 
             # We have to patch the entrypoint to toggle error checking
@@ -117,7 +117,7 @@ else
             echo Spark installed successfully
             exit 0
 	else
-	    echo Spark install failed
+            echo Spark install failed
         fi
 
         # Just in case there is more than one tarball, clean up

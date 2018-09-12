@@ -1,0 +1,13 @@
+# Python 3.6 override
+# for more information see https://concreate.readthedocs.io/en/develop/overrides.html
+schema_version: 1
+
+envs:
+    - name: SCL_ENABLE_CMD
+      value: "scl enable rh-python36"
+modules:
+    install:
+        - name: python36
+        - name: common
+        - name: metrics
+        - name: s2i
