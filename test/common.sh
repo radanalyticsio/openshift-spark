@@ -111,16 +111,18 @@ function poll_binary_build() {
     local name
     local source
     local expect_fail
-    local from_flag
+    local from_flag=""
     name=$1
-    source=$2
-    # We'll pass a tarball directory to test from-archive and the ability
-    # of the image to detect an unpacked directory. We'll use from-file
-    # with a directory to test the ability of the image to handle a tarball
-    if [[ "$source" == *".tgz" ]]; then
-	from_flag="--from-archive=$source"
-    else
-	from_flag="--from-file=$source"
+    if [ "$#" -ge 2 ]; then
+        source=$2
+        # We'll pass a tarball directory to test from-archive and the ability
+        # of the image to detect an unpacked directory. We'll use from-file
+        # with a directory to test the ability of the image to handle a tarball
+        if [[ "$source" == *".tgz" ]]; then
+	    from_flag="--from-archive=$source"
+        else
+	    from_flag="--from-file=$source"
+        fi
     fi
     if [ "$#" -eq 3 ]; then
 	expect_fail=$3
@@ -168,6 +170,7 @@ function poll_binary_build() {
 	    set -e
 	    return 1
 	else
+	    echo Build for $name-$BUILDNUM status is $status, returning
 	    break
 	fi
     done

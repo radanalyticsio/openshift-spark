@@ -15,7 +15,8 @@ function match_sum {
 }
 
 if [ -f $SPARK_HOME/bin/spark-submit ]; then
-    echo "Spark is installed"
+    echo "Spark is installed, nothing to do"
+    exit 1
 else
     echo "Attempting to install Spark"
     # If a url has been specfified for spark use it
@@ -117,7 +118,7 @@ else
             echo Spark installed successfully
             exit 0
 	else
-            echo Spark install failed
+            echo Cannot run spark-submit, Spark install failed
         fi
 
         # Just in case there is more than one tarball, clean up
