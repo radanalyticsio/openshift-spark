@@ -40,7 +40,7 @@ $(DOCKERFILE_CONTEXT)/Dockerfile $(DOCKERFILE_CONTEXT)/modules:
 
 $(DOCKERFILE_CONTEXT)-py36/Dockerfile $(DOCKERFILE_CONTEXT)-py36/modules:
 	-mkdir -p $(DOCKERFILE_CONTEXT)-py36
-	concreate generate --descriptor image-inc.yaml --overrides overrides/python36.yaml --target target-py36
+	concreate generate --descriptor image-inc.yaml --overrides overrides/python36-inc.yaml --target target-py36
 	cp -R target-py36/image/* $(DOCKERFILE_CONTEXT)-py36
 
 zero-tarballs:
@@ -59,5 +59,6 @@ test-e2e-py:
 	SPARK_TEST_IMAGE=$(SPARK_TEST_IMAGE) test/run.sh incomplete/
 
 test-e2e-py36:
-	LOCAL_IMAGE=$(SPARK_TEST_IMAGE)-py36 make -f Makefile.inc build-py36
+	# build already adds the -py36 to local image
+	LOCAL_IMAGE=$(SPARK_TEST_IMAGE) make -f Makefile.inc build-py36
 	SPARK_TEST_IMAGE=$(SPARK_TEST_IMAGE)-py36 test/run.sh incomplete/

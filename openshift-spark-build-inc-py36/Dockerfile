@@ -60,9 +60,6 @@ USER root
 RUN [ "bash", "-x", "/tmp/scripts/metrics/install" ]
 
 USER root
-RUN [ "bash", "-x", "/tmp/scripts/spark/install" ]
-
-USER root
 RUN [ "bash", "-x", "/tmp/scripts/s2i/install" ]
 
 USER root
