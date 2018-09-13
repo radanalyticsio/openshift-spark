@@ -19,18 +19,6 @@ function build_md5 {
     os::cmd::expect_success_and_text 'oc log buildconfig/spark' 'Copying spark entrypoint'
     os::cmd::expect_success_and_text 'oc log buildconfig/spark' 'Spark installed successfully'
     os::cmd::expect_success_and_text 'oc log buildconfig/spark' 'Pushed'
-
-    if [ "$#" -ne 1 ] || [ "$1" != "true" ]; then
-        # Now we should have an imagestream named spark
-        SPARK_PULL=$(oc get is spark --template='{{index .status "dockerImageRepository"}}')
-        os::cmd::expect_success 'oc new-app --file=$RESOURCE_DIR/test-template.yaml -p MASTER_NAME=master -p WORKER_NAME=worker -p SPARK_IMAGE=$SPARK_PULL'
-
-        get_cluster_pod master
-        os::cmd::try_until_text 'oc logs $POD' 'Starting.*master'
-
-        get_cluster_pod worker
-        os::cmd::try_until_text 'oc logs $POD' 'Starting.*worker'
-    fi
     os::cmd::expect_success 'oc delete buildconfig spark'
 }
 
@@ -54,7 +42,7 @@ function already_installed {
 }
 
 function build_env_var {
-    os::cmd::expect_success 'oc new-build --name=spark --docker-image="$SPARK_IMAGE" --binary -e SPARK_URL=https://archive.apache.org/dist/spark/spark-2.3.0/spark-2.3.0-bin-hadoop2.7.tgz -e SPARK_MD5_URL==https://archive.apache.org/dist/spark/spark-2.3.0/spark-2.3.0-bin-hadoop2.7.tgz.md5'
+    os::cmd::expect_success 'oc new-build --name=spark --docker-image="$SPARK_IMAGE" --binary -e SPARK_URL=https://archive.apache.org/dist/spark/spark-2.3.0/spark-2.3.0-bin-hadoop2.7.tgz -e SPARK_MD5_URL=https://archive.apache.org/dist/spark/spark-2.3.0/spark-2.3.0-bin-hadoop2.7.tgz.md5'
 
     poll_binary_build spark
 

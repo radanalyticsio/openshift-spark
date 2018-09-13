@@ -5,7 +5,7 @@ DOCKERFILE_CONTEXT=openshift-spark-build-inc
 SPARK_TEST_IMAGE ?= spark-testimage-inc
 export SPARK_TEST_IMAGE
 
-.PHONY: build clean push create destroy test-e2e build-py build-py36
+.PHONY: build clean push create destroy test-e2e test-e2e-py test-e2e-py-completed test-e2e-py36 test-e2e-py36-completed build-py build-py36
 
 build: build-py build-py36
 
@@ -60,8 +60,21 @@ test-e2e-py:
 	LOCAL_IMAGE=$(SPARK_TEST_IMAGE) make -f Makefile.inc build-py
 	SPARK_TEST_IMAGE=$(SPARK_TEST_IMAGE) test/run.sh incomplete/
 
+test-e2e-py-completed:
+	test/sparkinputs.sh
+	LOCAL_IMAGE=$(SPARK_TEST_IMAGE) make -f Makefile.inc build-py
+	test/localcomplete.sh $(SPARK_TEST_IMAGE) spark-complete
+	SPARK_TEST_IMAGE=spark-complete test/run.sh completed/
+
 test-e2e-py36:
 	test/sparkinputs.sh
 	# build already adds the -py36 to local image
 	LOCAL_IMAGE=$(SPARK_TEST_IMAGE) make -f Makefile.inc build-py36
 	SPARK_TEST_IMAGE=$(SPARK_TEST_IMAGE)-py36 test/run.sh incomplete/
+
+test-e2e-py36-completed:
+	test/sparkinputs.sh
+	# build already adds the -py36 to local image
+	LOCAL_IMAGE=$(SPARK_TEST_IMAGE) make -f Makefile.inc build-py36
+	test/localcomplete.sh $(SPARK_TEST_IMAGE)-py36 spark-complete-py36
+	SPARK_TEST_IMAGE=spark-complete-py36 test/run.sh completed/
