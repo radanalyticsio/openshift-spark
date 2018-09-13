@@ -18,10 +18,10 @@ os::cmd::expect_success 'oc new-app --file=$RESOURCE_DIR/test-template.yaml -p M
 
 # If a user tries to use the image as a cluster image without completion, the usage script should run
 get_cluster_pod master
-os::cmd::try_until_text 'oc logs $POD' 'this is usage'
+os::cmd::try_until_text 'oc logs $POD' 'This is an incomplete openshift-spark image'
 
 get_cluster_pod worker
-os::cmd::try_until_text 'oc logs $POD' 'this is usage'
+os::cmd::try_until_text 'oc logs $POD' 'This is an incomplete openshift-spark image'
 
 cleanup_app
 
