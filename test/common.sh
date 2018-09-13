@@ -98,6 +98,7 @@ function cleanup_app {
     oc delete service --all > /dev/null
     oc delete route --all > /dev/null
     oc delete template --all > /dev/null
+    oc delete pod --all > /dev/null
     os::cmd::try_until_text 'oc get pods' 'No resources found'
 }
 

@@ -10,6 +10,8 @@ matrix:
     - env: TO_TEST=openshift-spark-py36 OPENSHIFT_VERSION=v3.10
     - env: TO_TEST=openshift-spark-inc OPENSHIFT_VERSION=v3.10
     - env: TO_TEST=openshift-spark-py36-inc OPENSHIFT_VERSION=v3.10
+    - env: TO_TEST=openshift-spark-comp OPENSHIFT_VERSION=v3.10
+    - env: TO_TEST=openshift-spark-py36-comp OPENSHIFT_VERSION=v3.10
   fast_finish: true
 
 before_install:
@@ -25,6 +27,8 @@ script:
 - if [ "$TO_TEST" = "openshift-spark-py36" ]; then make test-e2e-py36 ; fi
 - if [ "$TO_TEST" = "openshift-spark-inc" ]; then make -f Makefile.inc test-e2e-py ; fi
 - if [ "$TO_TEST" = "openshift-spark-py36-inc" ]; then make -f Makefile.inc test-e2e-py36 ; fi
+- if [ "$TO_TEST" = "openshift-spark-comp" ]; then make -f Makefile.inc test-e2e-py-completed ; fi
+- if [ "$TO_TEST" = "openshift-spark-py36-comp" ]; then make -f Makefile.inc test-e2e-py36-completed ; fi
 notifications:
  email:
    on_success: never
