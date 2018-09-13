@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -x
-
 # If we get an s2i command and it's anything but "run" just do it
 # Otherwise we'll turn it into a launch
 if [[ -n "$STI_SCRIPTS_PATH" ]] && [[ $@ == *"$STI_SCRIPTS_PATH"* ]]; then

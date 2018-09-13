@@ -37,11 +37,13 @@ $(DOCKERFILE_CONTEXT)/Dockerfile $(DOCKERFILE_CONTEXT)/modules:
 	-mkdir -p $(DOCKERFILE_CONTEXT)
 	concreate generate --descriptor image-inc.yaml
 	cp -R target/image/* $(DOCKERFILE_CONTEXT)
+	-rm $(DOCKERFILE_CONTEXT)/spark*.tgz
 
 $(DOCKERFILE_CONTEXT)-py36/Dockerfile $(DOCKERFILE_CONTEXT)-py36/modules:
 	-mkdir -p $(DOCKERFILE_CONTEXT)-py36
 	concreate generate --descriptor image-inc.yaml --overrides overrides/python36-inc.yaml --target target-py36
 	cp -R target-py36/image/* $(DOCKERFILE_CONTEXT)-py36
+	-rm $(DOCKERFILE_CONTEXT)-py36/spark*.tgz
 
 zero-tarballs:
 	find ./$(DOCKERFILE_CONTEXT) -name "*.tgz" -type f -exec truncate -s 0 {} \;

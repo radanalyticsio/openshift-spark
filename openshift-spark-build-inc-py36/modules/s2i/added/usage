@@ -1,2 +1,24 @@
 #!/bin/bash
-echo "this is usage"
+#!/bin/bash
+cat <<EOF
+This is an incomplete openshift-spark image. It contains scripts
+for running an Apache Spark master or worker but is missing an actual
+Spark distribution.
+
+In order to produce a final image, a binary build must be performed which
+uses this image and supplies a Spark distribution.  For example:
+
+$ oc new-build --name=openshift-spark --docker-image=radanalyticsio/openshift-spark-inc --binary
+$ oc start-build openshift-spark --from-file=https://archive.apache.org/dist/spark/spark-2.3.0/spark-2.3.0-bin-hadoop2.7.tgz
+
+This will create a usable openshift-spark imagestream in the local project
+
+Note: the --from-file option also supports a local file or directory, so a Spark
+tarball and optionally it's md5 sum can be downloaded to a directory to use as a
+build input. For example:
+
+$ mkdir build_input
+$ wget https://archive.apache.org/dist/spark/spark-2.3.0/spark-2.3.0-bin-hadoop2.7.tgz -O build_input/spark-2.3.0-bin-hadoop2.7.tgz
+$ wget https://archive.apache.org/dist/spark/spark-2.3.0/spark-2.3.0-bin-hadoop2.7.tgz.md5 -O build_input/spark-2.3.0-bin-hadoop2.7.tgz.md5
+$ oc start-build openshift-spark --from-file=build_input
+EOF
