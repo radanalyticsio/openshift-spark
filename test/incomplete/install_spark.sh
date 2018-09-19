@@ -16,7 +16,7 @@ function build_md5 {
 
     os::cmd::expect_success_and_text 'oc log buildconfig/spark' 'Attempting to install Spark'
     os::cmd::expect_success_and_text 'oc log buildconfig/spark' 'Installing from tarball'
-    os::cmd::expect_success_and_text 'oc log buildconfig/spark' 'Copying spark entrypoint'
+    os::cmd::expect_success_and_text 'oc log buildconfig/spark' 'Installing spark native entrypoint'
     os::cmd::expect_success_and_text 'oc log buildconfig/spark' 'Spark installed successfully'
     os::cmd::expect_success_and_text 'oc log buildconfig/spark' 'Pushed'
     os::cmd::expect_success 'oc delete buildconfig spark'
