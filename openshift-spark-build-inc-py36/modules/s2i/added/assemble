@@ -2,6 +2,25 @@
 
 source $STI_SCRIPTS_PATH/s2i-env-vars
 
+# Just a word about the directory structure
+# SPARK_HOME == /opt/spark
+# SPARK_INSTALL == /opt/spark-distro
+
+# Extra things like default configuration files and additional
+# boot scripts may be stored in SPARK_INSTALL
+
+# At runtime, /opt/spark is a symlink to /opt/spark-distro/distro
+# but /opt/spark-distro/distro does not actually exist yet
+
+# The Spark tarball will be expanded in /opt/spark-distro using
+# it's original name, for example /opt/spark-distro/spark-2.3.0-bin-hadoop2.7,
+# as a dev aid to tracking and version checking
+
+# Ultimately, /opt/spark-distro/distro is created as a symlink to the Spark root
+# directory. This double-hop from /opt/spark to the Spark root through symlinks
+# allows the Spark installation to be staged in the base image but completed in
+# the S2I build without expanding permissions
+
 function match_sum {
     local sumfile=$1
     local delim=$2
@@ -83,12 +102,13 @@ else
         fi
 
         ln -s $sparkdir $SPARK_INSTALL/distro
-        chmod -R g+rwX $SPARK_INSTALL/distro
+        # Spark workers need to write to the spark directory to track apps
+        chmod -R g+rwX $sparkdir
 
         # Search for the spark entrypoint file and copy it to $SPARK_INSTALL
         entry=$(find $sparkdir/kubernetes -name entrypoint.sh)
         if [ -n "$entry" ]; then
-            echo Copying spark entrypoint
+            echo Installing spark native entrypoint for use with spark-on-k8s commands
             cp $entry $SPARK_INSTALL
 
             # We have to patch the entrypoint to toggle error checking
@@ -98,10 +118,12 @@ else
 
             # We also want to get rid of the tini invocation
             sed -i "s@exec /sbin/tini -s --@exec@" $SPARK_INSTALL/entrypoint.sh
+        else
+            echo No spark native entrypoint found for use with spark-on-k8s commands
         fi
 
 	# Include the default spark configuration files
-        pushd $SPARK_INSTALL/conf
+        pushd $SPARK_INSTALL/conf &> /dev/null
         for conf_file in *; do
             if ! [ -f "$SPARK_HOME"/conf/$conf_file ]; then
 	        echo Moving $conf_file to $SPARK_HOME/conf
@@ -110,7 +132,7 @@ else
 	        echo Not moving $conf_file, $SPARK_HOME/conf/$conf_file already exists
             fi
         done
-        popd
+        popd &> /dev/null
 
         # Can we run spark-submit?
         $SPARK_HOME/bin/spark-submit --version
