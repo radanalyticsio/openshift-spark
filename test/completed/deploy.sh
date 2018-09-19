@@ -38,7 +38,7 @@ os::cmd::try_until_success 'oc delete dc/worker'
 os::cmd::try_until_success 'oc delete dc/master'
 
 #check the pods have been deleted using a label
-os::cmd::try_until_text 'oc get pods' 'No resources found.' $((15*second))
+os::cmd::try_until_text 'oc get pods' 'No resources found.' $((25*second))
 
 cleanup_app
 
