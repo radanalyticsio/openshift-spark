@@ -8,6 +8,11 @@ if [[ -n "$STI_SCRIPTS_PATH" ]] && [[ $@ == *"$STI_SCRIPTS_PATH"* ]]; then
 	exit $?
     fi
     CMD=/launch.sh
+
+# allow just a simple "usage" command to print the usage script
+elif [[ -n "$STI_SCRIPTS_PATH" ]] && [[ $@ == "usage" ]]; then
+    exec $STI_SCRIPTS_PATH/usage
+    exit $?
 else
     CMD=$@
 fi

@@ -22,16 +22,17 @@ FROM centos:latest
 ENV \
     PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/spark/bin" \
     SCL_ENABLE_CMD="scl enable rh-python36" \
-    SPARK_HOME="/opt/spark" 
+    SPARK_HOME="/opt/spark" \
     SPARK_INSTALL="/opt/spark-distro" 
-
+    STI_SCRIPTS_PATH="/usr/libexec/s2i"
+      
 # Labels
 LABEL \
       io.cekit.version="2.1.4"  \
       maintainer="Chad Roberts <croberts@redhat.com>"  \
       org.concrt.version="2.1.4"  \
-      sparkversion="2.3.0" 
-
+      sparkversion="2.3.0" \
+      io.openshift.s2i.scripts-url="image:///usr/libexec/s2i"
 
 USER root
 
@@ -62,6 +63,9 @@ RUN [ "bash", "-x", "/tmp/scripts/metrics/install" ]
 
 USER root
 RUN [ "bash", "-x", "/tmp/scripts/spark/install" ]
+
+USER root
+RUN [ "bash", "-x", "/tmp/scripts/s2i/install" ]
 
 USER root
 RUN rm -rf /tmp/scripts
