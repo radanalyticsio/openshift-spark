@@ -3,14 +3,14 @@ schema_version: 1
 version: 2.3-latest
 release: community
 name: radanalyticsio/openshift-spark-inc
-from: centos/s2i-core-centos7:latest
+from: centos:latest
 labels:
     - name: maintainer
-      value: Trevor McKay <ctmckay@redhat.com>
+      value: Chad Roberts <croberts@redhat.com>
     - name: sparkversion
       value: 2.3.0
     - name: "io.openshift.s2i.scripts-url"
-      value: "image:///usr/libexec/s2i"      
+      value: "image:///usr/libexec/s2i"
 envs:
     - name: PATH
       value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/spark/bin

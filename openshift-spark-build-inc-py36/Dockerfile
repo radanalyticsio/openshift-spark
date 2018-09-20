@@ -16,7 +16,7 @@
 #
 # This is a Dockerfile for the radanalyticsio/openshift-spark-inc:2.3-latest image.
 
-FROM centos/s2i-core-centos7:latest
+FROM centos:latest
 
 # Environment variables
 ENV JBOSS_IMAGE_NAME="radanalyticsio/openshift-spark-inc" \
@@ -33,7 +33,7 @@ LABEL name="$JBOSS_IMAGE_NAME" \
       architecture="x86_64"  \
       com.redhat.component="radanalyticsio-openshift-spark-inc-docker"  \
       org.concrt.version="1.4.1" \
-      maintainer="Trevor McKay <ctmckay@redhat.com>" \
+      maintainer="Chad Roberts <croberts@redhat.com>" \
       sparkversion="2.3.0" \
       io.openshift.s2i.scripts-url="image:///usr/libexec/s2i"
 
