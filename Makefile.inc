@@ -15,6 +15,12 @@ build-py: $(DOCKERFILE_CONTEXT)
 build-py36: $(DOCKERFILE_CONTEXT)-py36
 	docker build -t $(LOCAL_IMAGE)-py36 $(DOCKERFILE_CONTEXT)-py36
 
+push: build
+	docker tag $(LOCAL_IMAGE) $(SPARK_IMAGE)
+	docker push $(SPARK_IMAGE)
+	docker tag $(LOCAL_IMAGE)-py36 $(SPARK_IMAGE)-py36
+	docker push $(SPARK_IMAGE)-py36
+
 clean: clean-context
 	-docker rmi $(LOCAL_IMAGE)
 	-docker rmi $(LOCAL_IMAGE)-py36
