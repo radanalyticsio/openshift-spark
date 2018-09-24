@@ -40,7 +40,7 @@ specification and construction, the
 used as the primary point of investigation, see the `image.yaml` file for
 more information.
 
-# Partial images without an Apache Spark installed
+# Partial images without an Apache Spark distribution installed
 
 This repository also supports building 'incomplete' versions of
 the images which contain tooling for OpenShift but lack an actual
@@ -63,14 +63,14 @@ To build the partial images, use make with Makefile.inc
 
 Tag and push the images to the designated reference.
 
-    make push SPARK_IMAGE=[REGISTRY_HOST[:REGISTRY_PORT]/]NAME[:TAG]
+    make -f Makefile.inc push SPARK_IMAGE=[REGISTRY_HOST[:REGISTRY_PORT]/]NAME[:TAG]
 
 ## Image Completion
 
 To produce a final image, a source-to-image build must be performed which takes
 a Spark distribution as input. This can be done in OpenShift or locally using
 the s2i tool if it's installed. The final images created can be used just
-like the `openshfit-spark` and `openshift-spark-py36` described above.
+like the `openshfit-spark` and `openshift-spark-py36` images described above.
 
 To complete the Python 2.7 image using the s2i tool
 
