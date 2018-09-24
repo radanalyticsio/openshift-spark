@@ -1,10 +1,37 @@
 #!/bin/bash
 if [ -f "$SPARK_HOME"/bin/spark-submit ]; then
-    echo full image usage would go here
-    exit 0
-fi
+cat <<EOF
+This openshift-spark image will run an Apache Spark master or worker process.
+There are several environment variables which affect its operation:
 
+SPARK_MASTER_ADDRESS   -- If this variable is unset, a Spark standalone master
+                          process will run.
 
+                          To run a Spark worker process, set this to the URL of
+                          the Spark master, for example spark://mymaster:7077
+
+SPARK_METRICS_ON       -- If this variable is unset no metrics sink will be
+                          configured.
+
+                          If it's set to 'prometheus' then the Spark process
+                          will be started with prometheus metrics on port 7777.
+
+                          If it's set to anything else then the Spark process
+                          will be started with jolokia metrics on port 7777.
+
+UPDATE_SPARK_CONF_DIR  -- If this variable is set to a directory, the files in
+                          that directory will be copied to $SPARK_HOME/conf
+                          before the Spark process starts. This can be used
+                          to selectively overwrite Spark configuration files.
+
+                          Note that if $SPARK_HOME/spark-defaults.conf
+                          does not contain any explicit settings for parameters
+                          matching the pattern 'spark.ui.reverseProxy*', default
+                          settings to turn reverse proxy on will be added to
+                          the configuration.
+EOF
+
+else
 cat <<EOF
 This is an incomplete openshift-spark image. It contains scripts for running an
 Apache Spark master or worker but is missing an actual Spark distribution.
@@ -45,3 +72,4 @@ s2i build build_input radanalyticsio/openshift-spark-inc openshift-spark
 This will build a local image named 'openshift-spark:latest' which can
 then be uploaded to an image repository.
 EOF
+fi
