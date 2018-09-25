@@ -69,10 +69,11 @@ Tag and push the images to the designated reference.
 
 To produce a final image, a source-to-image build must be performed which takes
 a Spark distribution as input. This can be done in OpenShift or locally using
-the s2i tool if it's installed. The final images created can be used just
-like the `openshfit-spark` and `openshift-spark-py36` images described above.
+the [s2i tool](https://github.com/openshift/source-to-image) if it's installed.
+The final images created can be used just like the `openshfit-spark` and
+`openshift-spark-py36` images described above.
 
-To complete the Python 2.7 image using the s2i tool
+To complete the Python 2.7 image using the [s2i tool](https://github.com/openshift/source-to-image)
 
     $ mkdir build_input
     $ wget https://archive.apache.org/dist/spark/spark-2.3.0/spark-2.3.0-bin-hadoop2.7.tgz -O build_input/spark-2.3.0-bin-hadoop2.7.tgz
