@@ -23,16 +23,17 @@ ENV \
     PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/spark/bin" \
     SCL_ENABLE_CMD="scl enable rh-python36" \
     SPARK_HOME="/opt/spark" \
-    SPARK_INSTALL="/opt/spark-distro" 
-    STI_SCRIPTS_PATH="/usr/libexec/s2i"
-      
+    SPARK_INSTALL="/opt/spark-distro" \
+    STI_SCRIPTS_PATH="/usr/libexec/s2i" 
+
 # Labels
 LABEL \
       io.cekit.version="2.1.4"  \
+      io.openshift.s2i.scripts-url="image:///usr/libexec/s2i"  \
       maintainer="Chad Roberts <croberts@redhat.com>"  \
       org.concrt.version="2.1.4"  \
-      sparkversion="2.3.0" \
-      io.openshift.s2i.scripts-url="image:///usr/libexec/s2i"
+      sparkversion="2.3.0" 
+
 
 USER root
 
@@ -53,9 +54,6 @@ COPY modules /tmp/scripts
 
 # Custom scripts
 USER root
-RUN [ "bash", "-x", "/tmp/scripts/python36/install" ]
-
-USER root
 RUN [ "bash", "-x", "/tmp/scripts/common/install" ]
 
 USER root
@@ -66,6 +64,9 @@ RUN [ "bash", "-x", "/tmp/scripts/spark/install" ]
 
 USER root
 RUN [ "bash", "-x", "/tmp/scripts/s2i/install" ]
+
+USER root
+RUN [ "bash", "-x", "/tmp/scripts/python36/install" ]
 
 USER root
 RUN rm -rf /tmp/scripts
@@ -80,3 +81,4 @@ WORKDIR /tmp
 ENTRYPOINT ["/entrypoint"]
 
 CMD ["/launch.sh"]
+

@@ -20,6 +20,12 @@ __SCL_ENABLE_CMD__
 __SPARK_HOME__
 >"/opt/spark"
 
+__SPARK_INSTALL__
+>"/opt/spark-distro"
+
+__STI_SCRIPTS_PATH__
+>"/usr/libexec/s2i"
+
 
 ### Configuration
 
@@ -32,6 +38,9 @@ when starting a container:
 
 __io.cekit.version__
 > 2.1.4
+
+__io.openshift.s2i.scripts-url__
+> image:///usr/libexec/s2i
 
 __maintainer__
 > Chad Roberts <croberts@redhat.com>
