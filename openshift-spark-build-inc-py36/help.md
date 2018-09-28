@@ -1,4 +1,4 @@
-# radanalyticsio/openshift-spark
+# radanalyticsio/openshift-spark-inc
 
 ## Description
 

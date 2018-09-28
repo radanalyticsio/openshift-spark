@@ -21,18 +21,19 @@ FROM centos:latest
 # Environment variables
 ENV \
     PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/spark/bin" \
+    SCL_ENABLE_CMD="" \
     SPARK_HOME="/opt/spark" \
     SPARK_INSTALL="/opt/spark-distro" \
-    STI_SCRIPTS_PATH="/usr/libexec/s2i" \
-    SCL_ENABLE_CMD="" 
+    STI_SCRIPTS_PATH="/usr/libexec/s2i" 
 
 # Labels
 LABEL \
       io.cekit.version="2.1.4"  \
+      io.openshift.s2i.scripts-url="image:///usr/libexec/s2i"  \
       maintainer="Chad Roberts <croberts@redhat.com>"  \
       org.concrt.version="2.1.4"  \
       sparkversion="2.3.0" 
-      io.openshift.s2i.scripts-url="image:///usr/libexec/s2i"
+
 
 USER root
 
@@ -77,3 +78,4 @@ WORKDIR /tmp
 ENTRYPOINT ["/entrypoint"]
 
 CMD ["/launch.sh"]
+

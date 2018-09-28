@@ -1,4 +1,4 @@
-# radanalyticsio/openshift-spark
+# radanalyticsio/openshift-spark-inc
 
 ## Description
 
@@ -15,7 +15,7 @@ __PATH__
 >"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/spark/bin"
 
 __SCL_ENABLE_CMD__
->"scl enable rh-python36"
+>""
 
 __SPARK_HOME__
 >"/opt/spark"
