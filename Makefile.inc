@@ -41,7 +41,7 @@ $(DOCKERFILE_CONTEXT)-py36: $(DOCKERFILE_CONTEXT)-py36/Dockerfile $(DOCKERFILE_C
 
 $(DOCKERFILE_CONTEXT)/Dockerfile $(DOCKERFILE_CONTEXT)/modules:
 	-mkdir -p $(DOCKERFILE_CONTEXT)
-	concreate generate --descriptor image-inc.yaml
+	concreate generate --descriptor image-inc.yaml --overrides overrides/default.yaml
 	cp -R target/image/* $(DOCKERFILE_CONTEXT)
 	-rm $(DOCKERFILE_CONTEXT)/spark*.tgz
 
