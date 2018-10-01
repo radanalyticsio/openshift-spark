@@ -70,7 +70,7 @@ else
             fi
 
             # Does the tarball contain a spark-submit?
-            name=$(tar -tzf $spark | grep "/spark-submit$")
+            name=$(tar -tzf $spark | grep -e "^[^/]*/bin/spark-submit$")
             if [ "$?" -ne 0 ]; then
                 echo Ignoring tarball $spark, no spark-submit
                 continue
