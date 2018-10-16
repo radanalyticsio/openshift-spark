@@ -6,12 +6,12 @@ services:
 - docker
 matrix:
   include:
-    - env: TO_TEST=openshift-spark OPENSHIFT_VERSION=v3.10
-    - env: TO_TEST=openshift-spark-py36 OPENSHIFT_VERSION=v3.10
-    - env: TO_TEST=openshift-spark-inc OPENSHIFT_VERSION=v3.10
-    - env: TO_TEST=openshift-spark-py36-inc OPENSHIFT_VERSION=v3.10
-    - env: TO_TEST=openshift-spark-comp OPENSHIFT_VERSION=v3.10
-    - env: TO_TEST=openshift-spark-py36-comp OPENSHIFT_VERSION=v3.10
+    - env: TO_TEST=openshift-spark OPENSHIFT_VERSION=v3.11
+    - env: TO_TEST=openshift-spark-py36 OPENSHIFT_VERSION=v3.11
+    - env: TO_TEST=openshift-spark-inc OPENSHIFT_VERSION=v3.11
+    - env: TO_TEST=openshift-spark-py36-inc OPENSHIFT_VERSION=v3.11
+    - env: TO_TEST=openshift-spark-comp OPENSHIFT_VERSION=v3.11
+    - env: TO_TEST=openshift-spark-py36-comp OPENSHIFT_VERSION=v3.11
   fast_finish: true
 
 before_install:
