@@ -49,8 +49,8 @@ downloads an Apache Spark distribution to a local 'build_input' directory
 (including the md5 file is optional).
 
 $ mkdir build_input
-$ wget https://archive.apache.org/dist/spark/spark-2.3.0/spark-2.3.0-bin-hadoop2.7.tgz -O build_input/spark-2.3.0-bin-hadoop2.7.tgz
-$ wget https://archive.apache.org/dist/spark/spark-2.3.0/spark-2.3.0-bin-hadoop2.7.tgz.md5 -O build_input/spark-2.3.0-bin-hadoop2.7.tgz.md5
+$ wget https://archive.apache.org/dist/spark/spark-2.4.0/spark-2.4.0-bin-hadoop2.7.tgz -O build_input/spark-2.4.0-bin-hadoop2.7.tgz
+$ wget https://archive.apache.org/dist/spark/spark-2.4.0/spark-2.4.0-bin-hadoop2.7.tgz.sha512 -O build_input/spark-2.4.0-bin-hadoop2.7.tgz.sha512
 
 Completing the image with OpenShift:
 ------------------------------------
@@ -58,7 +58,7 @@ Completing the image with OpenShift:
 Run a binary build specifying the spark distribution, for example:
 
 $ oc new-build --name=openshift-spark --docker-image=radanalyticsio/openshift-spark-inc --binary
-$ oc start-build openshift-spark --from-file=https://archive.apache.org/dist/spark/spark-2.3.0/spark-2.3.0-bin-hadoop2.7.tgz
+$ oc start-build openshift-spark --from-file=https://archive.apache.org/dist/spark/spark-2.4.0/spark-2.4.0-bin-hadoop2.7.tgz
 
 This will write the completed image to an imagestream called 'openshift-spark'
 in the current project. Note that the value of --from-file can also be a local

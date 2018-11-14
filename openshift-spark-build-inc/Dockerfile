@@ -14,7 +14,7 @@
 #
 # ------------------------------------------------------------------------
 #
-# This is a Dockerfile for the radanalyticsio/openshift-spark-inc:2.3-latest image.
+# This is a Dockerfile for the radanalyticsio/openshift-spark-inc:2.4-latest image.
 
 FROM centos:latest
 
@@ -32,7 +32,7 @@ LABEL \
       io.openshift.s2i.scripts-url="image:///usr/libexec/s2i"  \
       maintainer="Chad Roberts <croberts@redhat.com>"  \
       org.concrt.version="2.1.4"  \
-      sparkversion="2.3.0" 
+      sparkversion="2.4.0" 
 
 
 USER root

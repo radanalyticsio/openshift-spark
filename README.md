@@ -76,14 +76,14 @@ The final images created can be used just like the `openshfit-spark` and
 To complete the Python 2.7 image using the [s2i tool](https://github.com/openshift/source-to-image)
 
     $ mkdir build_input
-    $ wget https://archive.apache.org/dist/spark/spark-2.3.0/spark-2.3.0-bin-hadoop2.7.tgz -O build_input/spark-2.3.0-bin-hadoop2.7.tgz
-    $ wget https://archive.apache.org/dist/spark/spark-2.3.0/spark-2.3.0-bin-hadoop2.7.tgz.md5 -O build_input/spark-2.3.0-bin-hadoop2.7.tgz.md5
+    $ wget https://archive.apache.org/dist/spark/spark-2.4.0/spark-2.4.0-bin-hadoop2.7.tgz -O build_input/spark-2.4.0-bin-hadoop2.7.tgz
+    $ wget https://archive.apache.org/dist/spark/spark-2.4.0/spark-2.4.0-bin-hadoop2.7.tgz.sha512 -O build_input/spark-2.4.0-bin-hadoop2.7.tgz.sha512
     $ s2i build build_input radanalyticsio/openshift-spark-inc openshift-spark
 
 To complete the Python 2.7 image using OpenShift, for example:
 
     $ oc new-build --name=openshift-spark --docker-image=radanalyticsio/openshift-spark-inc --binary
-    $ oc start-build openshift-spark --from-file=https://archive.apache.org/dist/spark/spark-2.3.0/spark-2.3.0-bin-hadoop2.7.tgz
+    $ oc start-build openshift-spark --from-file=https://archive.apache.org/dist/spark/spark-2.4.0/spark-2.4.0-bin-hadoop2.7.tgz
 
     (note that the value of `--from-file` could also be the `build_input` directory from the s2i example above)
 

@@ -13,7 +13,7 @@ source $STI_SCRIPTS_PATH/s2i-env-vars
 # but /opt/spark-distro/distro does not actually exist yet
 
 # The Spark tarball will be expanded in /opt/spark-distro using
-# it's original name, for example /opt/spark-distro/spark-2.3.0-bin-hadoop2.7,
+# it's original name, for example /opt/spark-distro/spark-2.4.0-bin-hadoop2.7,
 # as a dev aid to tracking and version checking
 
 # Ultimately, /opt/spark-distro/distro is created as a symlink to the Spark root

@@ -13,7 +13,7 @@ source $STI_SCRIPTS_PATH/s2i-env-vars
 # but /opt/spark-distro/distro does not actually exist yet
 
 # The Spark tarball will be expanded in /opt/spark-distro using
-# it's original name, for example /opt/spark-distro/spark-2.3.0-bin-hadoop2.7,
+# it's original name, for example /opt/spark-distro/spark-2.4.0-bin-hadoop2.7,
 # as a dev aid to tracking and version checking
 
 # Ultimately, /opt/spark-distro/distro is created as a symlink to the Spark root
@@ -43,9 +43,9 @@ else
         echo Downloading $SPARK_URL
         wget $SPARK_URL -P $S2I_SOURCE_DIR
     fi
-    if [ -n "$SPARK_MD5_URL" ]; then
-        echo Downloading $SPARK_MD5_URL
-        wget $SPARK_MD5_URL -P $S2I_SOURCE_DIR
+    if [ -n "$SPARK_SHA_URL" ]; then
+        echo Downloading $SPARK_SHA_URL
+        wget $SPARK_SHA_URL -P $S2I_SOURCE_DIR
     fi
 
     for spark in $(ls "$S2I_SOURCE_DIR"); do
@@ -75,9 +75,10 @@ else
                 echo Ignoring tarball $spark, no spark-submit
                 continue
             else
-                # See if we have an md5 file to match against
-                if [ -f "$spark".md5 ]; then
-                    calcvalue=$(md5sum "$spark" | cut -d\  -f1)
+                # See if we have an sha512 file to match against
+todo
+                if [ -f "$spark".sha512 ]; then
+                    calcvalue=$(sha512sum "$spark" | cut -d\  -f1)
                     # split the md5 file using a space
                     match_sum "$spark".md5 \  $calcvalue
                     matched="$?"

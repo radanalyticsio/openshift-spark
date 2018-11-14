@@ -14,7 +14,7 @@
 #
 # ------------------------------------------------------------------------
 #
-# This is a Dockerfile for the radanalyticsio/openshift-spark:2.3-latest image.
+# This is a Dockerfile for the radanalyticsio/openshift-spark:2.4-latest image.
 
 FROM centos:latest
 
@@ -32,7 +32,7 @@ LABEL \
       io.openshift.s2i.scripts-url="image:///usr/libexec/s2i"  \
       maintainer="Chad Roberts <croberts@redhat.com>"  \
       org.concrt.version="2.1.4"  \
-      sparkversion="2.3.0" 
+      sparkversion="2.4.0" 
 
 
 USER root
@@ -46,7 +46,7 @@ RUN yum install -y java-1.8.0-openjdk wget \
 # Add all artifacts to the /tmp/artifacts
 # directory
 COPY \
-    spark-2.3.0-bin-hadoop2.7.tgz \
+    spark-2.4.0-bin-hadoop2.7.tgz \
     /tmp/artifacts/
 
 # Add scripts used to configure the image

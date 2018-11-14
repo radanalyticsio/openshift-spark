@@ -42,13 +42,13 @@ function already_installed {
 }
 
 function build_env_var {
-    os::cmd::expect_success 'oc new-build --name=spark --docker-image="$SPARK_IMAGE" --binary -e SPARK_URL=https://archive.apache.org/dist/spark/spark-2.3.0/spark-2.3.0-bin-hadoop2.7.tgz -e SPARK_MD5_URL=https://archive.apache.org/dist/spark/spark-2.3.0/spark-2.3.0-bin-hadoop2.7.tgz.md5'
+    os::cmd::expect_success 'oc new-build --name=spark --docker-image="$SPARK_IMAGE" --binary -e SPARK_URL=https://archive.apache.org/dist/spark/spark-2.4.0/spark-2.4.0-bin-hadoop2.7.tgz -e SPARK_SHA_URL=https://archive.apache.org/dist/spark/spark-2.4.0/spark-2.4.0-bin-hadoop2.7.tgz.sha512'
 
     poll_binary_build spark
 
     os::cmd::expect_success_and_text 'oc log buildconfig/spark' 'Attempting to install Spark'
-    os::cmd::try_until_success 'oc log buildconfig/spark | grep "Downloading.*spark-2.3.0-bin-hadoop2.7.tgz$"'
-    os::cmd::try_until_success 'oc log buildconfig/spark | grep "Downloading.*spark-2.3.0-bin-hadoop2.7.tgz.md5$"'
+    os::cmd::try_until_success 'oc log buildconfig/spark | grep "Downloading.*spark-2.4.0-bin-hadoop2.7.tgz$"'
+    os::cmd::try_until_success 'oc log buildconfig/spark | grep "Downloading.*spark-2.4.0-bin-hadoop2.7.tgz.sha512$"'
     os::cmd::expect_success_and_text 'oc log buildconfig/spark' 'Installing from tarball'
     os::cmd::expect_success_and_text 'oc log buildconfig/spark' 'Spark installed successfully'
     os::cmd::expect_success_and_text 'oc log buildconfig/spark' 'Pushed'
