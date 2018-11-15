@@ -46,7 +46,7 @@ Build inputs:
 The OpenShift method can take either local files or a URL as build input.
 For the s2i method, local files are required. Here is an example which
 downloads an Apache Spark distribution to a local 'build_input' directory
-(including the md5 file is optional).
+(including the sha512 file is optional).
 
 $ mkdir build_input
 $ wget https://archive.apache.org/dist/spark/spark-2.4.0/spark-2.4.0-bin-hadoop2.7.tgz -O build_input/spark-2.4.0-bin-hadoop2.7.tgz

@@ -24,10 +24,10 @@ source $STI_SCRIPTS_PATH/s2i-env-vars
 function match_sum {
     local sumfile=$1
     local delim=$2
-    local md5=$3
+    local sha=$3
     local initial=$(cat $sumfile | cut -d"$delim" -f1 | tr [:upper:] [:lower:] | tr -d [:space:])
     local rest=$(cat $sumfile | cut -d"$delim" --complement -f1 | tr [:upper:] [:lower:] | tr -d [:space:])
-    if [ "$md5" == "$initial" ] || [ "$md5" == "$rest" ]; then
+    if [ "$sha" == "$initial" ] || [ "$sha" == "$rest" ]; then
         return 0
     fi
     return 1
@@ -76,19 +76,18 @@ else
                 continue
             else
                 # See if we have an sha512 file to match against
-todo
                 if [ -f "$spark".sha512 ]; then
                     calcvalue=$(sha512sum "$spark" | cut -d\  -f1)
-                    # split the md5 file using a space
-                    match_sum "$spark".md5 \  $calcvalue
+                    # split the sha512 file using a space
+                    match_sum "$spark".sha512 \  $calcvalue
                     matched="$?"
                     if [ "$matched" -ne 0 ]; then
-                        # split the md5 file using equals sign in case it's BSD
-                        match_sum "$spark".md5 \=  $calcvalue
+                        # split the sha512 file using equals sign in case it's BSD
+                        match_sum "$spark".sha512 \=  $calcvalue
                         matched="$?"
                     fi
                     if [ "$matched" -ne 0 ]; then
-                        echo Ignoring tarball $spark, md5sum did not match
+                        echo Ignoring tarball $spark, sha512sum did not match
                         continue
                     fi
                 fi

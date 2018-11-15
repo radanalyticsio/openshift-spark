@@ -14,8 +14,8 @@ pushd $TOP_DIR/test/resources/spark-inputs
 if ! [ -f "spark-$version-bin-hadoop2.7.tgz" ]; then
     wget https://archive.apache.org/dist/spark/spark-$version/spark-$version-bin-hadoop2.7.tgz
 fi
-if ! [ -f "spark-$version-bin-hadoop2.7.tgz.md5" ]; then
-    wget https://archive.apache.org/dist/spark/spark-$version/spark-$version-bin-hadoop2.7.tgz.md5
+if ! [ -f "spark-$version-bin-hadoop2.7.tgz.sha512" ]; then
+    wget https://archive.apache.org/dist/spark/spark-$version/spark-$version-bin-hadoop2.7.tgz.sha512
 fi
 echo "spark-$version-bin-hadoop2.7.tgz: FF FF FF FF FF FF CA FE  BE EF CA FE BE EF CA FE" > spark-$version-bin-hadoop2.7.tgz.bad
 popd

@@ -53,16 +53,16 @@ fi
 # Change spark distro and download urls
 if [ ! -z ${SPARK+x} ]; then
 
-    wget https://archive.apache.org/dist/spark/spark-${SPARK}/spark-${SPARK}-bin-hadoop${HVER}.tgz.md5 -O /tmp/spark-${SPARK}-bin-hadoop${HVER}.tgz.md5
+    wget https://archive.apache.org/dist/spark/spark-${SPARK}/spark-${SPARK}-bin-hadoop${HVER}.tgz.sha512 -O /tmp/spark-${SPARK}-bin-hadoop${HVER}.tgz.sha512
     if [ "$?" -eq 0 ]; then
 
-        sum=$(cat /tmp/spark-${SPARK}-bin-hadoop2.7.tgz.md5 | cut -d':' -f 2 | tr -d '[:space:]' | tr '[:upper:]' '[:lower:]')
+        sum=$(cat /tmp/spark-${SPARK}-bin-hadoop2.7.tgz.sha512 | cut -d':' -f 2 | tr -d '[:space:]' | tr '[:upper:]' '[:lower:]')
 
 	# Fix the url references
 	sed -i "s@https://archive.apache.org/dist/spark/spark-.*/spark-.*-bin-@https://archive.apache.org/dist/spark/spark-${SPARK}/spark-${SPARK}-bin-@" image.yaml
 
-	# Fix the md5 sum references on the line following the url
-        sed -i '\@url: https://archive.apache.org/dist/spark/@!b;n;s/md5.*/md5: '$sum'/' image.yaml
+	# Fix the sha512 sum references on the line following the url
+        sed -i '\@url: https://archive.apache.org/dist/spark/@!b;n;s/sha512.*/sha512: '$sum'/' image.yaml
 
 	# Fix the spark version label
 	sed -i '\@name: sparkversion@!b;n;s/value.*/value: '$SPARK'/' image.yaml
@@ -72,7 +72,7 @@ if [ ! -z ${SPARK+x} ]; then
         sed -i 's@^version:.*-latest$@version: '$V'-latest@' image.yaml
 
     else
-        echo "Failed to get the md5 sum for the specified spark version, the version $SPARK may not be a real version"
+        echo "Failed to get the sha512 sum for the specified spark version, the version $SPARK may not be a real version"
         exit 1
     fi
 fi
