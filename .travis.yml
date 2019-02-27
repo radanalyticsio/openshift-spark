@@ -32,8 +32,6 @@ script:
 deploy:
   provider: script
   script: ./.travis.release.images.sh
-  on:
-    branch: master
 notifications:
  email:
    on_success: never
