@@ -9,10 +9,9 @@ IMAGES="${IMAGES:-
   openshift-spark-inc
   openshift-spark-py36-inc
 }"
-[ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ] && LATEST=1
 
 main() {
-  if [[ "$LATEST" = "1" ]]; then
+  if [[ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]]; then
     echo "Squashing and pushing the the :latest images to docker.io and quay.io"
     installDockerSquash
     loginDockerIo
@@ -27,7 +26,7 @@ main() {
     loginQuayIo
     pushReleaseImages "quay.io"
   else
-    echo "Not doing the docker push, because the tag '${TRAVIS_TAG}' is not of form x.y.z-n"
+    echo "Not doing the docker push, because the tag '${TRAVIS_TAG}' is not of form x.y.z-n or we are not building the master branch"
   fi
 }
 
