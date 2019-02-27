@@ -82,8 +82,8 @@ pushReleaseImages() {
 
     squashAndPush $image $_fully_qualified_image
 
-    # tag and push also x.y.z-latest image
-    local _x_y_z_latest=`echo ${TRAVIS_TAG} | cut -d'-' -f1`-latest
+    # tag and push also x.y-latest image
+    local _x_y_z_latest=`echo ${TRAVIS_TAG} | sed -r 's;([[:digit:]]+\.[[:digit:]]+).*;\1-latest;'`
     docker tag $_fully_qualified_image ${REPO}/${OWNER}/${image}:${_x_y_z_latest}
     docker push ${REPO}/${OWNER}/${image}:${_x_y_z_latest}
 
