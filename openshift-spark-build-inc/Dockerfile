@@ -14,7 +14,7 @@
 #
 # ------------------------------------------------------------------------
 #
-# This is a Dockerfile for the radanalyticsio/openshift-spark-inc:2.3-latest image.
+# This is a Dockerfile for the radanalyticsio/openshift-spark-inc:2.4-latest image.
 
 FROM centos:latest
 
@@ -45,8 +45,8 @@ LABEL \
       maintainer="Chad Roberts <croberts@redhat.com>"  \
       name="radanalyticsio/openshift-spark-inc"  \
       org.concrt.version="2.2.7"  \
-      sparkversion="2.3.0"  \
-      version="2.3-latest" 
+      sparkversion="2.4.0"  \
+      version="2.4-latest" 
 
 # Add scripts used to configure the image
 COPY modules /tmp/scripts
