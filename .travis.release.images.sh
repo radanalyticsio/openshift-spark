@@ -12,7 +12,7 @@ IMAGES="${IMAGES:-
 
 main() {
   if [[ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]]; then
-    echo "Squashing and pushing the the :latest images to docker.io and quay.io"
+    echo "Squashing and pushing the :latest images to docker.io and quay.io"
     installDockerSquash
     loginDockerIo
     pushLatestImages "docker.io"
@@ -55,7 +55,7 @@ squashAndPush() {
 
   echo "Squashing $_out.."
   # squash last 22 layers (everything up to the base centos image)
-  docker-squash -F 22 -t $_out $in
+  docker-squash -f 22 -t $_out $in
   docker push $_out
 }
 
