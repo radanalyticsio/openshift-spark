@@ -19,11 +19,13 @@ installing the default binary archives as distributed by the
 1. remove the generated cekit files for the previous version.
    ```
    make clean-context
+   make -f Makefile.inc clean-context
    ```
 1. generate the new cekit files. these will be the artifacts for image
    creation.
    ```
    make context
+   make -f Makefile.inc context
    ```
 1. zero the archive files. as these files are currently checked in to the
    repository it is important to zero out the archive files. they will be
@@ -42,6 +44,7 @@ Build the images with the following command:
 
 ```
 make build
+make -f Makefile.inc build
 ```
 
 This will run an image build against the generated cekit files and store
@@ -49,23 +52,3 @@ the image in the registry associated with your docker installation
 (usually localhost).
 
 The images are now ready for testing.
-
-## Update the incomplete images
-
-To keep image versions consistent, you will also need to update the images
-for the incomplete build. Although these images do not contain Spark, they
-are used as a base for other builds and should be updated.
-
-1. remove the generated cekit files for the previous version.
-   ```
-   make -f Makefile.inc clean-context
-   ```
-1. generate the new cekit files. these will be the artifacts for image
-   creation.
-   ```
-   make -f Makefile.inc context
-   ```
-1. build the images.
-   ```
-   make -f Makefile.inc build
-   ```
