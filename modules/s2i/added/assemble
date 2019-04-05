@@ -79,7 +79,7 @@ else
                 if [ -f "$spark".sha512 ]; then
                     calcvalue=$(sha512sum "$spark" | cut -d\  -f1)
                     # split the sha512 file using a space
-                    match_sum "$spark".sha512 \  $calcvalue
+                    match_sum "$spark".sha512 :  $calcvalue
                     matched="$?"
                     if [ "$matched" -ne 0 ]; then
                         # split the sha512 file using equals sign in case it's BSD
