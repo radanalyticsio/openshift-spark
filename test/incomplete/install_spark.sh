@@ -10,7 +10,7 @@ RESOURCE_DIR=$TOP_DIR/test/resources
 
 os::test::junit::declare_suite_start "install_spark"
 
-function build_md5 {
+function build_sha512 {
     os::cmd::expect_success 'oc new-build --name=spark --docker-image="$SPARK_IMAGE" --binary'
     poll_binary_build spark "$RESOURCE_DIR"/spark-inputs
 
@@ -42,24 +42,24 @@ function already_installed {
 }
 
 function build_env_var {
-    os::cmd::expect_success 'oc new-build --name=spark --docker-image="$SPARK_IMAGE" --binary -e SPARK_URL=https://archive.apache.org/dist/spark/spark-2.3.0/spark-2.3.0-bin-hadoop2.7.tgz -e SPARK_MD5_URL=https://archive.apache.org/dist/spark/spark-2.3.0/spark-2.3.0-bin-hadoop2.7.tgz.md5'
+    os::cmd::expect_success 'oc new-build --name=spark --docker-image="$SPARK_IMAGE" --binary -e SPARK_URL=https://archive.apache.org/dist/spark/spark-2.4.0/spark-2.4.0-bin-hadoop2.7.tgz -e SPARK_SHA512_URL=https://archive.apache.org/dist/spark/spark-2.4.0/spark-2.4.0-bin-hadoop2.7.tgz.sha512'
 
     poll_binary_build spark
 
     os::cmd::expect_success_and_text 'oc log buildconfig/spark' 'Attempting to install Spark'
-    os::cmd::try_until_success 'oc log buildconfig/spark | grep "Downloading.*spark-2.3.0-bin-hadoop2.7.tgz$"'
-    os::cmd::try_until_success 'oc log buildconfig/spark | grep "Downloading.*spark-2.3.0-bin-hadoop2.7.tgz.md5$"'
+    os::cmd::try_until_success 'oc log buildconfig/spark | grep "Downloading.*spark-2.4.0-bin-hadoop2.7.tgz$"'
+    os::cmd::try_until_success 'oc log buildconfig/spark | grep "Downloading.*spark-2.4.0-bin-hadoop2.7.tgz.sha512$"'
     os::cmd::expect_success_and_text 'oc log buildconfig/spark' 'Installing from tarball'
     os::cmd::expect_success_and_text 'oc log buildconfig/spark' 'Spark installed successfully'
     os::cmd::expect_success_and_text 'oc log buildconfig/spark' 'Pushed'
     os::cmd::expect_success 'oc delete buildconfig spark'
 }
 
-function build_bad_md5 {
+function build_bad_sha512 {
     os::cmd::expect_success 'oc new-build --name=spark --docker-image="$SPARK_IMAGE" --binary'
     poll_binary_build spark "$RESOURCE_DIR"/spark-inputs true
 
-    os::cmd::expect_success_and_text 'oc log buildconfig/spark' 'md5sum did not match'
+    os::cmd::expect_success_and_text 'oc log buildconfig/spark' 'sha512sum did not match'
     os::cmd::expect_success_and_text 'oc log buildconfig/spark' 'no valid Spark distribution found'
     os::cmd::expect_success 'oc delete buildconfig spark'
 }
@@ -125,19 +125,19 @@ function copy_nocopy {
 make_image
 make_configmap
 
-echo "++ build_md5"
-build_md5
+echo "++ build_sha512"
+build_sha512
 
-echo "++ build_md5 (md5 deleted)"
-md5=$(find $RESOURCE_DIR/spark-inputs -name "*.md5")
-rm $md5
+echo "++ build_sha512 (sha512 deleted)"
+sha512=$(find $RESOURCE_DIR/spark-inputs -name "*.sha512")
+rm $sha512
 skip_app=true
-build_md5 $skip_app
+build_sha512 $skip_app
 
-echo "++ build_bad_md5"
-mv $RESOURCE_DIR/spark-inputs/$(basename $md5 .md5).bad $md5
-build_bad_md5
-rm $md5
+echo "++ build_bad_sha512"
+mv $RESOURCE_DIR/spark-inputs/$(basename $sha512 .sha512).bad $sha512
+build_bad_sha512
+rm $sha512
 
 echo "++ build_from_directory"
 build_from_directory

@@ -24,10 +24,10 @@ source $STI_SCRIPTS_PATH/s2i-env-vars
 function match_sum {
     local sumfile=$1
     local delim=$2
-    local md5=$3
-    local initial=$(cat $sumfile | cut -d"$delim" -f1 | tr [:upper:] [:lower:] | tr -d [:space:])
-    local rest=$(cat $sumfile | cut -d"$delim" --complement -f1 | tr [:upper:] [:lower:] | tr -d [:space:])
-    if [ "$md5" == "$initial" ] || [ "$md5" == "$rest" ]; then
+    local sha512=$3
+    local initial=$(cat $sumfile | tr -d [:space:] | cut -d"$delim" -f1 | tr [:upper:] [:lower:])
+    local rest=$(cat $sumfile | tr -d [:space:] | cut -d"$delim" --complement -f1 | tr [:upper:] [:lower:])
+    if [ "$sha512" == "$initial" ] || [ "$sha512" == "$rest" ]; then
         return 0
     fi
     return 1
@@ -43,9 +43,9 @@ else
         echo Downloading $SPARK_URL
         wget $SPARK_URL -P $S2I_SOURCE_DIR
     fi
-    if [ -n "$SPARK_MD5_URL" ]; then
-        echo Downloading $SPARK_MD5_URL
-        wget $SPARK_MD5_URL -P $S2I_SOURCE_DIR
+    if [ -n "$SPARK_SHA512_URL" ]; then
+        echo Downloading $SPARK_SHA512_URL
+        wget $SPARK_SHA512_URL -P $S2I_SOURCE_DIR
     fi
 
     for spark in $(ls "$S2I_SOURCE_DIR"); do
@@ -75,19 +75,19 @@ else
                 echo Ignoring tarball $spark, no spark-submit
                 continue
             else
-                # See if we have an md5 file to match against
-                if [ -f "$spark".md5 ]; then
-                    calcvalue=$(md5sum "$spark" | cut -d\  -f1)
-                    # split the md5 file using a space
-                    match_sum "$spark".md5 \  $calcvalue
+                # See if we have an sha512 file to match against
+                if [ -f "$spark".sha512 ]; then
+                    calcvalue=$(sha512sum "$spark" | cut -d\  -f1)
+                    # split the sha512 file using a space
+                    match_sum "$spark".sha512 \  $calcvalue
                     matched="$?"
                     if [ "$matched" -ne 0 ]; then
-                        # split the md5 file using equals sign in case it's BSD
-                        match_sum "$spark".md5 \=  $calcvalue
+                        # split the sha512 file using equals sign in case it's BSD
+                        match_sum "$spark".sha512 \=  $calcvalue
                         matched="$?"
                     fi
                     if [ "$matched" -ne 0 ]; then
-                        echo Ignoring tarball $spark, md5sum did not match
+                        echo Ignoring tarball $spark, sha512sum did not match
                         continue
                     fi
                 fi
