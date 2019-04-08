@@ -51,6 +51,8 @@ else
     for spark in $(ls "$S2I_SOURCE_DIR"); do
 
         spark=$S2I_SOURCE_DIR/$spark
+        echo Found $spark
+        echo Checking for valid Spark archive
 
         # Is the file a directory? If it contains spark-submit, move it
         if [ -d "$spark" ]; then
@@ -68,6 +70,7 @@ else
                 echo Ignoring $spark, not a tar archive
                 continue
             fi
+            echo Validating tar archive $spark
 
             # Does the tarball contain a spark-submit?
             name=$(tar -tzf $spark | grep -e "^[^/]*/bin/spark-submit$")
@@ -75,11 +78,12 @@ else
                 echo Ignoring tarball $spark, no spark-submit
                 continue
             else
+                echo Found valid tar archive, matching checksums
                 # See if we have an sha512 file to match against
                 if [ -f "$spark".sha512 ]; then
                     calcvalue=$(sha512sum "$spark" | cut -d\  -f1)
-                    # split the sha512 file using a space
-                    match_sum "$spark".sha512 :  $calcvalue
+                    # split the sha512 file using a colon
+                    match_sum "$spark".sha512 \:  $calcvalue
                     matched="$?"
                     if [ "$matched" -ne 0 ]; then
                         # split the sha512 file using equals sign in case it's BSD
