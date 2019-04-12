@@ -53,28 +53,43 @@ fi
 # Change spark distro and download urls
 if [ ! -z ${SPARK+x} ]; then
 
-    wget https://archive.apache.org/dist/spark/spark-${SPARK}/spark-${SPARK}-bin-hadoop${HVER}.tgz.md5 -O /tmp/spark-${SPARK}-bin-hadoop${HVER}.tgz.md5
-    if [ "$?" -eq 0 ]; then
+    # TODO remove this download when sha512 support lands in upstream cekit (elmiko)
+    wget https://archive.apache.org/dist/spark/spark-${SPARK}/spark-${SPARK}-bin-hadoop${HVER}.tgz -O /tmp/spark-${SPARK}-bin-hadoop${HVER}.tgz
+    if [ "$?" -ne 0 ]; then
+        echo "Failed to download the specified version Spark archive"
+        exit 1
+    fi
 
-        sum=$(cat /tmp/spark-${SPARK}-bin-hadoop2.7.tgz.md5 | cut -d':' -f 2 | tr -d '[:space:]' | tr '[:upper:]' '[:lower:]')
+    wget https://archive.apache.org/dist/spark/spark-${SPARK}/spark-${SPARK}-bin-hadoop${HVER}.tgz.sha512 -O /tmp/spark-${SPARK}-bin-hadoop${HVER}.tgz.sha512
+    if [ "$?" -ne 0 ]; then
+        echo "Failed to download the sha512 sum for the specified Spark version"
+        exit 1
+    fi
+
+    # TODO remove this checksum calculation when sha512 support lands in upstream cekit (elmiko)
+    calcsum=$(sha512sum /tmp/spark-${SPARK}-bin-hadoop${HVER}.tgz | cut -d" "  -f1)
+    sum=$(cat  /tmp/spark-${SPARK}-bin-hadoop${HVER}.tgz.sha512 | tr -d [:space:] | cut -d: -f2 | tr [:upper:] [:lower:])
+    if [ "$calcsum" != "$sum" ]; then
+        echo "Failed to confirm authenticity of Spark archive, checksum mismatch"
+        echo "sha512sum   : ${calcsum}"
+        echo ".sha512 file: ${sum}"
+        exit 1
+    fi
 
 	# Fix the url references
 	sed -i "s@https://archive.apache.org/dist/spark/spark-.*/spark-.*-bin-@https://archive.apache.org/dist/spark/spark-${SPARK}/spark-${SPARK}-bin-@" image.yaml
 
+    # TODO replace this with sha512 when it lands in upstream cekit (elmiko)
 	# Fix the md5 sum references on the line following the url
-        sed -i '\@url: https://archive.apache.org/dist/spark/@!b;n;s/md5.*/md5: '$sum'/' image.yaml
+    calcsum=$(md5sum /tmp/spark-${SPARK}-bin-hadoop${HVER}.tgz | cut -d" " -f1)
+    sed -i '\@url: https://archive.apache.org/dist/spark/@!b;n;s/md5.*/md5: '$calcsum'/' image.yaml
 
 	# Fix the spark version label
 	sed -i '\@name: sparkversion@!b;n;s/value.*/value: '$SPARK'/' image.yaml
 
-        # Fix the concreate version value
-        V=$(echo $SPARK | cut -d'.' -f1,2)
-        sed -i 's@^version:.*-latest$@version: '$V'-latest@' image.yaml
-
-    else
-        echo "Failed to get the md5 sum for the specified spark version, the version $SPARK may not be a real version"
-        exit 1
-    fi
+    # Fix the concreate version value
+    V=$(echo $SPARK | cut -d'.' -f1,2)
+    sed -i 's@^version:.*-latest$@version: '$V'-latest@' image.yaml
 fi
 
 git add image.yaml
