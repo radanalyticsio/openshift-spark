@@ -67,11 +67,11 @@ function patch_uid {
 # standard spark entrypoint
 case "$1" in
     driver | executor | init)
-        $SPARK_INSTALL/entrypoint.sh "$CMD" &
+        $SPARK_INSTALL/entrypoint.sh $CMD &
         ;;
     *)
         patch_uid
-        $SCL_ENABLE_CMD "$CMD" &
+        $SCL_ENABLE_CMD $CMD &
         ;;
 esac
 PID=$!
