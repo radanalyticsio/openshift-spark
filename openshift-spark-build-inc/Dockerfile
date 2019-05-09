@@ -18,8 +18,20 @@
 
 FROM centos:latest
 
+USER root
+
+
+# Install required RPMs and ensure that the packages were installed
+RUN yum install -y java-1.8.0-openjdk wget numpy \
+    && yum clean all && rm -rf /var/cache/yum \
+    && rpm -q java-1.8.0-openjdk wget numpy
+
+
+
 # Environment variables
 ENV \
+    JBOSS_IMAGE_NAME="radanalyticsio/openshift-spark-inc" \
+    JBOSS_IMAGE_VERSION="2.3-latest" \
     PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/spark/bin" \
     SCL_ENABLE_CMD="" \
     SPARK_HOME="/opt/spark" \
@@ -28,20 +40,13 @@ ENV \
 
 # Labels
 LABEL \
-      io.cekit.version="2.1.4"  \
+      io.cekit.version="2.2.7"  \
       io.openshift.s2i.scripts-url="image:///usr/libexec/s2i"  \
       maintainer="Chad Roberts <croberts@redhat.com>"  \
-      org.concrt.version="2.1.4"  \
-      sparkversion="2.3.0" 
-
-
-USER root
-
-
-# Install required RPMs and ensure that the packages were installed
-RUN yum install -y java-1.8.0-openjdk wget numpy \
-    && yum clean all && rm -rf /var/cache/yum && \
-    rpm -q  java-1.8.0-openjdk wget numpy
+      name="radanalyticsio/openshift-spark-inc"  \
+      org.concrt.version="2.2.7"  \
+      sparkversion="2.3.0"  \
+      version="2.3-latest" 
 
 # Add scripts used to configure the image
 COPY modules /tmp/scripts
