@@ -20,6 +20,13 @@ For Spark versions, please see the `image.yaml` file.
 
 ## Build
 
+### Prerequisites
+
+* `concreate` tool from the [cekit project](https://github.com/cekit/cekit),
+  this can be installed from [pypi](https://pypi.org/project/concreate/).
+
+### Procedure
+
 Create all images and save them in the local Docker registry.
 
     make

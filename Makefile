@@ -59,11 +59,11 @@ $(DOCKERFILE_CONTEXT)-py36: $(DOCKERFILE_CONTEXT)-py36/Dockerfile \
 							$(DOCKERFILE_CONTEXT)-py36/modules
 
 $(DOCKERFILE_CONTEXT)/Dockerfile $(DOCKERFILE_CONTEXT)/modules:
-	cekit generate --descriptor image.yaml --overrides overrides/default.yaml
+	concreate generate --descriptor image.yaml --overrides overrides/default.yaml
 	cp -R target/image/* $(DOCKERFILE_CONTEXT)
 
 $(DOCKERFILE_CONTEXT)-py36/Dockerfile $(DOCKERFILE_CONTEXT)-py36/modules:
-	cekit generate --descriptor image.yaml --overrides overrides/python36.yaml --target target-py36
+	concreate generate --descriptor image.yaml --overrides overrides/python36.yaml --target target-py36
 	cp -R target-py36/image/* $(DOCKERFILE_CONTEXT)-py36
 
 zero-tarballs:
