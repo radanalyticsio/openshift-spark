@@ -13,6 +13,7 @@ IMAGES="${IMAGES:-
 main() {
   if [[ "$TRAVIS_BRANCH" = "master" && "$TRAVIS_PULL_REQUEST" = "false" ]]; then
     echo "Squashing and pushing the :latest images to docker.io and quay.io"
+    buildImages
     installDockerSquash
     loginDockerIo
     pushLatestImages "docker.io"
@@ -20,6 +21,7 @@ main() {
     pushLatestImages "quay.io"
   elif [[ "${TRAVIS_TAG}" =~ ^[0-9]+\.[0-9]+\.[0-9]+-[0-9]+$ ]]; then
     echo "Squashing and pushing the '${TRAVIS_TAG}' images to docker.io and quay.io"
+    buildImages
     installDockerSquash
     loginDockerIo
     pushReleaseImages "docker.io"
@@ -28,6 +30,11 @@ main() {
   else
     echo "Not doing the docker push, because the tag '${TRAVIS_TAG}' is not of form x.y.z-n or we are not building the master branch"
   fi
+}
+
+buildImages() {
+  make build-py build-py36
+  make -f Makefile.inc build-py build-py36
 }
 
 loginDockerIo() {
