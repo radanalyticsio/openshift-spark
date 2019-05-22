@@ -29,6 +29,9 @@ script:
 - if [ "$TO_TEST" = "openshift-spark-py36-inc" ]; then make -f Makefile.inc test-e2e-py36 ; fi
 - if [ "$TO_TEST" = "openshift-spark-comp" ]; then make -f Makefile.inc test-e2e-py-completed ; fi
 - if [ "$TO_TEST" = "openshift-spark-py36-comp" ]; then make -f Makefile.inc test-e2e-py36-completed ; fi
+deploy:
+  provider: script
+  script: ./.travis.release.images.sh
 notifications:
  email:
    on_success: never
