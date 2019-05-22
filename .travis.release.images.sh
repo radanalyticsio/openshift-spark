@@ -11,7 +11,7 @@ IMAGES="${IMAGES:-
 }"
 
 main() {
-  if [[ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]]; then
+  if [[ "$TRAVIS_BRANCH" = "master" && "$TRAVIS_PULL_REQUEST" = "false" ]]; then
     echo "Squashing and pushing the :latest images to docker.io and quay.io"
     installDockerSquash
     loginDockerIo
