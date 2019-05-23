@@ -54,7 +54,7 @@ installDockerSquash() {
 }
 
 squashAndPush() {
-  if [[ $# != 3 ]]; then
+  if [[ $# != 2 ]]; then
     echo "Usage: squashAndPush input_image output_image" && exit
   fi
   local _in=$1
@@ -62,12 +62,12 @@ squashAndPush() {
 
   echo "Squashing $_out.."
   # squash last 22 layers (everything up to the base centos image)
-  docker-squash -f 22 -t $_out $in
+  docker-squash -f 22 -t $_out $_in
   docker push $_out
 }
 
 pushLatestImages() {
-  if [[ $# != 2 ]]; then
+  if [[ $# != 1 ]]; then
     echo "Usage: pushLatestImages image_repo" && exit
   fi
   REPO="$1"
@@ -78,7 +78,7 @@ pushLatestImages() {
 }
 
 pushReleaseImages() {
-  if [[ $# != 2 ]]; then
+  if [[ $# != 1 ]]; then
     echo "Usage: pushReleaseImages image_repo" && exit
   fi
   REPO="$1"
