@@ -54,10 +54,16 @@ fi
 if [ ! -z ${SPARK+x} ]; then
 
     # TODO remove this download when sha512 support lands in upstream cekit (elmiko)
-    wget https://archive.apache.org/dist/spark/spark-${SPARK}/spark-${SPARK}-bin-hadoop${HVER}.tgz -O /tmp/spark-${SPARK}-bin-hadoop${HVER}.tgz
-    if [ "$?" -ne 0 ]; then
-        echo "Failed to download the specified version Spark archive"
-        exit 1
+    if [ -f "/tmp/spark-${SPARK}-bin-hadoop${HVER}.tgz" ]; then
+        echo
+        echo Using existing "/tmp/spark-${SPARK}-bin-hadoop${HVER}.tgz", if this is not what you want delete it and run again
+        echo
+    else
+        wget https://archive.apache.org/dist/spark/spark-${SPARK}/spark-${SPARK}-bin-hadoop${HVER}.tgz -O /tmp/spark-${SPARK}-bin-hadoop${HVER}.tgz
+        if [ "$?" -ne 0 ]; then
+            echo "Failed to download the specified version Spark archive"
+            exit 1
+        fi
     fi
 
     wget https://archive.apache.org/dist/spark/spark-${SPARK}/spark-${SPARK}-bin-hadoop${HVER}.tgz.sha512 -O /tmp/spark-${SPARK}-bin-hadoop${HVER}.tgz.sha512

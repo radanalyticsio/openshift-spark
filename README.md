@@ -22,8 +22,8 @@ For Spark versions, please see the `image.yaml` file.
 
 ### Prerequisites
 
-* `concreate` tool from the [cekit project](https://github.com/cekit/cekit),
-  this can be installed from [pypi](https://pypi.org/project/concreate/).
+* `cekit` version 2.2.7 from the [cekit project](https://github.com/cekit/cekit),
+  this can be installed from [pypi](https://pypi.org/project/cekit/).
 
 ### Procedure
 
@@ -43,7 +43,7 @@ There are several ways to customize the construction and build process. This
 project uses the [GNU Make tool](https://www.gnu.org/software/make/) for
 the build workflow, see the `Makefile` for more information. For container
 specification and construction, the
-[Container image creation tool `concreate`](https://github.com/cekit/cekit) is
+[Container Evolution Kit `cekit`](https://github.com/cekit/cekit) is
 used as the primary point of investigation, see the `image.yaml` file for
 more information.
 
