@@ -41,13 +41,13 @@ $(DOCKERFILE_CONTEXT)-py36: $(DOCKERFILE_CONTEXT)-py36/Dockerfile $(DOCKERFILE_C
 
 $(DOCKERFILE_CONTEXT)/Dockerfile $(DOCKERFILE_CONTEXT)/modules:
 	-mkdir -p $(DOCKERFILE_CONTEXT)
-	concreate generate --descriptor image-inc.yaml --overrides overrides/default.yaml
+	cekit generate --descriptor image-inc.yaml --overrides overrides/default.yaml
 	cp -R target/image/* $(DOCKERFILE_CONTEXT)
 	-rm $(DOCKERFILE_CONTEXT)/spark*.tgz
 
 $(DOCKERFILE_CONTEXT)-py36/Dockerfile $(DOCKERFILE_CONTEXT)-py36/modules:
 	-mkdir -p $(DOCKERFILE_CONTEXT)-py36
-	concreate generate --descriptor image-inc.yaml --overrides overrides/python36-inc.yaml --target target-py36
+	cekit generate --descriptor image-inc.yaml --overrides overrides/python36-inc.yaml --target target-py36
 	cp -R target-py36/image/* $(DOCKERFILE_CONTEXT)-py36
 	-rm $(DOCKERFILE_CONTEXT)-py36/spark*.tgz
 

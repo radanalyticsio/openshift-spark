@@ -90,12 +90,12 @@ if [ ! -z ${SPARK+x} ]; then
     calcsum=$(md5sum /tmp/spark-${SPARK}-bin-hadoop${HVER}.tgz | cut -d" " -f1)
     sed -i '\@url: https://archive.apache.org/dist/spark/@!b;n;s/md5.*/md5: '$calcsum'/' image.yaml
 
-	# Fix the spark version label
-	sed -i '\@name: sparkversion@!b;n;s/value.*/value: '$SPARK'/' image.yaml
+    # Fix the spark version label
+    sed -i '\@name: sparkversion@!b;n;s/value.*/value: '$SPARK'/' image.yaml
 
-    # Fix the concreate version value
+    # Fix the image version value (do this for incomplete as well)
     V=$(echo $SPARK | cut -d'.' -f1,2)
-    sed -i 's@^version:.*-latest$@version: '$V'-latest@' image.yaml
+    sed -i 's@^version:.*-latest$@version: '$V'-latest@' image*.yaml
 fi
 
 git add image.yaml
