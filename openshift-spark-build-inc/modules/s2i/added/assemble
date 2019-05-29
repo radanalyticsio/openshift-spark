@@ -139,7 +139,7 @@ else
         popd &> /dev/null
 
 	# If someone included mods in a parallel directory, install them with rsync
-        if [ -d "$S2I_SOURCE_DIR/modify-spark" ]; then
+        if [ -x /usr/bin/rsync ] && [ -d "$S2I_SOURCE_DIR/modify-spark" ]; then
 	    echo Found a modify-spark directory, running rsync to install changes
 	    rsync -av "$S2I_SOURCE_DIR/modify-spark/" $SPARK_HOME
         fi
