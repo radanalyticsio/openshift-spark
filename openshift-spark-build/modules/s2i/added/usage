@@ -45,12 +45,16 @@ Build inputs:
 
 The OpenShift method can take either local files or a URL as build input.
 For the s2i method, local files are required. Here is an example which
-downloads an Apache Spark distribution to a local 'build_input' directory
-(including the md5 file is optional).
+downloads an Apache Spark distribution to a local 'build-input' directory
+(including the sha512 file is optional).
 
-$ mkdir build_input
-$ wget https://archive.apache.org/dist/spark/spark-2.3.0/spark-2.3.0-bin-hadoop2.7.tgz -O build_input/spark-2.3.0-bin-hadoop2.7.tgz
-$ wget https://archive.apache.org/dist/spark/spark-2.3.0/spark-2.3.0-bin-hadoop2.7.tgz.md5 -O build_input/spark-2.3.0-bin-hadoop2.7.tgz.md5
+$ mkdir build-input
+$ wget https://archive.apache.org/dist/spark/spark-2.4.0/spark-2.4.0-bin-hadoop2.7.tgz -O build-input/spark-2.4.0-bin-hadoop2.7.tgz
+$ wget https://archive.apache.org/dist/spark/spark-2.4.0/spark-2.4.0-bin-hadoop2.7.tgz.sha512 -O build-input/spark-2.4.0-bin-hadoop2.7.tgz.sha512
+
+Optionally, your `build-input` directory may contain a modify-spark directory. The structure of this directory should be parallel to the structure
+of the top-level directory in the Spark distribution tarball. The contents of this directory will be copied to the Spark installation using rsync,
+allowing you to add or overwrite files. To add my.jar to Spark, for example, put it in build-input/modify-spark/jars/my.jar
 
 Completing the image with OpenShift:
 ------------------------------------
@@ -58,7 +62,7 @@ Completing the image with OpenShift:
 Run a binary build specifying the spark distribution, for example:
 
 $ oc new-build --name=openshift-spark --docker-image=radanalyticsio/openshift-spark-inc --binary
-$ oc start-build openshift-spark --from-file=https://archive.apache.org/dist/spark/spark-2.3.0/spark-2.3.0-bin-hadoop2.7.tgz
+$ oc start-build openshift-spark --from-file=https://archive.apache.org/dist/spark/spark-2.4.0/spark-2.4.0-bin-hadoop2.7.tgz
 
 This will write the completed image to an imagestream called 'openshift-spark'
 in the current project. Note that the value of --from-file can also be a local
@@ -67,7 +71,7 @@ directory (see Build Inputs above).
 Completing the image with the s2i tool:
 ---------------------------------------
 
-s2i build build_input radanalyticsio/openshift-spark-inc openshift-spark
+s2i build build-input radanalyticsio/openshift-spark-inc openshift-spark
 
 This will build a local image named 'openshift-spark:latest' which can
 then be uploaded to an image repository.

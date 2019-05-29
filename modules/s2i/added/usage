@@ -50,7 +50,7 @@ downloads an Apache Spark distribution to a local 'build-input' directory
 
 $ mkdir build-input
 $ wget https://archive.apache.org/dist/spark/spark-2.4.0/spark-2.4.0-bin-hadoop2.7.tgz -O build-input/spark-2.4.0-bin-hadoop2.7.tgz
-$ wget https://archive.apache.org/dist/spark/spark-2.4.0/spark-2.4.0-bin-hadoop2.7.tgz.sha512 -O build-input/spark-2.4.0-bin-hadoop2.7.tgz.md5
+$ wget https://archive.apache.org/dist/spark/spark-2.4.0/spark-2.4.0-bin-hadoop2.7.tgz.sha512 -O build-input/spark-2.4.0-bin-hadoop2.7.tgz.sha512
 
 Optionally, your `build-input` directory may contain a modify-spark directory. The structure of this directory should be parallel to the structure
 of the top-level directory in the Spark distribution tarball. The contents of this directory will be copied to the Spark installation using rsync,
