@@ -138,6 +138,12 @@ else
         done
         popd &> /dev/null
 
+	# If someone included mods in a parallel directory, install them with rsync
+        if [ -d "$S2I_SOURCE_DIR/modify-spark" ]; then
+	    echo Found a modify-spark directory, running rsync to install changes
+	    rsync -av "$S2I_SOURCE_DIR/modify-spark/" $SPARK_HOME
+        fi
+
         # Can we run spark-submit?
         $SPARK_HOME/bin/spark-submit --version
         if [ "$?" -eq 0 ]; then

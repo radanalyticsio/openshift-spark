@@ -31,6 +31,7 @@ packages:
     install:
         - java-1.8.0-openjdk
         - wget
+        - rsync
 run:
     user: 185
     entrypoint:

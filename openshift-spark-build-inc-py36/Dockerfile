@@ -18,41 +18,40 @@
 
 FROM centos:latest
 
+USER root
+
+
+# Install required RPMs and ensure that the packages were installed
+RUN yum install -y java-1.8.0-openjdk wget rsync \
+    && yum clean all && rm -rf /var/cache/yum \
+    && rpm -q java-1.8.0-openjdk wget rsync
+
+
+
 # Environment variables
-ENV JBOSS_IMAGE_NAME="radanalyticsio/openshift-spark-inc" \
+ENV \
+    JBOSS_IMAGE_NAME="radanalyticsio/openshift-spark-inc" \
     JBOSS_IMAGE_VERSION="2.4-latest" \
-    SCL_ENABLE_CMD="scl enable rh-python36" \
     PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/spark/bin" \
+    SCL_ENABLE_CMD="scl enable rh-python36" \
     SPARK_HOME="/opt/spark" \
     SPARK_INSTALL="/opt/spark-distro" \
     STI_SCRIPTS_PATH="/usr/libexec/s2i" 
 
 # Labels
-LABEL name="$JBOSS_IMAGE_NAME" \
-      version="$JBOSS_IMAGE_VERSION" \
-      architecture="x86_64"  \
-      com.redhat.component="radanalyticsio-openshift-spark-inc-docker"  \
-      org.concrt.version="1.4.1" \
-      maintainer="Chad Roberts <croberts@redhat.com>" \
-      sparkversion="2.4.0" \
-      io.openshift.s2i.scripts-url="image:///usr/libexec/s2i"
-
-
-USER root
-
-
-# Install required RPMs and ensure that the packages were installed
-RUN yum install -y  java-1.8.0-openjdk wget \
-    && yum clean all && \
-    rpm -q  java-1.8.0-openjdk wget
+LABEL \
+      io.cekit.version="2.2.7"  \
+      io.openshift.s2i.scripts-url="image:///usr/libexec/s2i"  \
+      maintainer="Chad Roberts <croberts@redhat.com>"  \
+      name="radanalyticsio/openshift-spark-inc"  \
+      org.concrt.version="2.2.7"  \
+      sparkversion="2.4.0"  \
+      version="2.4-latest" 
 
 # Add scripts used to configure the image
 COPY modules /tmp/scripts
 
 # Custom scripts
-USER root
-RUN [ "bash", "-x", "/tmp/scripts/python36/install" ]
-
 USER root
 RUN [ "bash", "-x", "/tmp/scripts/common/install" ]
 
@@ -63,6 +62,9 @@ USER root
 RUN [ "bash", "-x", "/tmp/scripts/s2i/install" ]
 
 USER root
+RUN [ "bash", "-x", "/tmp/scripts/python36/install" ]
+
+USER root
 RUN rm -rf /tmp/scripts
 
 USER 185
@@ -71,3 +73,4 @@ USER 185
 ENTRYPOINT ["/entrypoint"]
 
 CMD ["/usr/libexec/s2i/usage"]
+
