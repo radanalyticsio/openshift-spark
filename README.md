@@ -80,19 +80,33 @@ the [s2i tool](https://github.com/openshift/source-to-image) if it's installed.
 The final images created can be used just like the `openshfit-spark` and
 `openshift-spark-py36` images described above.
 
+### Build inputs
+
+The OpenShift method can take either local files or a URL as build input.
+For the s2i method, local files are required. Here is an example which
+downloads an Apache Spark distribution to a local 'build-input' directory
+(including the sha512 file is optional).
+
+    $ mkdir build-input
+    $ wget https://archive.apache.org/dist/spark/spark-2.4.0/spark-2.4.0-bin-hadoop2.7.tgz -O build-input/spark-2.4.0-bin-hadoop2.7.tgz
+    $ wget https://archive.apache.org/dist/spark/spark-2.4.0/spark-2.4.0-bin-hadoop2.7.tgz.sha512 -O build-input/spark-2.4.0-bin-hadoop2.7.tgz.sha512
+
+Optionally, your `build-input` directory may contain a `modify-spark` directory. The structure of this directory should be parallel to the structure
+of the top-level directory in the Spark distribution tarball. During the installation, the contents of this directory will be copied to the Spark
+installation using `rsync`, allowing you to add or overwrite files. To add `my.jar` to Spark, for example, put it in  `build-input/modify-spark/jars/my.jar`
+
+### Running the image completion
+
 To complete the Python 2.7 image using the [s2i tool](https://github.com/openshift/source-to-image)
 
-    $ mkdir build_input
-    $ wget https://archive.apache.org/dist/spark/spark-2.3.0/spark-2.3.0-bin-hadoop2.7.tgz -O build_input/spark-2.3.0-bin-hadoop2.7.tgz
-    $ wget https://archive.apache.org/dist/spark/spark-2.3.0/spark-2.3.0-bin-hadoop2.7.tgz.md5 -O build_input/spark-2.3.0-bin-hadoop2.7.tgz.md5
-    $ s2i build build_input radanalyticsio/openshift-spark-inc openshift-spark
+    $ s2i build build-input radanalyticsio/openshift-spark-inc openshift-spark
 
 To complete the Python 2.7 image using OpenShift, for example:
 
     $ oc new-build --name=openshift-spark --docker-image=radanalyticsio/openshift-spark-inc --binary
-    $ oc start-build openshift-spark --from-file=https://archive.apache.org/dist/spark/spark-2.3.0/spark-2.3.0-bin-hadoop2.7.tgz
+    $ oc start-build openshift-spark --from-file=https://archive.apache.org/dist/spark/spark-2.4.0/spark-2.4.0-bin-hadoop2.7.tgz
 
-    (note that the value of `--from-file` could also be the `build_input` directory from the s2i example above)
+    Note that the value of `--from-file` could also be the `build-input` directory from the s2i example above.
 
 This will write the completed image to an imagestream called `openshift-spark` in the current project
 
