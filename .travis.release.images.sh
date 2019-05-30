@@ -18,7 +18,7 @@ main() {
     loginDockerIo
     pushLatestImages "docker.io"
     loginQuayIo
-    pushLatestImages "quay.io"
+    pushLatestImages "quay.io" 
   elif [[ "${TRAVIS_TAG}" =~ ^[0-9]+\.[0-9]+\.[0-9]+-[0-9]+$ ]]; then
     echo "Squashing and pushing the '${TRAVIS_TAG}' images to docker.io and quay.io"
     buildImages
@@ -60,9 +60,15 @@ squashAndPush() {
   local _in=$1
   local _out=$2
 
-  echo "Squashing $_out.."
-  # squash last 22 layers (everything up to the base centos image)
-  docker-squash -f 22 -t $_out $_in
+  local _layers_total=$(docker history -q $_in | wc -l)
+  local _layers_to_keep=4
+  if ! [[ "$_layers_total" =~ "^[0-9]+$" ]] || [[ "$_layers_total" -le "$_layers_to_keep" ]] ; then
+    echo "error: _layers_total is not a number or lower than or equal to $_layers_to_keep" >&2; exit
+  fi
+  local _last_n=$[_layers_total - _layers_to_keep]
+
+  echo "Squashing $_out (last $_last_n layers).."
+  docker-squash -f $_last_n -t $_out $_in
   docker push $_out
 }
 
