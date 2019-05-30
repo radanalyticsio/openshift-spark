@@ -9,11 +9,7 @@ stages:
   - deploy
 
 before_install:
-- pwd
-- bash --version
-- sudo apt-get install --only-upgrade bash
-- bash --version
-- test/prepare.sh
+- ./.travis.before.install.sh
 
 env:
   global: OPENSHIFT_VERSION="v3.10"
