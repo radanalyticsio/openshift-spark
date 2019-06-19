@@ -7,6 +7,7 @@ IMAGES="${IMAGES:-
   openshift-spark
   openshift-spark-py36
   openshift-spark-inc
+  openshift-spark-py36-inc
 }"
 
 main() {
