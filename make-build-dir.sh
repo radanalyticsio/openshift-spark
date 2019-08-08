@@ -15,4 +15,4 @@ make -f Makefile.inc zero-tarballs
 git add openshift-spark-build
 git add openshift-spark-build-py36
 git add openshift-spark-build-inc
-git add openshift-spark-build-inc-py36
+git add openshift-spark-build-py36-inc
