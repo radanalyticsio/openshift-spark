@@ -106,8 +106,6 @@ else
         fi
 
         ln -s $sparkdir $SPARK_INSTALL/distro
-        # Spark workers need to write to the spark directory to track apps
-        chmod -R g+rwX $sparkdir
 
         # Search for the spark entrypoint file and copy it to $SPARK_INSTALL
         entry=$(find $sparkdir/kubernetes -name entrypoint.sh)
@@ -139,10 +137,15 @@ else
         popd &> /dev/null
 
 	# If someone included mods in a parallel directory, install them with rsync
+        # Don't try to preserve permisions, owner, or group because we don't have
+        # any control over how s2i uploaded the files, so there's no use preserving.
         if [ -x /usr/bin/rsync ] && [ -d "$S2I_SOURCE_DIR/modify-spark" ]; then
 	    echo Found a modify-spark directory, running rsync to install changes
-	    rsync -av "$S2I_SOURCE_DIR/modify-spark/" $SPARK_HOME
+	    rsync -vrltD "$S2I_SOURCE_DIR/modify-spark/" $SPARK_HOME
         fi
+
+        # Spark workers need to write to the spark directory to track apps
+        chmod -R g+rwX $sparkdir
 
         # Can we run spark-submit?
         $SPARK_HOME/bin/spark-submit --version
