@@ -12,7 +12,7 @@ labels:
     - name: maintainer
       value: Chad Roberts <croberts@redhat.com>
     - name: sparkversion
-      value: 2.4.0
+      value: 2.4.4
     - name: "io.openshift.s2i.scripts-url"
       value: "image:///usr/libexec/s2i"
 envs:
@@ -37,8 +37,8 @@ packages:
         - java-1.8.0-openjdk
         - wget
 artifacts:
-    - url: https://archive.apache.org/dist/spark/spark-2.4.0/spark-2.4.0-bin-hadoop2.7.tgz
-      md5: c1a230474c21335c983f45e84dcf8fb9
+    - url: https://archive.apache.org/dist/spark/spark-2.4.4/spark-2.4.4-bin-hadoop2.7.tgz
+      md5: 2b190cb07becf3868a16690b4a123c42
 run:
     user: 185
     entrypoint:

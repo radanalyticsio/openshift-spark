@@ -7,8 +7,6 @@ from: centos:centos7
 labels:
     - name: maintainer
       value: Chad Roberts <croberts@redhat.com>
-    - name: sparkversion
-      value: 2.4.0
     - name: "io.openshift.s2i.scripts-url"
       value: "image:///usr/libexec/s2i"
 envs:

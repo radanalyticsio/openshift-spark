@@ -45,7 +45,6 @@ LABEL \
       maintainer="Chad Roberts <croberts@redhat.com>"  \
       name="radanalyticsio/openshift-spark-inc"  \
       org.concrt.version="2.2.7"  \
-      sparkversion="2.4.0"  \
       version="2.4-latest" 
 
 # Add scripts used to configure the image
