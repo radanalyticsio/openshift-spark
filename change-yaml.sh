@@ -54,10 +54,16 @@ fi
 if [ ! -z ${SPARK+x} ]; then
 
     # TODO remove this download when sha512 support lands in upstream cekit (elmiko)
-    wget https://archive.apache.org/dist/spark/spark-${SPARK}/spark-${SPARK}-bin-hadoop${HVER}.tgz -O /tmp/spark-${SPARK}-bin-hadoop${HVER}.tgz
-    if [ "$?" -ne 0 ]; then
-        echo "Failed to download the specified version Spark archive"
-        exit 1
+    if [ -f "/tmp/spark-${SPARK}-bin-hadoop${HVER}.tgz" ]; then
+        echo
+        echo Using existing "/tmp/spark-${SPARK}-bin-hadoop${HVER}.tgz", if this is not what you want delete it and run again
+        echo
+    else
+        wget https://archive.apache.org/dist/spark/spark-${SPARK}/spark-${SPARK}-bin-hadoop${HVER}.tgz -O /tmp/spark-${SPARK}-bin-hadoop${HVER}.tgz
+        if [ "$?" -ne 0 ]; then
+            echo "Failed to download the specified version Spark archive"
+            exit 1
+        fi
     fi
 
     wget https://archive.apache.org/dist/spark/spark-${SPARK}/spark-${SPARK}-bin-hadoop${HVER}.tgz.sha512 -O /tmp/spark-${SPARK}-bin-hadoop${HVER}.tgz.sha512
@@ -84,12 +90,12 @@ if [ ! -z ${SPARK+x} ]; then
     calcsum=$(md5sum /tmp/spark-${SPARK}-bin-hadoop${HVER}.tgz | cut -d" " -f1)
     sed -i '\@url: https://archive.apache.org/dist/spark/@!b;n;s/md5.*/md5: '$calcsum'/' image.yaml
 
-	# Fix the spark version label
-	sed -i '\@name: sparkversion@!b;n;s/value.*/value: '$SPARK'/' image.yaml
+    # Fix the spark version label
+    sed -i '\@name: sparkversion@!b;n;s/value.*/value: '$SPARK'/' image.yaml
 
-    # Fix the concreate version value
+    # Fix the image version value (do this for incomplete as well)
     V=$(echo $SPARK | cut -d'.' -f1,2)
-    sed -i 's@^version:.*-latest$@version: '$V'-latest@' image.yaml
+    sed -i 's@^version:.*-latest$@version: '$V'-latest@' image*.yaml
 fi
 
 git add image.yaml
