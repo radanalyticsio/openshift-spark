@@ -75,7 +75,7 @@ zero-tarballs:
 test-e2e:
 	LOCAL_IMAGE=$(OPENSHIFT_SPARK_TEST_IMAGE) make build
 	test/run.sh completed/
-	SPARK_TEST_IMAGE=$(OPENSHIFT_SPARK_TEST_IMAGE)-py36 test/run.sh completed/
+	SPARK_TEST_IMAGE=$(OPENSHIFT_SPARK_TEST_IMAGE)-py36 test/run.sh completed
 
 test-e2e-py:
 	LOCAL_IMAGE=$(OPENSHIFT_SPARK_TEST_IMAGE) make build-py

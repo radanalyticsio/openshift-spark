@@ -27,6 +27,21 @@ os::cmd::expect_success 'oc expose service/master-webui'
 # parse the ip
 HOST=$(oc get route | grep master-webui | awk '{print $2;}')
 
+set +e
+while true; do
+    echo "Looping"
+    curl --silent "$HOST" | grep "Alive Workers"
+    a=$(curl --silent "$HOST" | grep "Alive Workers" | sed "s,[^0-9],\\ ,g" | tr -d "[:space:]")
+    echo $a
+    if [ "$a" == "1" ]; then
+        break
+    else
+        oc get pods
+    fi
+    sleep 5
+done
+set -e
+
 os::cmd::try_until_text 'curl --silent "$HOST" | grep "Alive Workers" | sed "s,[^0-9],\\ ,g" | tr -d "[:space:]"' "^1$"
 
 #checking the delpoyer pods are gone
