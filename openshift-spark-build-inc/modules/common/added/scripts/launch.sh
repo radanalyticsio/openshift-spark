@@ -35,11 +35,19 @@ else
     metrics=" with jolokia metrics enabled (deprecated, set SPARK_METRICS_ON to 'prometheus')"
 fi
 
+if [ ${USE_CGROUP_MEMORY} == "true" ]; then
+    SPARK_JAVA_OPTS=${SPARK_JAVA_OPTS:-"-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=2 -XshowSettings:vm"}
+    START_CMD="java $JAVA_AGENT $SPARK_JAVA_OPTS -cp /opt/spark/conf/:/opt/spark/jars/*"
+else
+    START_CMD="$SPARK_HOME/bin/spark-class$JAVA_AGENT"
+fi
+
 if [ -z ${SPARK_MASTER_ADDRESS+_} ]; then
     echo "Starting master$metrics"
-    exec $SPARK_HOME/bin/spark-class$JAVA_AGENT org.apache.spark.deploy.master.Master
+    START_CLASS="org.apache.spark.deploy.master.Master"
 else
     echo "Starting worker$metrics, will connect to: $SPARK_MASTER_ADDRESS"
+    START_CLASS="org.apache.spark.deploy.worker.Worker $SPARK_MASTER_ADDRESS"
     while true; do
         echo "Waiting for spark master to be available ..."
         curl --connect-timeout 1 -s -X GET $SPARK_MASTER_UI_ADDRESS > /dev/null
@@ -48,5 +56,6 @@ else
         fi
         sleep 1
     done
-    exec $SPARK_HOME/bin/spark-class$JAVA_AGENT org.apache.spark.deploy.worker.Worker $SPARK_MASTER_ADDRESS
 fi
+
+exec $START_CMD $START_CLASS

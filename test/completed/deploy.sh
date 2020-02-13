@@ -37,6 +37,8 @@ while true; do
         break
     else
         oc get pods
+        n=$(oc get pod -l name=worker -o name)
+        oc log $n
     fi
     sleep 5
 done
