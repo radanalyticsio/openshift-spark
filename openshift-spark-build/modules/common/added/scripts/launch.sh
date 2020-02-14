@@ -44,10 +44,10 @@ fi
 
 if [ -z ${SPARK_MASTER_ADDRESS+_} ]; then
     echo "Starting master$metrics"
-    START_CLASS="org.apache.spark.deploy.master.Master $SPARK_MASTER_ADDRESS"
+    START_CLASS="org.apache.spark.deploy.master.Master"
 else
     echo "Starting worker$metrics, will connect to: $SPARK_MASTER_ADDRESS"
-    START_CLASS="org.apache.spark.deploy.worker.Worker"
+    START_CLASS="org.apache.spark.deploy.worker.Worker $SPARK_MASTER_ADDRESS"
     while true; do
         echo "Waiting for spark master to be available ..."
         curl --connect-timeout 1 -s -X GET $SPARK_MASTER_UI_ADDRESS > /dev/null
