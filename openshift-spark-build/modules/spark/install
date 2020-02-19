@@ -48,5 +48,5 @@ if [ -n "$entry" ]; then
     sed -i '/^uidentry/a set -e' $SPARK_INSTALL/entrypoint.sh
 
     # We also want to get rid of the tini invocation
-    sed -i "s@exec /sbin/tini -s --@exec@" $SPARK_INSTALL/entrypoint.sh
+    sed -i "s@exec .*/tini -s --@exec@" $SPARK_INSTALL/entrypoint.sh
 fi
