@@ -119,7 +119,7 @@ else
             sed -i '/^uidentry/a set -e' $SPARK_INSTALL/entrypoint.sh
 
             # We also want to get rid of the tini invocation
-            sed -i "s@exec /sbin/tini -s --@exec@" $SPARK_INSTALL/entrypoint.sh
+            sed -i "s@exec .*/tini -s --@exec@" $SPARK_INSTALL/entrypoint.sh
         else
             echo No spark native entrypoint found for use with spark-on-k8s commands
         fi
