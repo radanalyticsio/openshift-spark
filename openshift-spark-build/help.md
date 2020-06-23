@@ -58,7 +58,7 @@ __org.concrt.version__
 > 2.2.7
 
 __sparkversion__
-> 2.4.5
+> 2.4.6
 
 __version__
 > 2.4-latest

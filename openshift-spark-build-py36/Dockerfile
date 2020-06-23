@@ -30,7 +30,7 @@ RUN yum install -y java-1.8.0-openjdk wget \
 # Add all artifacts to the /tmp/artifacts
 # directory
 COPY \
-    spark-2.4.5-bin-hadoop2.7.tgz \
+    spark-2.4.6-bin-hadoop2.7.tgz \
     /tmp/artifacts/
 
 
@@ -51,7 +51,7 @@ LABEL \
       maintainer="Chad Roberts <croberts@redhat.com>"  \
       name="radanalyticsio/openshift-spark"  \
       org.concrt.version="2.2.7"  \
-      sparkversion="2.4.5"  \
+      sparkversion="2.4.6"  \
       version="2.4-latest" 
 
 # Add scripts used to configure the image
