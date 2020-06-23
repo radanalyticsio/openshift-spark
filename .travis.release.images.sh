@@ -98,10 +98,10 @@ pushReleaseImages() {
 
     squashAndPush $image $_fully_qualified_image
 
-    # tag and push also x.y-latest image
-    local _x_y_z_latest=`echo ${TRAVIS_TAG} | sed -r 's;([[:digit:]]+\.[[:digit:]]+).*;\1-latest;'`
-    docker tag $_fully_qualified_image ${REPO}/${OWNER}/${image}:${_x_y_z_latest}
-    docker push ${REPO}/${OWNER}/${image}:${_x_y_z_latest}
+    # tag and push "x.y" image which acts as a "latest" for all  major.minor.Z versions
+    local _x_y_latest=`echo ${TRAVIS_TAG} | sed -r 's;([[:digit:]]+\.[[:digit:]]+).*;\1;'`
+    docker tag $_fully_qualified_image ${REPO}/${OWNER}/${image}:${_x_y_latest}
+    docker push ${REPO}/${OWNER}/${image}:${_x_y_latest}
 
     # tag and push also :latest image
     docker tag $_fully_qualified_image ${REPO}/${OWNER}/${image}:latest
