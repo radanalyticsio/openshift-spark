@@ -1,25 +1,33 @@
 #!/bin/bash
+function check_if_writable {
+    if [ ! -w "$1" ]; then
+        echo "$1 is not writable. Exiting."
+        exit 1
+    fi
+}
 
 function check_reverse_proxy {
     grep -e "^spark\.ui\.reverseProxy" $SPARK_HOME/conf/spark-defaults.conf &> /dev/null
     if [ "$?" -ne 0 ]; then
+        check_if_writable $SPARK_HOME/conf/spark-defaults.conf
         echo "Appending default reverse proxy config to spark-defaults.conf"
         echo "spark.ui.reverseProxy              true" >> $SPARK_HOME/conf/spark-defaults.conf
         echo "spark.ui.reverseProxyUrl           /" >> $SPARK_HOME/conf/spark-defaults.conf
     fi
 }
 
-# If the UPDATE_SPARK_CONF_DIR dir is non-empty,
+# If the {UPDATE_SPARK_CONF_DIR} dir is non-empty,
 # copy the contents to $SPARK_HOME/conf
-if [ -d "$UPDATE_SPARK_CONF_DIR" ]; then
-    sparkconfs=$(ls -1 $UPDATE_SPARK_CONF_DIR | wc -l)
+if [ -d "${UPDATE_SPARK_CONF_DIR}" ]; then
+    sparkconfs=$(ls -1 "${UPDATE_SPARK_CONF_DIR}" | wc -l)
     if [ "$sparkconfs" -ne "0" ]; then
-        echo "Copying from $UPDATE_SPARK_CONF_DIR to $SPARK_HOME/conf"
-        ls -1 $UPDATE_SPARK_CONF_DIR
-        cp $UPDATE_SPARK_CONF_DIR/* $SPARK_HOME/conf
+        echo "Copying from ${UPDATE_SPARK_CONF_DIR} to ${SPARK_HOME}/conf"
+        ls -1 "${UPDATE_SPARK_CONF_DIR}"
+        check_if_writable $SPARK_HOME/conf
+        cp "${UPDATE_SPARK_CONF_DIR}"/* "${SPARK_HOME}"/conf
     fi
-elif [ -n "$UPDATE_SPARK_CONF_DIR" ]; then
-    echo "Directory $UPDATE_SPARK_CONF_DIR does not exist, using default spark config"
+elif [ -n "${UPDATE_SPARK_CONF_DIR}" ]; then
+    echo "Directory ${UPDATE_SPARK_CONF_DIR} does not exist, using default spark config"
 fi
 
 check_reverse_proxy
@@ -41,12 +49,16 @@ if [ -z ${SPARK_MASTER_ADDRESS+_} ]; then
 else
     echo "Starting worker$metrics, will connect to: $SPARK_MASTER_ADDRESS"
     while true; do
-        echo "Waiting for spark master to be available ..."
+        echo -n "Waiting for spark master to be available ..."
         curl --connect-timeout 1 -s -X GET $SPARK_MASTER_UI_ADDRESS > /dev/null
         if [ $? -eq 0 ]; then
+            echo -e "\nSpark master is available"
             break
+        else
+            echo -n "."
         fi
         sleep 1
     done
+    echo "Running $SPARK_HOME/bin/spark-class$JAVA_AGENT org.apache.spark.deploy.worker.Worker $SPARK_MASTER_ADDRESS"
     exec $SPARK_HOME/bin/spark-class$JAVA_AGENT org.apache.spark.deploy.worker.Worker $SPARK_MASTER_ADDRESS
 fi
