@@ -1,6 +1,6 @@
 template.active
 target/
-target-py36/
+target-py27/
 
 # Intellij
 .idea/

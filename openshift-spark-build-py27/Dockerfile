@@ -59,28 +59,17 @@
 ###### /
 ###### END module 's2i:1.0'
 
-###### START module 'python36:1.0'
-###### \
-        # Copy 'python36' module content
-        COPY modules/python36 /tmp/scripts/python36
-        # Custom scripts from 'python36' module
-        USER root
-        RUN [ "sh", "-x", "/tmp/scripts/python36/install" ]
-###### /
-###### END module 'python36:1.0'
-
 ###### START image 'radanalyticsio/openshift-spark:2.4-latest'
 ###### \
         # Switch to 'root' user to install 'radanalyticsio/openshift-spark' image defined packages
         USER root
         # Install packages defined in the 'radanalyticsio/openshift-spark' image
-        RUN yum --setopt=tsflags=nodocs install -y java-1.8.0-openjdk wget \
-            && rpm -q java-1.8.0-openjdk wget
+        RUN yum --setopt=tsflags=nodocs install -y java-1.8.0-openjdk wget numpy \
+            && rpm -q java-1.8.0-openjdk wget numpy
         # Set 'radanalyticsio/openshift-spark' image defined environment variables
         ENV \
             JBOSS_IMAGE_NAME="radanalyticsio/openshift-spark" \
-            JBOSS_IMAGE_VERSION="2.4-latest" \
-            SCL_ENABLE_CMD="scl enable rh-python36" 
+            JBOSS_IMAGE_VERSION="2.4-latest" 
         # Set 'radanalyticsio/openshift-spark' image defined labels
         LABEL \
             io.cekit.version="3.7.0"  \

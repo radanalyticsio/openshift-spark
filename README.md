@@ -11,8 +11,8 @@ for usage on [OpenShift Origin](https://openshift.org).
 By default, it will build the following images into your local Docker
 registry:
 
-* `openshift-spark`, Apache Spark, Python 2.7
-* `openshift-spark-py36`, Apache Spark, Python 3.6
+* `openshift-spark`, Apache Spark, Python 3.6
+* `openshift-spark-py27`, Apache Spark, Python 2.7
 
 For Spark versions, please see the `image.yaml` file.
 
@@ -22,7 +22,7 @@ For Spark versions, please see the `image.yaml` file.
 
 ### Prerequisites
 
-* `cekit` version 2.2.7 from the [cekit project](https://github.com/cekit/cekit),
+* `cekit` version 3.7.0 from the [cekit project](https://github.com/cekit/cekit),
   this can be installed from [pypi](https://pypi.org/project/cekit/) using pip and
   specifying the specific version.
 
@@ -58,8 +58,8 @@ This gives users an alternative to checking out the repository
 and modifying build files if they want to run a custom
 Spark distribution. By default, the partial images built will be
 
-* `openshift-spark-inc`, Apache Spark, Python 2.7
-* `openshift-spark-inc-py36`, Apache Spark, Python 3.6
+* `openshift-spark-inc`, Apache Spark, Python 3.6
+* `openshift-spark-inc-py27`, Apache Spark, Python 2.7
 
 ## Build
 
@@ -79,7 +79,7 @@ To produce a final image, a source-to-image build must be performed which takes
 a Spark distribution as input. This can be done in OpenShift or locally using
 the [s2i tool](https://github.com/openshift/source-to-image) if it's installed.
 The final images created can be used just like the `openshfit-spark` and
-`openshift-spark-py36` images described above.
+`openshift-spark-py27` images described above.
 
 ### Build inputs
 
@@ -89,8 +89,8 @@ downloads an Apache Spark distribution to a local 'build-input' directory
 (including the sha512 file is optional).
 
     $ mkdir build-input
-    $ wget https://archive.apache.org/dist/spark/spark-2.4.0/spark-2.4.0-bin-hadoop2.7.tgz -O build-input/spark-2.4.0-bin-hadoop2.7.tgz
-    $ wget https://archive.apache.org/dist/spark/spark-2.4.0/spark-2.4.0-bin-hadoop2.7.tgz.sha512 -O build-input/spark-2.4.0-bin-hadoop2.7.tgz.sha512
+    $ wget https://archive.apache.org/dist/spark/spark-2.4.6/spark-2.4.6-bin-hadoop2.7.tgz -O build-input/spark-2.4.6-bin-hadoop2.7.tgz
+    $ wget https://archive.apache.org/dist/spark/spark-2.4.6/spark-2.4.6-bin-hadoop2.7.tgz.sha512 -O build-input/spark-2.4.6-bin-hadoop2.7.tgz.sha512
 
 Optionally, your `build-input` directory may contain a `modify-spark` directory. The structure of this directory should be parallel to the structure
 of the top-level directory in the Spark distribution tarball. During the installation, the contents of this directory will be copied to the Spark
@@ -98,14 +98,14 @@ installation using `rsync`, allowing you to add or overwrite files. To add `my.j
 
 ### Running the image completion
 
-To complete the Python 2.7 image using the [s2i tool](https://github.com/openshift/source-to-image)
+To complete the Python 3.6 image using the [s2i tool](https://github.com/openshift/source-to-image)
 
     $ s2i build build-input radanalyticsio/openshift-spark-inc openshift-spark
 
-To complete the Python 2.7 image using OpenShift, for example:
+To complete the Python 3.6 image using OpenShift, for example:
 
     $ oc new-build --name=openshift-spark --docker-image=radanalyticsio/openshift-spark-inc --binary
-    $ oc start-build openshift-spark --from-file=https://archive.apache.org/dist/spark/spark-2.4.0/spark-2.4.0-bin-hadoop2.7.tgz
+    $ oc start-build openshift-spark --from-file=https://archive.apache.org/dist/spark/spark-2.4.6/spark-2.4.6-bin-hadoop2.7.tgz
 
     Note that the value of `--from-file` could also be the `build-input` directory from the s2i example above.
 

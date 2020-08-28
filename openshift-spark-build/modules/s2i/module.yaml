@@ -1,5 +1,23 @@
-schema_version: 1
-
-name: s2i
+artifacts: []
+envs:
+- name: STI_SCRIPTS_PATH
+  value: /usr/libexec/s2i
 execute:
-    - script: install
+- directory: s2i
+  module_name: s2i
+  name: s2i/install
+  script: install
+labels: []
+modules:
+  install: []
+  repositories: []
+name: s2i
+osbs:
+  configuration: {}
+  repository: {}
+packages:
+  install: []
+  repositories: []
+ports: []
+version: 1.0
+volumes: []

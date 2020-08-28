@@ -20,20 +20,20 @@ jobs:
     name: openshift-spark
     script: make test-e2e-py
 
-  - name: openshift-spark-py36
-    script: make test-e2e-py36
+  - name: openshift-spark-py27
+    script: make test-e2e-py27
 
   - name: openshift-spark-inc
     script: make -f Makefile.inc test-e2e-py
 
-  - name: openshift-spark-py36-inc
-    script: make -f Makefile.inc test-e2e-py36
+  - name: openshift-spark-py27-inc
+    script: make -f Makefile.inc test-e2e-py27
 
   - name: openshift-spark-comp
     script: make -f Makefile.inc test-e2e-py-completed
 
-  - name: openshift-spark-py36-comp
-    script: make -f Makefile.inc test-e2e-py36-completed
+  - name: openshift-spark-py27-comp
+    script: make -f Makefile.inc test-e2e-py27-completed
 
   - stage: deploy
     name: "Push container images"

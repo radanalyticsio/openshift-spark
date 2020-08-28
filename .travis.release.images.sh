@@ -5,9 +5,9 @@ set -xe
 OWNER="${OWNER:-radanalyticsio}"
 IMAGES="${IMAGES:-
   openshift-spark
-  openshift-spark-py36
+  openshift-spark-py27
   openshift-spark-inc
-  openshift-spark-py36-inc
+  openshift-spark-py27-inc
 }"
 
 main() {
@@ -33,8 +33,8 @@ main() {
 }
 
 buildImages() {
-  make build-py build-py36
-  make -f Makefile.inc build-py build-py36
+  make build-py build-py27
+  make -f Makefile.inc build-py build-py27
 }
 
 loginDockerIo() {

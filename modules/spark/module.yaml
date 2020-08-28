@@ -1,5 +1,15 @@
-schema_version: 1
+version: 1.0
 
 name: spark
+envs:
+    - name: PATH
+      value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/spark/bin
+    - name: SPARK_HOME
+      value: /opt/spark
+    - name: SPARK_INSTALL
+      value: /opt/spark-distro
+artifacts:
+    - url: https://archive.apache.org/dist/spark/spark-2.4.6/spark-2.4.6-bin-hadoop2.7.tgz
+      md5: 82364f8765d03dfb14cb9c606d678058
 execute:
     - script: install

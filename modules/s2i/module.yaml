@@ -1,5 +1,8 @@
-schema_version: 1
+version: 1.0
 
 name: s2i
+envs:
+    - name: STI_SCRIPTS_PATH
+      value: /usr/libexec/s2i
 execute:
     - script: install

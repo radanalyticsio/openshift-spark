@@ -1,17 +1,15 @@
 artifacts: []
-envs:
-- name: STI_SCRIPTS_PATH
-  value: /usr/libexec/s2i
+envs: []
 execute:
-- directory: s2i
-  module_name: s2i
-  name: s2i/install
+- directory: python36
+  module_name: python36
+  name: python36/install
   script: install
 labels: []
 modules:
   install: []
   repositories: []
-name: s2i
+name: python36
 osbs:
   configuration: {}
   repository: {}

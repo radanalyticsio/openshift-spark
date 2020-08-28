@@ -9,7 +9,7 @@ function usage() {
     echo
     echo "required arguments"
     echo
-    echo "  SPARK_VERSION      The spark version number, like 2.2.1"
+    echo "  SPARK_VERSION      The spark version number, like 2.4.6"
     echo
     echo "optional arguments:"
     echo

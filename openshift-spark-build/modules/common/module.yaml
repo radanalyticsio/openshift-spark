@@ -1,5 +1,21 @@
-schema_version: 1
-
-name: common
+artifacts: []
+envs: []
 execute:
-    - script: install
+- directory: common
+  module_name: common
+  name: common/install
+  script: install
+labels: []
+modules:
+  install: []
+  repositories: []
+name: common
+osbs:
+  configuration: {}
+  repository: {}
+packages:
+  install: []
+  repositories: []
+ports: []
+version: 1.0
+volumes: []

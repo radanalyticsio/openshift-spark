@@ -1,26 +1,21 @@
 schema_version: 1
 
+# The S2I bits are included to pick up the usage script and
+# to give a meaningful error on an attempt to install Spark in
+# a complete image via S2I
+
 version: 2.4-latest
 release: community
 name: radanalyticsio/openshift-spark-inc
-from: centos:centos7
+from: centos:7
 labels:
     - name: maintainer
       value: Chad Roberts <croberts@redhat.com>
     - name: "io.openshift.s2i.scripts-url"
       value: "image:///usr/libexec/s2i"
-envs:
-    - name: PATH
-      value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/spark/bin
-    - name: SPARK_HOME
-      value: /opt/spark
-    - name: SPARK_INSTALL
-      value: /opt/spark-distro
-    - name: STI_SCRIPTS_PATH
-      value: /usr/libexec/s2i
-    - name: SCL_ENABLE_CMD
-      value: ""
 modules:
+    repositories:
+        - path: modules
     install:
         - name: common
         - name: metrics
