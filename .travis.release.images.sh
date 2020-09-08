@@ -31,8 +31,8 @@ main() {
 }
 
 buildImages() {
-  make build
-  make -f Makefile.inc build
+  BUILDER=docker make build
+  BUILDER=docker make -f Makefile.inc build
 }
 
 loginDockerIo() {
