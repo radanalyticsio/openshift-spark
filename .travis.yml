@@ -12,7 +12,7 @@ before_install:
 - ./.travis.before.install.sh
 
 env:
-  global: OPENSHIFT_VERSION="v3.10"
+  global: OPENSHIFT_VERSION="v3.11"
 
 jobs:
   include:
