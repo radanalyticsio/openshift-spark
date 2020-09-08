@@ -111,15 +111,6 @@ function bad_submit {
     os::cmd::expect_success 'oc delete buildconfig spark'
 }
 
-function copy_nocopy {
-    os::cmd::expect_success 'oc new-build --name=spark --docker-image="$SPARK_IMAGE" --binary'
-    poll_binary_build spark "$RESOURCE_DIR"/spark-inputs-with-conf
-
-    os::cmd::try_until_success 'oc log buildconfig/spark | grep "^Moving.*to /opt/spark/conf"'
-    os::cmd::try_until_success 'oc log buildconfig/spark | grep "^Not moving.*/opt/spark/conf.*already exists"'
-    os::cmd::expect_success 'oc delete buildconfig spark'
-}
-
 
 # Handles registries, etc, and sets SPARK_IMAGE to the right value
 make_image
@@ -159,9 +150,6 @@ already_installed
 
 echo "++ bad_submit"
 bad_submit
-
-echo "++ copy_nocopy"
-copy_nocopy
 
 cleanup_app
 

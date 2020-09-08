@@ -1,5 +1,21 @@
-schema_version: 1
-
-name: metrics
+artifacts: []
+envs: []
 execute:
-    - script: install
+- directory: metrics
+  module_name: metrics
+  name: metrics/install
+  script: install
+labels: []
+modules:
+  install: []
+  repositories: []
+name: metrics
+osbs:
+  configuration: {}
+  repository: {}
+packages:
+  install: []
+  repositories: []
+ports: []
+version: 1.0
+volumes: []

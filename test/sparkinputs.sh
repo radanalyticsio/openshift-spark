@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-
+set -x
 TOP_DIR=$(readlink -f `dirname "${BASH_SOURCE[0]}"` | grep -o '.*/openshift-spark/')
 BUILD_DIR=$TOP_DIR/openshift-spark-build
 
 # See what spark version the image build used
-fullname=$(find $BUILD_DIR -name spark-[0-9.]*\.tgz)
+fullname=$(find $BUILD_DIR -name "spark-[0-9.]*\.tgz")
 
 # Download the same version to use as a binary build input
 filename=$(basename $fullname)

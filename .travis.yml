@@ -18,22 +18,13 @@ jobs:
   include:
   - stage: Openshift tests
     name: openshift-spark
-    script: make test-e2e-py
-
-  - name: openshift-spark-py36
-    script: make test-e2e-py36
+    script: BUILDER=docker make test-e2e
 
   - name: openshift-spark-inc
-    script: make -f Makefile.inc test-e2e-py
-
-  - name: openshift-spark-py36-inc
-    script: make -f Makefile.inc test-e2e-py36
+    script: BUILDER=docker make -f Makefile.inc test-e2e
 
   - name: openshift-spark-comp
-    script: make -f Makefile.inc test-e2e-py-completed
-
-  - name: openshift-spark-py36-comp
-    script: make -f Makefile.inc test-e2e-py36-completed
+    script: BUILDER=docker make -f Makefile.inc test-e2e-completed
 
   - stage: deploy
     name: "Push container images"

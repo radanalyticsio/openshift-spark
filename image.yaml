@@ -4,41 +4,32 @@ schema_version: 1
 # to give a meaningful error on an attempt to install Spark in
 # a complete image via S2I
 
-version: 2.4-latest
+version: 3.0.0-latest
 release: community
 name: radanalyticsio/openshift-spark
-from: centos:centos7
+from: centos:8
 labels:
     - name: maintainer
-      value: Chad Roberts <croberts@redhat.com>
+      value: Trevor McKay <tmckay@redhat.com>
     - name: sparkversion
-      value: 2.4.6
+      value: 3.0.0
     - name: "io.openshift.s2i.scripts-url"
       value: "image:///usr/libexec/s2i"
-envs:
-    - name: PATH
-      value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/spark/bin
-    - name: SPARK_HOME
-      value: /opt/spark
-    - name: SPARK_INSTALL
-      value: /opt/spark-distro
-    - name: STI_SCRIPTS_PATH
-      value: /usr/libexec/s2i
-    - name: SCL_ENABLE_CMD
-      value: ""
+
+packages:
+    install:
+        - java-11-openjdk
+        # python36 added in the common module
+        - python3-numpy
+
 modules:
+    repositories:
+        - path: modules
     install:
         - name: common
         - name: metrics
         - name: spark
         - name: s2i
-packages:
-    install:
-        - java-1.8.0-openjdk
-        - wget
-artifacts:
-    - url: https://archive.apache.org/dist/spark/spark-2.4.6/spark-2.4.6-bin-hadoop2.7.tgz
-      md5: 82364f8765d03dfb14cb9c606d678058
 run:
     user: 185
     entrypoint:

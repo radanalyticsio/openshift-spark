@@ -113,28 +113,14 @@ else
             echo Installing spark native entrypoint for use with spark-on-k8s commands
             cp $entry $SPARK_INSTALL
 
-            # We have to patch the entrypoint to toggle error checking
-            # around the uidentry check for 2.3 (fix on the way)
-            sed -i '/^uidentry/i set +e' $SPARK_INSTALL/entrypoint.sh
-            sed -i '/^uidentry/a set -e' $SPARK_INSTALL/entrypoint.sh
-
-            # We also want to get rid of the tini invocation
+            # We want to get rid of the tini invocation
             sed -i "s@exec .*/tini -s --@exec@" $SPARK_INSTALL/entrypoint.sh
         else
             echo No spark native entrypoint found for use with spark-on-k8s commands
         fi
 
 	# Include the default spark configuration files
-        pushd $SPARK_INSTALL/conf &> /dev/null
-        for conf_file in *; do
-            if ! [ -f "$SPARK_HOME"/conf/$conf_file ]; then
-	        echo Moving $conf_file to $SPARK_HOME/conf
-                mv $conf_file $SPARK_HOME/conf
-            else
-	        echo Not moving $conf_file, $SPARK_HOME/conf/$conf_file already exists
-            fi
-        done
-        popd &> /dev/null
+        mv --no-clobber "$SPARK_INSTALL"/conf/* "$SPARK_HOME"/conf/
 
 	# If someone included mods in a parallel directory, install them with rsync
         # Don't try to preserve permisions, owner, or group because we don't have
