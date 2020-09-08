@@ -1,5 +1,24 @@
-schema_version: 1
-
-name: common
+artifacts: []
+envs:
+- name: SPARK_INSTALL
+  value: /opt/spark-distro
 execute:
-    - script: install
+- directory: common
+  module_name: common
+  name: common/install
+  script: install
+labels: []
+modules:
+  install: []
+  repositories: []
+name: common
+osbs:
+  configuration: {}
+  repository: {}
+packages:
+  install:
+  - python36
+  repositories: []
+ports: []
+version: 1.0
+volumes: []

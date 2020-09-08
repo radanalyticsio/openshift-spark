@@ -1,5 +1,11 @@
-schema_version: 1
+version: 1.0
 
 name: common
+envs:
+    - name: SPARK_INSTALL
+      value: /opt/spark-distro
+packages:
+    install:
+      - python36
 execute:
     - script: install

@@ -29,16 +29,14 @@ HOST=$(oc get route | grep master-webui | awk '{print $2;}')
 
 os::cmd::try_until_text 'curl --silent "$HOST" | grep "Alive Workers" | sed "s,[^0-9],\\ ,g" | tr -d "[:space:]"' "^1$"
 
-#checking the delpoyer pods are gone
-os::cmd::try_until_text 'oc get pods -l openshift.io/deployer-pod-for.name' 'No resources found.'
-
 #test deletion
 os::cmd::try_until_success 'oc delete dc/worker'
 
 os::cmd::try_until_success 'oc delete dc/master'
 
 #check the pods have been deleted using a label
-os::cmd::try_until_text 'oc get pods' 'No resources found.' $((25*second))
+os::cmd::try_until_text 'oc get pods -l deploymentconfig=master' 'No resources found.' $((25*second))
+os::cmd::try_until_text 'oc get pods -l deploymentconfig=worker' 'No resources found.' $((25*second))
 
 cleanup_app
 

@@ -1,5 +1,30 @@
-schema_version: 1
-
-name: s2i
+artifacts: []
+envs:
+- name: STI_SCRIPTS_PATH
+  value: /usr/libexec/s2i
+- name: PATH
+  value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/spark/bin
+- name: SPARK_HOME
+  value: /opt/spark
+- name: SPARK_INSTALL
+  value: /opt/spark-distro
 execute:
-    - script: install
+- directory: s2i
+  module_name: s2i
+  name: s2i/install
+  script: install
+labels: []
+modules:
+  install: []
+  repositories: []
+name: s2i
+osbs:
+  configuration: {}
+  repository: {}
+packages:
+  install:
+  - wget
+  repositories: []
+ports: []
+version: 1.0
+volumes: []

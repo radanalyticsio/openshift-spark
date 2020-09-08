@@ -66,20 +66,12 @@ function patch_uid {
 # If we receive a spark-on-kube command, hand it off to the
 # standard spark entrypoint
 case "$1" in
-    driver | executor | init)
-        if [ -z "$SCL_ENABLE_CMD" ]; then
-            $SPARK_INSTALL/entrypoint.sh $CMD
-        else
-            $SCL_ENABLE_CMD -- $SPARK_INSTALL/entrypoint.sh $CMD &
-        fi
+    driver | executor)
+        $SPARK_INSTALL/entrypoint.sh $CMD &
         ;;
     *)
         patch_uid
-        if [ -z "$SCL_ENABLE_CMD" ]; then
-            $CMD &
-        else
-            $SCL_ENABLE_CMD -- $CMD &
-        fi
+        $CMD &
         ;;
 esac
 PID=$!

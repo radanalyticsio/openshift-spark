@@ -1,7 +1,0 @@
-# Default override
-# for more information see https://concreate.readthedocs.io/en/develop/overrides.html
-schema_version: 1
-
-packages:
-    install:
-        - numpy

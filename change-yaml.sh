@@ -9,7 +9,7 @@ function usage() {
     echo
     echo "required arguments"
     echo
-    echo "  SPARK_VERSION      The spark version number, like 2.2.1"
+    echo "  SPARK_VERSION      The spark version number, like 3.0.0"
     echo
     echo "optional arguments:"
     echo
@@ -17,7 +17,7 @@ function usage() {
 }
 
 # Set the hadoop version
-HVER=2.7
+HVER=3.2
 
 while getopts h opt; do
     case $opt in
@@ -82,13 +82,13 @@ if [ ! -z ${SPARK+x} ]; then
         exit 1
     fi
 
-	# Fix the url references
-	sed -i "s@https://archive.apache.org/dist/spark/spark-.*/spark-.*-bin-@https://archive.apache.org/dist/spark/spark-${SPARK}/spark-${SPARK}-bin-@" image.yaml
+    # Fix the url references
+    sed -i "s@https://archive\.apache\.org/dist/spark/spark-.*/spark-.*-bin-hadoop.*\.tgz@https://archive\.apache\.org/dist/spark/spark-${SPARK}/spark-${SPARK}-bin-hadoop${HVER}\.tgz@" modules/spark/module.yaml
 
     # TODO replace this with sha512 when it lands in upstream cekit (elmiko)
-	# Fix the md5 sum references on the line following the url
+    # Fix the md5 sum references on the line following the url
     calcsum=$(md5sum /tmp/spark-${SPARK}-bin-hadoop${HVER}.tgz | cut -d" " -f1)
-    sed -i '\@url: https://archive.apache.org/dist/spark/@!b;n;s/md5.*/md5: '$calcsum'/' image.yaml
+    sed -i '\@url: https://archive.apache.org/dist/spark/@!b;n;s/md5.*/md5: '$calcsum'/' modules/spark/module.yaml
 
     # Fix the spark version label
     sed -i '\@name: sparkversion@!b;n;s/value.*/value: '$SPARK'/' image.yaml

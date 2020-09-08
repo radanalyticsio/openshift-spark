@@ -1,7 +1,0 @@
-#!/bin/sh
-echo "checking length of file $1"
-if ! [ -s "$1" ]; then
-    filename=$(basename $1)
-    version=$(echo $filename | cut -d '-' -f2)
-    wget https://archive.apache.org/dist/spark/spark-$version/spark-$version-bin-hadoop2.7.tgz -O $1
-fi

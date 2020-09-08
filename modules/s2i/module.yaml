@@ -1,5 +1,17 @@
-schema_version: 1
+version: 1.0
 
 name: s2i
+envs:
+    - name: STI_SCRIPTS_PATH
+      value: /usr/libexec/s2i
+    - name: PATH
+      value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/spark/bin
+    - name: SPARK_HOME
+      value: /opt/spark
+    - name: SPARK_INSTALL
+      value: /opt/spark-distro
+packages:
+    install:
+        - wget
 execute:
     - script: install
