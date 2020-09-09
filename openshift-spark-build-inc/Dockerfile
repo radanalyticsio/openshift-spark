@@ -14,10 +14,10 @@
 #
 # ------------------------------------------------------------------------
 #
-# This is a Dockerfile for the radanalyticsio/openshift-spark-inc:3.0.0-latest image.
+# This is a Dockerfile for the radanalyticsio/openshift-spark-inc:3.0 image.
 
 
-## START target image radanalyticsio/openshift-spark-inc:3.0.0-latest
+## START target image radanalyticsio/openshift-spark-inc:3.0
 ## \
     FROM centos:8
 
@@ -72,7 +72,7 @@
 ###### /
 ###### END module 's2i:1.0'
 
-###### START image 'radanalyticsio/openshift-spark-inc:3.0.0-latest'
+###### START image 'radanalyticsio/openshift-spark-inc:3.0'
 ###### \
         # Switch to 'root' user to install 'radanalyticsio/openshift-spark-inc' image defined packages
         USER root
@@ -82,16 +82,16 @@
         # Set 'radanalyticsio/openshift-spark-inc' image defined environment variables
         ENV \
             JBOSS_IMAGE_NAME="radanalyticsio/openshift-spark-inc" \
-            JBOSS_IMAGE_VERSION="3.0.0-latest" 
+            JBOSS_IMAGE_VERSION="3.0" 
         # Set 'radanalyticsio/openshift-spark-inc' image defined labels
         LABEL \
             io.cekit.version="3.6.0"  \
             io.openshift.s2i.scripts-url="image:///usr/libexec/s2i"  \
             maintainer="Trevor McKay <tmckay@redhat.com>"  \
             name="radanalyticsio/openshift-spark-inc"  \
-            version="3.0.0-latest" 
+            version="3.0" 
 ###### /
-###### END image 'radanalyticsio/openshift-spark-inc:3.0.0-latest'
+###### END image 'radanalyticsio/openshift-spark-inc:3.0'
 
 
     # Switch to 'root' user and remove artifacts and modules
