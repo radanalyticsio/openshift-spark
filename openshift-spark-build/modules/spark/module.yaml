@@ -1,8 +1,8 @@
 artifacts:
-- md5: c5c0af4b4b9cb21d214c7026439df236
-  name: spark-3.0.0-bin-hadoop3.2.tgz
-  target: spark-3.0.0-bin-hadoop3.2.tgz
-  url: https://archive.apache.org/dist/spark/spark-3.0.0/spark-3.0.0-bin-hadoop3.2.tgz
+- md5: 31e019e35e75a4c55c7efa4464641bf1
+  name: spark-3.0.1-bin-hadoop3.2.tgz
+  target: spark-3.0.1-bin-hadoop3.2.tgz
+  url: https://archive.apache.org/dist/spark/spark-3.0.1/spark-3.0.1-bin-hadoop3.2.tgz
 envs:
 - name: PATH
   value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/spark/bin

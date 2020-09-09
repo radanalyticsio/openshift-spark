@@ -12,7 +12,7 @@ packages:
     install:
         - wget
 artifacts:
-    - url: https://archive.apache.org/dist/spark/spark-3.0.0/spark-3.0.0-bin-hadoop3.2.tgz
-      md5: c5c0af4b4b9cb21d214c7026439df236
+    - url: https://archive.apache.org/dist/spark/spark-3.0.1/spark-3.0.1-bin-hadoop3.2.tgz
+      md5: 31e019e35e75a4c55c7efa4464641bf1
 execute:
     - script: install

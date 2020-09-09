@@ -4,7 +4,7 @@ schema_version: 1
 # to give a meaningful error on an attempt to install Spark in
 # a complete image via S2I
 
-version: 3.0.0-latest
+version: 3.0
 release: community
 name: radanalyticsio/openshift-spark-inc
 from: centos:8
