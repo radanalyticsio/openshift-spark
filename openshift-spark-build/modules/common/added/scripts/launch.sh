@@ -40,9 +40,12 @@ if [ -z ${SPARK_MASTER_ADDRESS+_} ]; then
     exec $SPARK_HOME/bin/spark-class$JAVA_AGENT org.apache.spark.deploy.master.Master
 else
     echo "Starting worker$metrics, will connect to: $SPARK_MASTER_ADDRESS"
+
+    # spark://x.y.z:7077  -> x.y.z/7077
+    _MASTER_HOST_AND_PORT=$(echo $SPARK_MASTER_ADDRESS | sed -r 's;.*//(.*):(.*);\1/\2;g')
     while true; do
         echo "Waiting for spark master to be available ..."
-        curl --connect-timeout 1 -s -X GET $SPARK_MASTER_UI_ADDRESS > /dev/null
+        timeout 1 sh -c "(</dev/tcp/$_MASTER_HOST_AND_PORT) &>/dev/null"
         if [ $? -eq 0 ]; then
             break
         fi
